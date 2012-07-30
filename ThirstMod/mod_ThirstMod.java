@@ -50,6 +50,10 @@ public class mod_ThirstMod extends BaseMod {
 		new DrinkLoader().loadDrinks();
 		
 		try {
+			Item.itemsList[282] = null;
+			Item.itemsList[373] = null;
+			Item.itemsList[335] = null;
+			
 			Class item = Item.class;
 			Field soup = item.getField("bowlSoup");
 			Item soupObj = (new ItemSoupMod(26, 8)).setIconCoord(8, 4).setItemName("mushroomStew");
@@ -63,12 +67,7 @@ public class mod_ThirstMod extends BaseMod {
 			Field bucket = item.getField("bucketMilk");
 			Item bucketMilk = (new ItemBucketMilkMod(79)).setIconCoord(13, 4).setItemName("milk").setContainerItem(Item.bucketEmpty);
 			bucket.set(Item.bucketMilk, bucketMilk);
-		} catch (SecurityException e) {
-			e.printStackTrace();
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (NoSuchFieldException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -80,7 +79,6 @@ public class mod_ThirstMod extends BaseMod {
 				minecraft.ingameGUI = new net.minecraft.src.thirstmod.GuiIngame(minecraft);
 				gui = true;
 			}
-	minecraft.thePlayer.inventory.addItemStackToInventory(new ItemStack(Item.bucketMilk));
 		}
 		return true;
 	}
