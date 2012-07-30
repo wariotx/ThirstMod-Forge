@@ -124,11 +124,6 @@ public class ItemDrink extends Item implements ITextureProvider {
 		return this;
 	}
 
-	public static boolean canItemDrink() {
-		return true;
-	}
-	
-	@Override
 	public String getTextureFile() {
 		return "/thirstmod/textures/icons.png";
 	}
