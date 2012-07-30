@@ -206,6 +206,11 @@ public class ThirstStats {
 						if (random.nextFloat() < 0.4f && ConfigHelper.poisonOn) {
 							poisoned = true;
 						}
+					} 
+					if(biomes.contains(Utilities.getCurrentBiome(entityplayer))) {
+						if (random.nextFloat() < poisonRate && ConfigHelper.poisonOn) {
+							poisoned = true;
+						}
 					} else {
 						if (random.nextFloat() < 0.3f && ConfigHelper.poisonOn) {
 							poisoned = true;
