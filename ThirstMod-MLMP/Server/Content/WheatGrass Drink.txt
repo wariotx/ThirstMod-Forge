@@ -1,0 +1,12 @@
+ID:605
+Name:Wheat-Grass Drink
+ShortName:wgd
+Texture:wheatDrink.png
+Replenish:5
+Saturation:1.5
+DBRecipe:419:0
+AlwaysDrinkable:false
+MaxStackSize:4
+PoisonChance:0
+Shiny:false
+FoodHeal:0:0
