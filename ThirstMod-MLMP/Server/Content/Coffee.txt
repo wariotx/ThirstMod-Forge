@@ -1,0 +1,13 @@
+ID:609
+Name:Coffee
+ShortName:coffee
+Texture:coffee.png
+Replenish:6
+Saturation:1.9
+DBRecipe:421:0
+AlwaysDrinkable:false
+MaxStackSize:4
+PoisonChance:0
+Shiny:false
+FoodHeal:0:0
+
