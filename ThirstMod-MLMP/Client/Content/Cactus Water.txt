@@ -1,0 +1,12 @@
+ID:607
+Name:Cactus Water
+ShortName:cw
+Texture:cactusWater.png
+Replenish:3
+Saturation:1.7
+DBRecipe:81:0
+AlwaysDrinkable:false
+MaxStackSize:4
+PoisonChance:0
+Shiny:false
+FoodHeal:0:0
