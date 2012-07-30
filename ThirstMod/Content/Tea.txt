@@ -1,0 +1,12 @@
+ID:707
+Name:Tea
+ShortName:tea
+Texture:tea.png
+Replenish:1
+Saturation:0.5
+DBRecipe:37:0
+AlwaysDrinkable:false
+MaxStackSize:4
+PoisonChance:0
+Shiny:false
+FoodHeal:0:0

@@ -3,10 +3,12 @@ package net.minecraft.src.thirstmod;
 import java.io.*;
 import net.minecraft.src.*;
 import net.minecraft.src.forge.*;
+import net.minecraft.src.thirstmod.content.ContentMain;
 
 public class SaveHandlerMod implements ISaveEventHandler {
 	
 	public void onWorldLoad(World world) {
+		new ContentMain().registerTextureOverrides(ModLoader.getMinecraftInstance().renderEngine);
 	}
 
 	public void onWorldSave(World world) {

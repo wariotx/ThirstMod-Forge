@@ -6,6 +6,7 @@ import net.minecraft.src.forge.*;
 import net.minecraft.src.thirstmod.*;
 import net.minecraft.src.thirstmod.blocks.*;
 import net.minecraft.src.thirstmod.containers.*;
+import net.minecraft.src.thirstmod.content.ContentMain;
 import net.minecraft.src.thirstmod.itemmod.*;
 import net.minecraft.src.thirstmod.items.*;
 
@@ -53,6 +54,7 @@ public class mod_ThirstMod extends BaseMod {
 		MinecraftForgeClient.preloadTexture("/thirstmod/textures/icons.png");
 		new ConfigHelper();
 		new DrinkLoader().loadDrinks();
+		ContentMain.loadContent();
 	}
 
 	public boolean onTickInGame(float time, Minecraft minecraft) {
@@ -85,5 +87,9 @@ public class mod_ThirstMod extends BaseMod {
 		} else {
 			return null;
 		}
+	}
+	
+	public static void setIconIndex(Item item, int i) {
+		item.iconIndex = i;
 	}
 }

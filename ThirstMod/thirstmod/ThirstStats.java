@@ -1,7 +1,6 @@
 package net.minecraft.src.thirstmod;
 
-import java.util.Random;
-
+import java.util.*;
 import net.minecraft.src.*;
 
 public class ThirstStats {
@@ -19,6 +18,8 @@ public class ThirstStats {
 	private String prevWorldName;
 	private boolean readNbt;
 	private boolean isNew;
+	public static List biomes = new ArrayList();
+	public static float poisonRate;
 	
 	public ThirstStats() {
 		level = 20;

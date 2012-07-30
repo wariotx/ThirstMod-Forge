@@ -2,6 +2,7 @@ package net.minecraft.src.thirstmod;
 
 import java.io.*;
 import net.minecraft.src.*;
+import net.minecraft.src.thirstmod.containers.JMRecipes;
 import net.minecraft.src.thirstmod.content.*;
 
 public class Utilities {
@@ -62,8 +63,8 @@ public class Utilities {
 		}
 	}
 	
-	public void registerContent(ContentMain conMain) {
-		conMain.prepare();
+	public static void addJMRecipe(int id, int metadata, ItemStack return1) {
+		JMRecipes.solidifying().addSolidifying(id, metadata, return1);
 	}
 	
 	public static void print(Object obj) {
