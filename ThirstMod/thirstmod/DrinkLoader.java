@@ -76,6 +76,13 @@ public class DrinkLoader {
 			Field bucket = item.getField("bucketMilk");
 			Item bucketMilk = (new ItemBucketMilkMod(79)).setIconCoord(13, 4).setItemName("milk").setContainerItem(Item.bucketEmpty);
 			bucket.set(Item.bucketMilk, bucketMilk);
+			
+			//Must make sure this code is called if wantFBucket == true. Too lazy to do everything needed to make the cauldron work.
+			//medievor can do it sometime if he pops online.
+			/*Class block = Block.class;
+			Field cauldron = block.getField("cauldron");
+			Block cauldronObj;*/
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
