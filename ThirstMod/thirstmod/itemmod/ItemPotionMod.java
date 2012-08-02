@@ -1,11 +1,20 @@
+/**
+ * This Minecraft Modification is provided for free so that it may enhance your experience. 
+ * Under NO circumstances can you strip code from this class to place in your modification 
+ * without permission from the authors.
+ * 
+ * AUTHORS: MEDIEVOR TARUN1998
+ * 
+ * Don't be evil. :)
+ */
+
 package net.minecraft.src.thirstmod.itemmod;
 
 import java.util.HashMap;
+import net.minecraft.src.thirstmod.core.*;
 import java.util.Iterator;
 import java.util.List;
 import net.minecraft.src.*;
-import net.minecraft.src.thirstmod.ConfigHelper;
-import net.minecraft.src.thirstmod.Utilities;
 
 public class ItemPotionMod extends ItemPotion
 {

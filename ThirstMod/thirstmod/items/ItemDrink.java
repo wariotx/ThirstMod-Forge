@@ -1,9 +1,18 @@
-package net.minecraft.src.thirstmod;
+/**
+ * This Minecraft Modification is provided for free so that it may enhance your experience. 
+ * Under NO circumstances can you strip code from this class to place in your modification 
+ * without permission from the authors.
+ * 
+ * AUTHORS: MEDIEVOR TARUN1998
+ * 
+ * Don't be evil. :)
+ */
+
+package net.minecraft.src.thirstmod.items;
 
 import java.util.*;
-
+import net.minecraft.src.thirstmod.core.*;
 import net.minecraft.src.forge.ITextureProvider;
-import net.minecraft.src.thirstmod.*;
 import net.minecraft.src.*;
 
 public class ItemDrink extends Item implements ITextureProvider {

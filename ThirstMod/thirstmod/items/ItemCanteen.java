@@ -1,8 +1,17 @@
+/**
+ * This Minecraft Modification is provided for free so that it may enhance your experience. 
+ * Under NO circumstances can you strip code from this class to place in your modification 
+ * without permission from the authors.
+ * 
+ * AUTHORS: MEDIEVOR TARUN1998
+ * 
+ * Don't be evil. :)
+ */
+
 package net.minecraft.src.thirstmod.items;
 
 import net.minecraft.src.*;
-import net.minecraft.src.thirstmod.ConfigHelper;
-import net.minecraft.src.thirstmod.Utilities;
+import net.minecraft.src.thirstmod.core.*;
 
 public class ItemCanteen extends Item
 {

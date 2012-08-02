@@ -1,3 +1,7 @@
+/**
+ * Code belongs to CPW
+ */
+
 package net.minecraft.src.thirstmod.overrides;
 
 import java.util.BitSet;
