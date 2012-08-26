@@ -1,0 +1,48 @@
+# Configuration file
+# Generated on 8/26/12 1:53 PM
+
+####################
+# block 
+####################
+
+block {
+   Drinks Brewer=3505
+   Rain Collector=3506
+}
+
+####################
+# drinks 
+####################
+
+drinks {
+   Chocolate Milk=true
+   Fresh Bucket=true
+   Milk=true
+}
+
+####################
+# general 
+####################
+
+general {
+   Exhaustion Rate=10
+   Max Stack Size=10
+   Meter on leftside=true
+   Old Meter Textures=false
+   Peaceful On=false
+   Poisoning On=true
+}
+
+####################
+# item 
+####################
+
+item {
+   Chocolate Milk=801
+   Dirty Filter=806
+   Filter=805
+   Fresh Water=803
+   Fresh Water Bucket=802
+   Milk=800
+}
+

@@ -1,0 +1,12 @@
+ID:604
+Name:Pumpkin Juice
+ShortName:pj
+TexturePos:6
+Replenish:4
+Saturation:1.4
+DBRecipe:86:0
+AlwaysDrinkable:false
+MaxStackSize:4
+PoisonChance:0
+Shiny:false
+FoodHeal:0:0

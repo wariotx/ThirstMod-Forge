@@ -1,0 +1,13 @@
+ID:603
+Name:Golden Apple Juice
+ShortName:gaj
+TexturePos:4
+Replenish:20
+Saturation:10
+DBRecipe:322:0
+AlwaysDrinkable:true
+MaxStackSize:4
+PoisonChance:0
+Shiny:true
+FoodHeal:0:0
+
