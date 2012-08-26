@@ -6,6 +6,8 @@ import net.minecraft.src.thirstmod.blocks.*;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class GuiJM extends GuiContainer
 {
     private TileEntityJM freezerInventory;
@@ -14,7 +16,7 @@ public class GuiJM extends GuiContainer
     {
         super(new ContainerJM(inventoryplayer, tileentityfreezer));
         freezerInventory = tileentityfreezer;
-        mc = ModLoader.getMinecraftInstance();
+        mc = FMLClientHandler.instance().getClient();
     }
 
     protected void drawGuiContainerForegroundLayer()

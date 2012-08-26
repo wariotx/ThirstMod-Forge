@@ -2,7 +2,6 @@ package net.minecraft.src.thirstmod;
 
 import java.io.*;
 import net.minecraft.src.*;
-import net.minecraft.src.ThirstMod.*;
 import net.minecraft.src.thirstmod.*;
 import java.util.*;
 import net.minecraft.client.Minecraft;

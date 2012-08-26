@@ -1,7 +1,10 @@
 package net.minecraft.src.thirstmod.blocks;
 
 import java.util.Random;
+
+import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.src.*;
+import net.minecraft.src.thirstmod.ThirstMod;
 import net.minecraft.src.thirstmod.ThirstUtils;
 
 public class BlockRC extends BlockContainer {
@@ -26,7 +29,7 @@ public class BlockRC extends BlockContainer {
 		TileEntityRC tileentityfurnace = (TileEntityRC) par1World.getBlockTileEntity(par2, par3, par4);
 
 		if (tileentityfurnace != null) {
-			ModLoader.getMinecraftInstance().displayGuiScreen(new GuiRC(ThirstUtils.getPlayerMp().inventory, tileentityfurnace));
+			FMLClientHandler.instance().getClient().displayGuiScreen(new GuiRC(ThirstUtils.getPlayerMp().inventory, tileentityfurnace));
 		}
 
 		return true;

@@ -2,12 +2,14 @@ package net.minecraft.src.thirstmod.blocks;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.*;
 
 public class GuiRC extends GuiContainer {
 	private TileEntityRC rc;
-	private Minecraft minecraft = ModLoader.getMinecraftInstance();
+	private Minecraft minecraft = FMLClientHandler.instance().getClient();
 
 	public GuiRC(InventoryPlayer var1, TileEntityRC var2) {
 		super(new ContainerRC(var1, var2));
@@ -22,7 +24,7 @@ public class GuiRC extends GuiContainer {
     }
 
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
-		World world = ModLoader.getMinecraftInstance().theWorld;
+		World world = minecraft.theWorld;
         int var4 = minecraft.renderEngine.getTexture("/thirstmod/textures/waterCollector.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         minecraft.renderEngine.bindTexture(var4);

@@ -5,6 +5,8 @@ import java.net.*;
 
 import org.lwjgl.Sys;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 import net.minecraft.src.*;
 import net.minecraft.src.thirstmod.blocks.JMRecipes;
 
@@ -24,7 +26,7 @@ public class ThirstUtils {
 	 * @return EntityPlayer.class instance.
 	 */
 	public static EntityPlayer getPlayer() {
-		return ModLoader.getMinecraftInstance().thePlayer;
+		return FMLClientHandler.instance().getClient().thePlayer;
 	}
 	
 	/** 
@@ -32,7 +34,7 @@ public class ThirstUtils {
 	 * @return EntityPlayerMP.class instance.
 	 */
 	public static EntityPlayerMP getPlayerMp() {
-		return (EntityPlayerMP) ModLoader.getMinecraftServerInstance().getConfigurationManager().playerEntityList.iterator().next();
+		return (EntityPlayerMP) FMLClientHandler.instance().getServer().getConfigurationManager().playerEntityList.iterator().next();
 	}
 	
 	/**
@@ -40,7 +42,7 @@ public class ThirstUtils {
 	 * @return the world instance.
 	 */
 	public static World getWorld() {
-		return ModLoader.getMinecraftInstance().theWorld;
+		return FMLClientHandler.instance().getClient().theWorld;
 	}
 	
 	/** 

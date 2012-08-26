@@ -1,7 +1,10 @@
 package net.minecraft.src.thirstmod.blocks;
 
 import java.util.Random;
+
+import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.src.*;
+import net.minecraft.src.thirstmod.ThirstMod;
 import net.minecraft.src.thirstmod.ThirstUtils;
 import net.minecraft.src.thirstmod.gui.GuiJM;
 
@@ -23,7 +26,7 @@ public class BlockJM extends BlockContainer {
 		TileEntityJM tileentityfreezer = (TileEntityJM) par1World.getBlockTileEntity(par2, par3, i);
 		ThirstMod.INSTANCE.tile = tileentityfreezer;
 		ThirstUtils.getPlayerMp().openGui(ThirstMod.INSTANCE, 90, par1World, par2, par3, i);
-		ModLoader.getMinecraftInstance().displayGuiScreen(new GuiJM(ThirstUtils.getPlayerMp().inventory, tileentityfreezer));
+		FMLClientHandler.instance().getClient().displayGuiScreen(new GuiJM(ThirstUtils.getPlayerMp().inventory, tileentityfreezer));
 		return true;
 	}
 	

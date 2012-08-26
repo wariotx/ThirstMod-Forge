@@ -6,7 +6,6 @@ package net.minecraft.src.thirstmod;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import net.minecraft.src.ThirstMod.*;
 import net.minecraft.src.*;
 
 public class Drink extends Item

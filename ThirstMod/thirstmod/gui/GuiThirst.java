@@ -14,6 +14,8 @@ import net.minecraft.src.thirstmod.ThirstUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import cpw.mods.fml.client.FMLClientHandler;
+
 public class GuiThirst extends GuiIngame
 {
     private static final RenderItem itemRenderer = new RenderItem();
@@ -36,9 +38,9 @@ public class GuiThirst extends GuiIngame
 
     public GuiThirst()
     {
-    	super(ModLoader.getMinecraftInstance());
-        this.mc = ModLoader.getMinecraftInstance();
-        this.persistantChatGUI = new GuiNewChat(ModLoader.getMinecraftInstance());
+    	super(FMLClientHandler.instance().getClient());
+        this.mc = FMLClientHandler.instance().getClient();
+        this.persistantChatGUI = new GuiNewChat(FMLClientHandler.instance().getClient());
     }
 
     /**

@@ -2,6 +2,7 @@ package net.minecraft.src.thirstmod.blocks;
 
 import java.util.HashMap;
 import net.minecraft.src.*;
+import net.minecraft.src.thirstmod.DrinkLoader;
 
 import java.util.Map;
 

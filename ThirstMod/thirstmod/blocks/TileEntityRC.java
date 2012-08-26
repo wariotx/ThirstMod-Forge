@@ -1,5 +1,7 @@
 package net.minecraft.src.thirstmod.blocks;
 
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import net.minecraft.src.*;
 
 public class TileEntityRC extends TileEntity implements IInventory {
@@ -16,10 +18,10 @@ public class TileEntityRC extends TileEntity implements IInventory {
 	
 	@Override
 	public void updateEntity() {
-		worldObj = ModLoader.getMinecraftInstance().theWorld;
+		worldObj = FMLClientHandler.instance().getClient().theWorld;
 		if (worldObj != null) {
 			try {
-				boolean flag = (Boolean) ModLoader.getPrivateValue(WorldInfo.class, worldObj.getWorldInfo(), "raining");
+				boolean flag = (Boolean) ObfuscationReflectionHelper.getPrivateValue(WorldInfo.class, worldObj.getWorldInfo(), "raining");
 				boolean flag1 = canRainOn(xCoord, yCoord, zCoord, worldObj);
 				isActive = flag && flag1;
 				if (isActive == true && canFill()) {

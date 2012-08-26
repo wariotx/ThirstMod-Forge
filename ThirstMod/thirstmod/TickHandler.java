@@ -1,12 +1,7 @@
 package net.minecraft.src.thirstmod;
 
 import java.util.EnumSet;
-
-import javax.jws.Oneway;
-
-import net.minecraft.src.ModLoader;
-import net.minecraft.src.ThirstMod;
-
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
@@ -20,10 +15,10 @@ public class TickHandler implements ITickHandler {
 	 */
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
-		if(ModLoader.getMinecraftInstance().currentScreen != null) {
-			ThirstMod.INSTANCE.onTickInGui(ModLoader.getMinecraftInstance().currentScreen);
-		} else if(ModLoader.getMinecraftInstance().thePlayer != null) {
-			ThirstMod.INSTANCE.onTickInGame(ModLoader.getMinecraftInstance());
+		if(FMLClientHandler.instance().getClient().currentScreen != null) {
+			ThirstMod.INSTANCE.onTickInGui(FMLClientHandler.instance().getClient().currentScreen);
+		} else if(FMLClientHandler.instance().getClient().thePlayer != null) {
+			ThirstMod.INSTANCE.onTickInGame(FMLClientHandler.instance().getClient());
 		}
 	}
 

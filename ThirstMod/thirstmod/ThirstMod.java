@@ -1,4 +1,4 @@
-package net.minecraft.src;
+package net.minecraft.src.thirstmod;
 
 import java.lang.reflect.Field;
 

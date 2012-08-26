@@ -1,5 +1,6 @@
 package net.minecraft.src.thirstmod.blocks;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.src.*;
 
 public class TileEntityJM extends TileEntity implements IInventory {
@@ -291,7 +292,7 @@ public class TileEntityJM extends TileEntity implements IInventory {
 		if (i == Item.blazeRod.shiftedIndex) {
 			return 2400;
 		} else {
-			return ModLoader.addAllFuel(itemstack.itemID, itemstack.getItemDamage());
+			return GameRegistry.getFuelValue(itemstack);
 		}
 	}
 	

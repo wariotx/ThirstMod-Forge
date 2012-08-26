@@ -8,9 +8,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.ModLoader;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -82,7 +83,7 @@ public class ContentDrink extends ContentLoader {
 									.setTexFile(textureFile);
 							MinecraftForgeClient.preloadTexture(textureFile);
 							drink.setIconIndex(texPos);
-							ModLoader.addName(drink, name);
+							LanguageRegistry.addName(drink, name);
 							ThirstUtils.addJMRecipe(jmTop, metadata, new ItemStack(drink));
 							addedDrinks.add(files[i].getName());
 						} catch (Exception e)
