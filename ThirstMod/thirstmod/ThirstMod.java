@@ -23,6 +23,7 @@ import net.minecraftforge.event.*;
 import net.minecraftforge.event.world.WorldEvent;
 
 @Mod(modid = "ThirstMod", name = "Thirst Mod", version = "1.0.0")
+@NetworkMod(serverSideRequired = false, clientSideRequired = true)
 public class ThirstMod implements IGuiHandler {
 	public static final Block waterCollector = new BlockRC(232).setBlockName("waterCollector").setResistance(5F).setHardness(4F).setCreativeTab(CreativeTabs.tabBlock);
 	public static final Block juiceMaker = new BlockJM(233).setBlockName("jm").setResistance(5F).setHardness(4F).setCreativeTab(CreativeTabs.tabBlock);
@@ -32,7 +33,6 @@ public class ThirstMod implements IGuiHandler {
 	@Instance
 	public static ThirstMod INSTANCE;
 	
-	public TileEntityJM tile;
 	private boolean changedGui = false;
 	private boolean isUpdate = false;
 	private boolean loadedMod = false;
@@ -78,7 +78,6 @@ public class ThirstMod implements IGuiHandler {
 			ThirstUtils.getStats().onTick(ThirstUtils.getPlayer());
 			if(changedGui == false) {
 				minecraft.ingameGUI = new GuiThirst();
-				ThirstUtils.getPlayerMp().inventory.addItemStackToInventory(new ItemStack(Item.helmetDiamond));
 				if(isUpdate == true) {
 					FMLClientHandler.instance().displayGuiScreen(minecraft.thePlayer, new GuiUpdate());
 				}
@@ -130,8 +129,10 @@ public class ThirstMod implements IGuiHandler {
 	 */
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		if(ID == 90) {
-			return new ContainerJM(ThirstUtils.getPlayerMp().inventory, tile);
+		TileEntity tile = world.getBlockTileEntity(x, y, z);
+		switch(ID) {
+			case 90: return new ContainerJM(player.inventory, (TileEntityJM) tile);
+			case 91: return new ContainerRC(player.inventory, (TileEntityRC) tile);
 		}
 		return null;
 	}
@@ -141,9 +142,11 @@ public class ThirstMod implements IGuiHandler {
 	 */
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		if (ID == 90) {
-			return new GuiJM(ThirstUtils.getPlayerMp().inventory, tile);
-		} 
+		TileEntity tile = world.getBlockTileEntity(x, y, z);
+		switch(ID) {
+			case 90: return new GuiJM(player.inventory, (TileEntityJM) tile);
+			case 91: return new GuiRC(player.inventory, (TileEntityRC) tile);
+		}
 		return null;
 	}
 }

@@ -22,16 +22,7 @@ public class BlockRC extends BlockContainer {
 	
 	@Override
 	public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9) {
-		if (par1World.isRemote) {
-			return true;
-		}
-
-		TileEntityRC tileentityfurnace = (TileEntityRC) par1World.getBlockTileEntity(par2, par3, par4);
-
-		if (tileentityfurnace != null) {
-			FMLClientHandler.instance().getClient().displayGuiScreen(new GuiRC(ThirstUtils.getPlayerMp().inventory, tileentityfurnace));
-		}
-
+		par5EntityPlayer.openGui(ThirstMod.INSTANCE, 91, par1World, par2, par3, par4);
 		return true;
 	}
 	

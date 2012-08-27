@@ -88,10 +88,16 @@ public class ContainerRC extends Container {
 		}
 
 	}
+	
+	@Override
+	public void addCraftingToCrafters(ICrafting par1ICrafting) {
+        super.addCraftingToCrafters(par1ICrafting);
+        par1ICrafting.updateCraftingInventoryInfo(this, 0, this.rc.RainMeter);
+        par1ICrafting.updateCraftingInventoryInfo(this, 1, this.rc.internalBucket);
+    }
 
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
 		return rc.isUseableByPlayer(entityplayer);
 	}
-
 }

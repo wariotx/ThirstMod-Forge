@@ -2,8 +2,10 @@ package net.minecraft.src.thirstmod.blocks;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.src.*;
+import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.ISidedInventory;
 
-public class TileEntityJM extends TileEntity implements IInventory {
+public class TileEntityJM extends TileEntity implements IInventory, ISidedInventory {
 	private ItemStack stacks[];
     public int brewrbrewTime;
     public int currentItemCoolTime;
@@ -315,4 +317,18 @@ public class TileEntityJM extends TileEntity implements IInventory {
     {
         return getItembrewTime(par0ItemStack) > 0;
     }
+	
+	@Override
+	public int getStartInventorySide(ForgeDirection side) {
+		if (side == ForgeDirection.DOWN)
+			return 1;
+		if (side == ForgeDirection.UP)
+			return 0;
+		return 2;
+	}
+
+	@Override
+	public int getSizeInventorySide(ForgeDirection side) {
+		return 1;
+	}
 }

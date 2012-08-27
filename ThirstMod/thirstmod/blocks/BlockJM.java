@@ -22,11 +22,8 @@ public class BlockJM extends BlockContainer {
 	}
 	
 	@Override
-	public boolean onBlockActivated(World par1World, int par2, int par3, int i, EntityPlayer entityplayer, int j, float f, float f1, float f2) {
-		TileEntityJM tileentityfreezer = (TileEntityJM) par1World.getBlockTileEntity(par2, par3, i);
-		ThirstMod.INSTANCE.tile = tileentityfreezer;
-		ThirstUtils.getPlayerMp().openGui(ThirstMod.INSTANCE, 90, par1World, par2, par3, i);
-		FMLClientHandler.instance().getClient().displayGuiScreen(new GuiJM(ThirstUtils.getPlayerMp().inventory, tileentityfreezer));
+	public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer entityplayer, int j, float f, float f1, float f2) {
+		entityplayer.openGui(ThirstMod.INSTANCE, 90, par1World, x, y, z);
 		return true;
 	}
 	

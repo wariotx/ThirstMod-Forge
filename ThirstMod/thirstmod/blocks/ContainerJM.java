@@ -110,9 +110,19 @@ public class ContainerJM extends Container {
 
 		return var2;
 	}
+	
+	@Override
+	public void addCraftingToCrafters(ICrafting par1ICrafting)
+    {
+        super.addCraftingToCrafters(par1ICrafting);
+        par1ICrafting.updateCraftingInventoryInfo(this, 0, this.furnace.brewrbrewTime);
+        par1ICrafting.updateCraftingInventoryInfo(this, 1, this.furnace.brewrCoolTime);
+        par1ICrafting.updateCraftingInventoryInfo(this, 2, this.furnace.currentItemCoolTime);
+        par1ICrafting.updateCraftingInventoryInfo(this, 3, this.furnace.makeTime);
+    }
 
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return this.furnace.isUseableByPlayer(ThirstUtils.getPlayerMp());
+		return this.furnace.isUseableByPlayer(entityplayer);
 	}
 }
