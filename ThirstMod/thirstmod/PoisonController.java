@@ -41,12 +41,14 @@ public class PoisonController {
 	 * Poison the Player.
 	 */
 	private void poisonPlayer() {
-		if(poisonPlayer == true) {
-			poisonTimer++;
-			isPoisoned = true;
-			if(poisonTimer > 360) {
-				isPoisoned = false;
-				poisonPlayer = false;
+		if(ConfigHelper.poisonOn == true) {
+			if(poisonPlayer == true) {
+				poisonTimer++;
+				isPoisoned = true;
+				if(poisonTimer > 360) {
+					isPoisoned = false;
+					poisonPlayer = false;
+				}
 			}
 		}
 	}

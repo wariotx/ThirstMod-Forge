@@ -1,12 +1,9 @@
 package net.minecraft.src.thirstmod;
 
-import java.lang.reflect.Field;
-
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.src.*;
 import net.minecraft.src.thirstmod.*;
-import net.minecraft.src.thirstmod.vanilla.*;
 
 public class DrinkLoader {
 	public static Item freshWater;
@@ -33,28 +30,6 @@ public class DrinkLoader {
 			Item fBucket = ((Drink) new Drink(ConfigHelper.fBucketId, 10, 1.4f, false).setIconCoord(4, 1).setItemName("freshBucket")).setTexFile("/thirstmod/textures/icons.png");
 			LanguageRegistry.addName(fBucket, "Fresh Water Bucket");
 			GameRegistry.addSmelting(Item.bucketWater.shiftedIndex, new ItemStack(fBucket, 1), 0.4f);
-		}
-
-		try {
-			Item.itemsList[282] = null;
-			Item.itemsList[373] = null;
-			Item.itemsList[335] = null;
-
-			Class item = Item.class;
-			Field soup = item.getField("bowlSoup");
-			Item soupObj = (new ItemSoupMod(26, 8)).setIconCoord(8, 4).setItemName("mushroomStew");
-			soup.set(Item.bowlSoup, soupObj);
-
-			Class itemPotion = ItemPotion.class;
-			Field potion = itemPotion.getField("potion");
-			ItemPotion potionObj = (ItemPotion) (new ItemPotionMod(117)).setIconCoord(13, 8).setItemName("potion");
-			potion.set(ItemPotion.potion, potionObj);
-
-			Field bucket = item.getField("bucketMilk");
-			Item bucketMilk = (new ItemBucketMilkMod(79)).setIconCoord(13, 4).setItemName("milk").setContainerItem(Item.bucketEmpty);
-			bucket.set(Item.bucketMilk, bucketMilk);
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 }

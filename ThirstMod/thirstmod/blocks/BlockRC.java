@@ -4,7 +4,7 @@ import java.util.Random;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.src.*;
-import net.minecraft.src.thirstmod.ThirstMod;
+import net.minecraft.src.thirstmod.*;
 import net.minecraft.src.thirstmod.ThirstUtils;
 
 public class BlockRC extends BlockContainer {

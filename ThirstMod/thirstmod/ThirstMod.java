@@ -1,7 +1,5 @@
 package net.minecraft.src.thirstmod;
 
-import java.lang.reflect.Field;
-
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.*;
@@ -32,10 +30,11 @@ public class ThirstMod implements IGuiHandler {
 	
 	@Instance
 	public static ThirstMod INSTANCE;
+	private DrinkController dc = new DrinkController();
 	
 	private boolean changedGui = false;
 	private boolean isUpdate = false;
-	private boolean loadedMod = false;
+	public boolean loadedMod = false;
 	
 	/**
 	 * Called when the mod is loaded.
@@ -43,30 +42,32 @@ public class ThirstMod implements IGuiHandler {
 	 */
 	@Init
 	public void onLoad(FMLInitializationEvent event) {
-			GameRegistry.registerBlock(waterCollector);
-			GameRegistry.registerBlock(juiceMaker);
-			GameRegistry.registerTileEntity(TileEntityRC.class, "Rain Collector");
-			GameRegistry.registerTileEntity(TileEntityJM.class, "Juice Maker");
-			LanguageRegistry.addName(waterCollector, "Rain Collector");
-			LanguageRegistry.addName(juiceMaker, "Drinks Brewer");
-			GameRegistry.addRecipe(new ItemStack(waterCollector, 1), new Object[]
-			{ "***", "*#*", "***", Character.valueOf('*'), Block.cobblestone, Character.valueOf('#'), Item.bucketEmpty, });
-			GameRegistry.addRecipe(new ItemStack(juiceMaker, 1), new Object[]
-			{ "***", "*#*", "***", Character.valueOf('*'), Block.cobblestone, Character.valueOf('#'), Item.glassBottle, });
-			
-			new ContentLoader();
-			new DrinkLoader().loadDrinks();
-			MinecraftForgeClient.preloadTexture("/thirstmod/textures/icons.png");
-			
-			try {
-				isUpdate = ThirstUtils.checkForUpdate();
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-			TickRegistry.registerTickHandler(new TickHandler(), Side.CLIENT);
-			MinecraftForge.EVENT_BUS.register(INSTANCE);
-			NetworkRegistry.instance().registerGuiHandler(this, this);
-			loadedMod = true;
+		GameRegistry.registerBlock(waterCollector);
+		GameRegistry.registerBlock(juiceMaker);
+		GameRegistry.registerTileEntity(TileEntityRC.class, "Rain Collector");
+		GameRegistry.registerTileEntity(TileEntityJM.class, "Juice Maker");
+		LanguageRegistry.addName(waterCollector, "Rain Collector");
+		LanguageRegistry.addName(juiceMaker, "Drinks Brewer");
+		GameRegistry.addRecipe(new ItemStack(waterCollector, 1), new Object[] 
+		{ "***", "*#*", "***", Character.valueOf('*'), Block.cobblestone, Character.valueOf('#'), Item.bucketEmpty, });
+		GameRegistry.addRecipe(new ItemStack(juiceMaker, 1), new Object[] 
+		{ "***", "*#*", "***", Character.valueOf('*'), Block.cobblestone, Character.valueOf('#'), Item.glassBottle, });
+
+		new ContentLoader();
+		new DrinkLoader().loadDrinks();
+		MinecraftForgeClient.preloadTexture("/thirstmod/textures/icons.png");
+
+		try {
+			isUpdate = ThirstUtils.checkForUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		TickRegistry.registerTickHandler(new TickHandler(), Side.CLIENT);
+		MinecraftForge.EVENT_BUS.register(INSTANCE);
+		NetworkRegistry.instance().registerGuiHandler(this, this);
+		DrinkController.addDrink(Item.potion, 5, 1f);
+		DrinkController.addDrink(Item.bucketMilk, 10, 3f);
+		DrinkController.addDrink(Item.bowlSoup, 7, 2f);
 	}
 
 	/**
@@ -75,18 +76,23 @@ public class ThirstMod implements IGuiHandler {
 	 */
 	public void onTickInGame(Minecraft minecraft) {
 		if(ThirstUtils.getPlayer().capabilities.isCreativeMode == false) {
-			ThirstUtils.getStats().onTick(ThirstUtils.getPlayer());
 			if(changedGui == false) {
 				minecraft.ingameGUI = new GuiThirst();
+				changedGui = true;
+			} 
+			if(loadedMod == false) {
 				if(isUpdate == true) {
 					FMLClientHandler.instance().displayGuiScreen(minecraft.thePlayer, new GuiUpdate());
+					isUpdate = false;
 				}
 				ThirstUtils.readNbt(ThirstUtils.getPlayerMp().getEntityData());
 				new ThirstUtils();
-				changedGui = true;
-			} 
+				loadedMod = true;
+			}
+			ThirstUtils.getStats().onTick(ThirstUtils.getPlayer());
 		}
-	}
+		dc.onTick(minecraft);
+	} 
 	
 	/**
 	 * Called when the Minecraft.currentGui is not null.

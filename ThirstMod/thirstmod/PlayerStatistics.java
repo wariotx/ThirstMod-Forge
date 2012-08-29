@@ -11,6 +11,7 @@ public class PlayerStatistics {
 	public int healhurtTimer;
 	public int drinkTimer;
 	private Random random = new Random();
+	private PoisonController poisonCon = new PoisonController();
 	
 	public PlayerStatistics() {
 		level = 20;
@@ -50,7 +51,6 @@ public class PlayerStatistics {
 				}
 			}
 		}
-		PoisonController poisonCon = new PoisonController();
 		poisonCon.onTick();
 		if(player.isSneaking() && player.isInWater()) {
 			drinkTimer++;

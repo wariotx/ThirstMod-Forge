@@ -131,6 +131,7 @@ public class ThirstUtils {
 		getStats().saturation = 5f;
 		getStats().healhurtTimer = 0;
 		getStats().drinkTimer = 0;
+		ThirstMod.INSTANCE.loadedMod = false;
 	}
 	
 	/**
