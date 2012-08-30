@@ -22,7 +22,7 @@ public class TileEntityRC extends TileEntity implements IInventory, ISidedInvent
 	public void updateEntity() {
 		if (worldObj != null) {
 			try {
-				boolean flag = (Boolean) ObfuscationReflectionHelper.getPrivateValue(WorldInfo.class, worldObj.getWorldInfo(), "raining");
+				boolean flag = (Boolean) ObfuscationReflectionHelper.getPrivateValue(WorldInfo.class, worldObj.getWorldInfo(), 12);
 				boolean flag1 = canRainOn(xCoord, yCoord, zCoord, worldObj);
 				isActive = flag && flag1;
 				if (isActive == true && canFill()) {

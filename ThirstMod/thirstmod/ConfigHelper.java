@@ -28,7 +28,6 @@ public class ConfigHelper {
 	public static int freshWaterId;
 	public static int jmId;
 	public static int rcId;
-	//public static int canteenId;
 	public static int filterId;
 	public static int dFilterId;
 	
@@ -37,7 +36,7 @@ public class ConfigHelper {
 		
 		poisonOn = Boolean.parseBoolean(config.getOrCreateBooleanProperty("Poisoning On", "General", true).value);
 		peacefulOn = Boolean.parseBoolean(config.getOrCreateBooleanProperty("Peaceful On", "General", false).value);
-		meterOnLeft = Boolean.parseBoolean(config.getOrCreateBooleanProperty("Meter on leftside", "General", true).value);
+		meterOnLeft = Boolean.parseBoolean(config.getOrCreateBooleanProperty("Meter on leftside", "General", false).value);
 		oldTextures = Boolean.parseBoolean(config.getOrCreateBooleanProperty("Old Meter Textures", "General", false).value);
 		thirstRate = Integer.parseInt(config.getOrCreateIntProperty("Exhaustion Rate", "General", 10).value);
 		maxStackSize = Integer.parseInt(config.getOrCreateIntProperty("Max Stack Size", "General", 10).value);
@@ -50,7 +49,6 @@ public class ConfigHelper {
 		cMilkId = Integer.parseInt(config.getOrCreateIntProperty("Chocolate Milk", "Item", 801).value);
 		fBucketId = Integer.parseInt(config.getOrCreateIntProperty("Fresh Water Bucket", "Item", 802).value);
 		freshWaterId = Integer.parseInt(config.getOrCreateIntProperty("Fresh Water", "Item", 803).value);
-		//canteenId = Integer.parseInt(config.getOrCreateIntProperty("Canteen", "Item", 804).value);
 		filterId = Integer.parseInt(config.getOrCreateIntProperty("Filter", "Item", 805).value);
 		dFilterId = Integer.parseInt(config.getOrCreateIntProperty("Dirty Filter", "Item", 806).value);
 		

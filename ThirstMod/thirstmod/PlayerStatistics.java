@@ -26,7 +26,10 @@ public class PlayerStatistics {
 	 * @param player EntityPlayer instance.
 	 */
 	public void onTick(EntityPlayer player) {
-		int difSet = player.worldObj.difficultySetting;
+		int difSet = player.worldObj.difficultySetting;;
+		if(ConfigHelper.peacefulOn == true) {
+			difSet = 0;
+		}
 		if(exhaustion > 4f) {
 			exhaustion = 0f;
 			if(saturation > 0f) {
@@ -46,7 +49,6 @@ public class PlayerStatistics {
 			healhurtTimer++;
 			if(healhurtTimer > 80) {
 				if (player.getHealth() > 10 || difSet >= 3 || player.getHealth() > 1 && difSet >= 2) {
-					player.setEntityHealth(player.getHealth() - 1);
 					healhurtTimer = 0;
 				}
 			}
@@ -75,7 +77,7 @@ public class PlayerStatistics {
 	public void exhaustPlayer(EntityPlayer player) {
 		int multiplier = ThirstUtils.getCurrentBiome(player) == "Desert" ? 2 : 1;
 		int movement = ThirstUtils.getMovementStat(player);
-		float tweak = (float)1;
+		float tweak = (float)ConfigHelper.thirstRate;
 		if (player.isInsideOfMaterial(Material.water)) {
 			if (movement > 0) {
 				addExhaustion(0.015F * (float) movement * 0.003F * tweak);

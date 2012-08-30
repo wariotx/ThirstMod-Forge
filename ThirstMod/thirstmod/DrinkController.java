@@ -14,7 +14,7 @@ public class DrinkController {
 	private static HashMap poisonMap = new HashMap();
 	
 	public void onTick(Minecraft minecraft) {
-		ItemStack item = ObfuscationReflectionHelper.getPrivateValue(EntityPlayer.class, minecraft.thePlayer, "itemInUse");
+		ItemStack item = ObfuscationReflectionHelper.getPrivateValue(EntityPlayer.class, minecraft.thePlayer, 38);
 		if(item != null) {
 			if(levelMap.containsKey(item.getItem())) {
 				onItemBeingDrunk(item);
@@ -31,13 +31,12 @@ public class DrinkController {
 	public void onItemBeingDrunk(ItemStack item) {
 		if(levelMap.containsKey(item.getItem())) {
 			itemHeal++;
-			if(itemHeal == 24) {
+			if(itemHeal == item.getMaxItemUseDuration()) {
 				ThirstUtils.getStats().addStats((Integer)levelMap.get(item.getItem()), (Float)saturationMap.get(item.getItem()));
 				if(item.getItem() == Item.potion && item.getItemDamage() == 0) {
 					Random rand = new Random(); 
 					if(rand.nextFloat() < 0.3f) {
 						PoisonController.startPoison();
-						System.out.println("Poison cause you were drinking bad water.");
 					}
 				}
 				itemHeal = 0;

@@ -2,11 +2,7 @@ package net.minecraft.src.thirstmod;
 
 import java.io.*;
 import java.net.*;
-
-import org.lwjgl.Sys;
-
 import cpw.mods.fml.client.FMLClientHandler;
-
 import net.minecraft.src.*;
 import net.minecraft.src.thirstmod.blocks.JMRecipes;
 
@@ -82,15 +78,36 @@ public class ThirstUtils {
 	 * @return true if a update is available. Triggers a update screen to be displayed upon loading a save file.
 	 * @throws Exception
 	 */
-	public static boolean checkForUpdate() throws Exception {
-		URL file = new URL("http://dl.dropbox.com/u/47453096/VersionMod.txt");
-		BufferedReader br = new BufferedReader(new InputStreamReader(file.openStream()));
-		String version = br.readLine();
-		if(getModVersion().equals(version)) {
-			return false;
-		} else {
-			System.out.println("New mod version found: " + version);
-			return true;
+	public static boolean checkForUpdate() {
+		try {
+			URL file = new URL("http://dl.dropbox.com/u/47453096/VersionMod.txt");
+			BufferedReader br = new BufferedReader(new InputStreamReader(file.openStream()));
+			String version = br.readLine();
+			if(getModVersion().equals(version)) {
+				return false;
+			} else {
+				System.out.println("New mod version found: " + version);
+				return true;
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/**
+	 * Checks the latest mod version.
+	 * @return
+	 */
+	public static String getReleasedVersion() {
+		try {
+			URL file = new URL("http://dl.dropbox.com/u/47453096/VersionMod.txt");
+			BufferedReader br = new BufferedReader(new InputStreamReader(file.openStream()));
+			String version = br.readLine();
+			return version;
+		} catch(Exception e) {
+			e.printStackTrace();
+			return getModVersion();
 		}
 	}
 	
@@ -131,6 +148,9 @@ public class ThirstUtils {
 		getStats().saturation = 5f;
 		getStats().healhurtTimer = 0;
 		getStats().drinkTimer = 0;
+	}
+	
+	public static void setModUnloaded() {
 		ThirstMod.INSTANCE.loadedMod = false;
 	}
 	
@@ -189,21 +209,21 @@ public class ThirstUtils {
 
 	/**
 	 * Adds a recipe to the Drinks Brewer.
-	 * @param i Item that is placed in the top Drinks Brewer Slot.
-	 * @param item The Item that is returned after the item (int i) is brewed.
+	 * @param id Item that is placed in the top Drinks Brewer Slot.
+	 * @param item The Item that is returned after the item (int id) is brewed.
 	 */
-	public static void addJMRecipe(int i, ItemStack item) {
-		JMRecipes.solidifying().addSolidifying(i, item);
+	public static void addJMRecipe(int id, ItemStack item) {
+		JMRecipes.solidifying().addSolidifying(id, item);
 	}
 	
 	/**
 	 * Adds a recipe to the Drinks Brewer.
-	 * @param i Item that is placed in the top Drinks Brewer Slot.
+	 * @param id Item that is placed in the top Drinks Brewer Slot.
 	 * @param j Metadata for (int i) if needed.
-	 * @param item The Item that is returned after the item (int i, int j) is brewed.
+	 * @param item The Item that is returned after the item (int id, int metadata) is brewed.
 	 */
-	public static void addJMRecipe(int i, int j, ItemStack item) {
-		JMRecipes.solidifying().addSolidifying(i, j, item);
+	public static void addJMRecipe(int id, int metadata, ItemStack item) {
+		JMRecipes.solidifying().addSolidifying(id, metadata, item);
 	}
 }
 
