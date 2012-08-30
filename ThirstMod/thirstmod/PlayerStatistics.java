@@ -77,7 +77,7 @@ public class PlayerStatistics {
 	public void exhaustPlayer(EntityPlayer player) {
 		int multiplier = ThirstUtils.getCurrentBiome(player) == "Desert" ? 2 : 1;
 		int movement = ThirstUtils.getMovementStat(player);
-		float tweak = (float)ConfigHelper.thirstRate;
+		float tweak = (float)ConfigHelper.thirstRate / 10;
 		if (player.isInsideOfMaterial(Material.water)) {
 			if (movement > 0) {
 				addExhaustion(0.015F * (float) movement * 0.003F * tweak);
