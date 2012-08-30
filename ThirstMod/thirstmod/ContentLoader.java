@@ -21,7 +21,7 @@ public class ContentLoader
 	 */
 	public void loadMainFiles()
 	{
-		File apiDir = new File(Minecraft.getMinecraftDir(), "/mods/ThirstMod/ContentMain/");
+		File apiDir = new File(Minecraft.getMinecraftDir(), "/mods/ThirstMod/Content/Main/");
 		
 		boolean deleted = false;
 		
@@ -52,8 +52,8 @@ public class ContentLoader
 					if (deleted == false)
 					{
 						//Deletes the .ini and .DS_Store files that can cause conflicts in the loading process.
-						ThirstUtils.deleteFiles(Minecraft.getMinecraftDir() + "/mods/ThirstMod/ContentMain/", ".DS_Store");
-						ThirstUtils.deleteFiles(Minecraft.getMinecraftDir() + "/mods/ThirstMod/ContentMain/", ".ini");
+						ThirstUtils.deleteFiles(Minecraft.getMinecraftDir() + "/mods/ThirstMod/Content/Main/", ".DS_Store");
+						ThirstUtils.deleteFiles(Minecraft.getMinecraftDir() + "/mods/ThirstMod/Content/Main/", ".ini");
 						deleted = true;
 					}
 					if (!addedfiles.contains(files[i].getName()) && deleted == true)
@@ -61,8 +61,6 @@ public class ContentLoader
 						try
 						{
 							init(new BufferedReader(new FileReader(files[i])));
-							System.out.println(directory);
-							System.out.println(textureFile);
 							addedfiles.add(files[i].getName());
 							new ContentDrink(directory, textureFile);
 						} catch (Exception e)
@@ -134,11 +132,11 @@ public class ContentLoader
 	public void read(String[] colon)
 	{
 		if(colon[0].equals("Directory")) {
-			directory = Minecraft.getMinecraftDir().toString() + "/mods/ThirstMod/Content/" + colon[1];
+			directory = Minecraft.getMinecraftDir().toString() + "/mods/ThirstMod/Content/Files/" + colon[1];
 		}
 		if(colon[0].equals("Texture"))
 		{
-			textureFile = "/Content Textures/" + colon[1];
+			textureFile = "/Content/Textures/" + colon[1];
 		}
 	}
 }
