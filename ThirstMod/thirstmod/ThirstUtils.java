@@ -14,7 +14,7 @@ public class ThirstUtils {
 	 * @return the mod version.
 	 */
 	public static String getModVersion() {
-		return "1.0.0";
+		return "1.0.1";
 	}
 	
 	/** 

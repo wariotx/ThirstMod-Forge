@@ -29,7 +29,7 @@ public class DrinkLoader {
 			LanguageRegistry.addName(cMilk, "Chocolate Milk");
 		}
 		if (ConfigHelper.wantFBucket == true) {
-			Item fBucket = ((Drink) new Drink(ConfigHelper.fBucketId, 10, 1.4f, false).setIconCoord(4, 1).setItemName("freshBucket")).setTexFile("/thirstmod/textures/icons.png").setMaxStackSize(ConfigHelper.maxStackSize);
+			Item fBucket = ((Drink) ((Drink) new Drink(ConfigHelper.fBucketId, 10, 1.4f, false).setIconCoord(4, 1).setItemName("freshBucket").setMaxStackSize(ConfigHelper.maxStackSize)).setReturn(Item.bucketEmpty)).setTexFile("/thirstmod/textures/icons.png");
 			LanguageRegistry.addName(fBucket, "Fresh Water Bucket");
 			GameRegistry.addSmelting(Item.bucketWater.shiftedIndex, new ItemStack(fBucket, 1), 0.4f);
 			ModLoader.addShapelessRecipe(new ItemStack(fBucket, 1), new Object[]

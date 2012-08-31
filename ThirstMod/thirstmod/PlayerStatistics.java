@@ -38,18 +38,12 @@ public class PlayerStatistics {
 				level = level - 1;
 			}
 		}
-		if(level >= 18 && player.getFoodStats().getFoodLevel() >= 18 && player.shouldHeal()) { 
-			healhurtTimer++;
-			if(healhurtTimer > 80) {
-				player.heal(1);
-				healhurtTimer = 0;
-			}
-		}
 		if(level == 0) {
 			healhurtTimer++;
 			if(healhurtTimer > 80) {
 				if (player.getHealth() > 10 || difSet >= 3 || player.getHealth() > 1 && difSet >= 2) {
 					healhurtTimer = 0;
+					ThirstUtils.getPlayerMp().attackEntityFrom(DamageSource.starve, 1);
 				}
 			}
 		}
@@ -57,8 +51,8 @@ public class PlayerStatistics {
 		if(player.isSneaking() && player.isInWater()) {
 			drinkTimer++;
 			if(drinkTimer > 16) {
-				addStats(1, 0.3f);
-				player.worldObj.playSoundAtEntity(player, "random.drink", 0.5F, player.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+				addStats(1, 0.3F);
+				ThirstUtils.getPlayerMp().worldObj.playSoundAtEntity(ThirstUtils.getPlayerMp(), "random.drink", 0.5F, player.worldObj.rand.nextFloat() * 0.1F + 0.9F);
 				if(poisonCon.getBiomesList().containsKey(ThirstUtils.getCurrentBiome(player)) && ConfigHelper.poisonOn == true) {
 					if(random.nextFloat() < poisonCon.getBiomePoison(ThirstUtils.getCurrentBiome(player))) {
 						PoisonController.startPoison();

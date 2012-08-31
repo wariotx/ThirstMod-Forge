@@ -25,7 +25,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
-@Mod(modid = "ThirstMod", name = "Thirst Mod", version = "1.0.0")
+@Mod(modid = "ThirstMod", name = "Thirst Mod", version = "1.0.1")
 @NetworkMod(serverSideRequired = false, clientSideRequired = true)
 public class ThirstMod implements IGuiHandler {
 	public static final Block waterCollector = new BlockRC(ConfigHelper.rcId).setBlockName("waterCollector").setResistance(5F).setHardness(4F).setCreativeTab(CreativeTabs.tabBlock);
@@ -86,7 +86,7 @@ public class ThirstMod implements IGuiHandler {
 	 * @param minecraft
 	 */
 	public void onTickInGame(Minecraft minecraft) {
-		if(ThirstUtils.getPlayer().capabilities.isCreativeMode == false) {
+		if(ThirstUtils.getPlayerMp().capabilities.isCreativeMode == false) {
 			if(changedGui == false) {
 				minecraft.ingameGUI = new GuiThirst();
 				changedGui = true;
@@ -114,7 +114,7 @@ public class ThirstMod implements IGuiHandler {
 			ThirstUtils.setDefaults();
 			ThirstUtils.setModUnloaded();
 		}
-		if(gui instanceof GuiFurnace) {
+		if(gui instanceof GuiGameOver) {
 			ThirstUtils.setDefaults();
 		}
 	}
@@ -153,7 +153,7 @@ public class ThirstMod implements IGuiHandler {
 	 * @return
 	 */
 	public static boolean isJumping() {
-		return ThirstUtils.getPlayer().onGround == false;
+		return ThirstUtils.getPlayerMp().onGround == false;
 	}
 	
 	/**

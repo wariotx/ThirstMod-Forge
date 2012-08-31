@@ -363,7 +363,11 @@ public class GuiThirst extends GuiIngame
                     var26 = MathHelper.ceiling_double_int((double)(var25 - 2) * 10.0D / 300.0D);
                     var52 = MathHelper.ceiling_double_int((double)var25 * 10.0D / 300.0D) - var26;
                     
-                    int y = -10;
+                    int y = 0;
+                    
+                    if(var23 > 0) {
+                    	y = -10;
+                    }
                     
                     for (var28 = 0; var28 < var26 + var52; ++var28)
                     {

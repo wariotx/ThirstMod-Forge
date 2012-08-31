@@ -6,6 +6,8 @@ package net.minecraft.src.thirstmod;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
+import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.src.*;
 
 public class Drink extends Item
@@ -20,6 +22,7 @@ public class Drink extends Item
 	private boolean hasEffect = false;
 	private Random rand = new Random();
 	private String texture;
+	private Item returnItem = Item.glassBottle;
 	
 	private float poisonChance;
 	
@@ -64,10 +67,10 @@ public class Drink extends Item
 		
 		if (itemstack.stackSize <= 0)
 		{
-			return new ItemStack(Item.glassBottle);
+			return new ItemStack(returnItem);
 		} else
 		{
-			entityplayer.inventory.addItemStackToInventory(new ItemStack(Item.glassBottle));
+			entityplayer.inventory.addItemStackToInventory(new ItemStack(returnItem));
 			return itemstack;
 		}
 	}
@@ -84,7 +87,9 @@ public class Drink extends Item
 
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
 	{
-		entityplayer.setItemInUse(itemstack, getMaxItemUseDuration(itemstack));
+		if(canDrink() == true) {
+			entityplayer.setItemInUse(itemstack, getMaxItemUseDuration(itemstack));
+		}
 		return itemstack;
 	}
 
@@ -179,18 +184,22 @@ public class Drink extends Item
 	}
 
 	/**
-	 * Can the person drink. Set to true for debugging.
+	 * Can the person drink.
 	 * @return
 	 */
 	public static boolean canDrink()
 	{	
-		/*
 		if(ThirstUtils.getStats().level < 20) {
 			return true;
+		} else if(FMLClientHandler.instance().getClient().thePlayer.capabilities.isCreativeMode == true) {
+			return true;
 		}
-		return false.
-		*/
-		return true;
+		return false;
+	}
+	
+	public Item setReturn(Item item) {
+		returnItem = item;
+		return this;
 	}
 	
 	/** 

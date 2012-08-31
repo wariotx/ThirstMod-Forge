@@ -103,7 +103,7 @@ public class GuiUpdate extends GuiScreen
     
     private void openUrl() {
 		try {
-			URL thirstMod = new URL("http://www.minecraftforum.net/topic/1016543-125sspsmpthirst-modv07/");
+			URL thirstMod = new URL("http://www.minecraftforum.net/topic/1143097-132-ssplan-thirst-mod-finally-updated-now-with-custom-drinks/");
 			URI uri = thirstMod.toURI();
 			Desktop.getDesktop().browse(uri);
 		} catch(Exception e) {
