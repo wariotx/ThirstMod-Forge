@@ -125,8 +125,11 @@ public class ThirstMod implements IGuiHandler {
 	 */
 	@ForgeSubscribe
 	public void onSave(WorldEvent.Save save) {
-		ThirstUtils.writeNbt(ThirstUtils.getPlayerMp().getEntityData());
-	}
+		try {
+			ThirstUtils.writeNbt(ThirstUtils.getPlayerMp().getEntityData());
+		} catch(Exception e) {
+		}
+ 	}
 	
 	/**
 	 * Called when the player right clicks on a living entity.

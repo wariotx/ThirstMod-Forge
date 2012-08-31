@@ -29,8 +29,12 @@ public class ThirstUtils {
 	 * Gets an EntityPlayerMP.class instance.
 	 * @return EntityPlayerMP.class instance.
 	 */
-	public static EntityPlayerMP getPlayerMp() {
-		return (EntityPlayerMP) FMLClientHandler.instance().getServer().getConfigurationManager().playerEntityList.iterator().next();
+	public static EntityPlayer getPlayerMp() {
+		try {
+			return (EntityPlayerMP) FMLClientHandler.instance().getServer().getConfigurationManager().playerEntityList.iterator().next();
+		} catch(Exception e) {
+			return FMLClientHandler.instance().getClient().thePlayer;
+		}
 	}
 	
 	/**
