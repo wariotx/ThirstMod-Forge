@@ -17,7 +17,7 @@ public class BlockJM extends BlockContainer {
 	
 	@Override
 	public int idDropped(int i, Random random, int j) {
-		return 233;
+		return ThirstMod.INSTANCE.juiceMaker.blockID;
 	}
 	
 	@Override

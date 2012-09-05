@@ -3,6 +3,7 @@ package net.minecraft.src.thirstmod;
 import java.util.*;
 
 import net.minecraft.src.*;
+import net.minecraft.src.thirstmod.api.ThirstAPI;
 
 public class PlayerStatistics {
 	public int level;
@@ -113,6 +114,9 @@ public class PlayerStatistics {
 	 * @param par2 Amount to saturation.
 	 */
 	public void addStats(int par1, float par2) {
+		for(int i = 0; i < ThirstAPI.instance().registeredStatsAPI.length; i++) {
+			ThirstAPI.instance().registeredStatsAPI[i].onStatsAdded(par1, par2);
+		}
 		level = Math.min(par1 + level, 20);
 		saturation = Math.min(saturation + (float) par1 * par2 * 2.0F, level);
 	}

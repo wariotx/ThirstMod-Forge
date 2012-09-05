@@ -86,6 +86,7 @@ public class ContentDrink extends ContentLoader {
 							LanguageRegistry.addName(drink, name);
 							ThirstUtils.addJMRecipe(jmTop, metadata, new ItemStack(drink));
 							addedDrinks.add(files[i].getName());
+							DrinkController.addOtherDrink(drink);
 						} catch (Exception e)
 						{
 							System.out.println("Drink not loaded:" + files[i].getName());
