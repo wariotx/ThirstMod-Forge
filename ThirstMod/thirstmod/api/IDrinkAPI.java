@@ -6,6 +6,7 @@ import net.minecraft.src.ItemStack;
  * Provides two events triggered by an item being or finished drinking.
  * You must first register your item with DrinkController.
  * This can be used to add poison when the item is being drunk or even not adding the stats.
+ * This can be implemented by a Item class.
  */
 
 public interface IDrinkAPI {

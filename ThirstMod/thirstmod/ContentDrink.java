@@ -12,6 +12,7 @@ import java.util.List;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.thirstmod.api.ThirstAPI;
 
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -41,6 +42,7 @@ public class ContentDrink extends ContentLoader {
 	public static float potionEffectProbability;
 	
 	private static List addedDrinks = new ArrayList();
+	private String fileName;
 	
 	public ContentDrink(String fileDir, String textureFile) {
 		File apiDir = new File(fileDir);
@@ -76,6 +78,7 @@ public class ContentDrink extends ContentLoader {
 					{
 						try
 						{
+							fileName = files[i].getName();
 							init(new BufferedReader(new FileReader(files[i])));
 							Item drink = (((Drink) new Drink(id, replenish, saturation, alwaysDrinkable).setItemName(shortName)
 									.setMaxStackSize(maxStackSize)).setEffect(isShiny)).setPoisoningChance(chance)
@@ -163,6 +166,11 @@ public class ContentDrink extends ContentLoader {
 			potionDuration = Integer.parseInt(colon[2]);
 			potionAmplifier = Integer.parseInt(colon[3]);
 			potionEffectProbability = 1;
+		}
+		for(int i = 0; i < ThirstAPI.instance().registeredContentAPI.length; i++) {
+			if(ThirstAPI.instance().registeredContentAPI[i] != null) {
+				ThirstAPI.instance().registeredContentAPI[i].onDrinkContentLoad(fileName, colon.clone());
+			}
 		}
 	}
 }

@@ -2,11 +2,15 @@ package net.minecraft.src.thirstmod;
 
 import java.util.*;
 
+import net.minecraft.src.BiomeGenBase;
+import net.minecraft.src.thirstmod.api.ThirstAPI;
+
 public class PoisonController {
 	private static int poisonTimer;
 	private static boolean poisonPlayer = false;
 	private static boolean isPoisoned = false;
 	private static Map biomesList = new HashMap();
+	private boolean loadedClass = false;
 	
 	/**
 	 * PoisonControler ticks. Called from PlayerStatistics.class.
@@ -15,7 +19,10 @@ public class PoisonController {
 		if(shouldPoison() == true) {
 			poisonPlayer();
 		}
-		addBiomePoison();
+		if(loadedClass == false) {
+			addBiomePoison();
+			loadedClass = true;
+		}
 	}
 	
 	/**
@@ -43,9 +50,20 @@ public class PoisonController {
 	private void poisonPlayer() {
 		if(ConfigHelper.poisonOn == true) {
 			if(poisonPlayer == true) {
+				for(int i = 0; i < ThirstAPI.instance().registeredPoisonAPI.length; i++) {
+					if(ThirstAPI.instance().registeredPoisonAPI[i] != null) {
+						ThirstAPI.instance().registeredPoisonAPI[i].onPlayerPoisoned(poisonTimeRemain());
+					}
+					
+				}
 				poisonTimer++;
 				isPoisoned = true;
 				if(poisonTimer > 360) {
+					for(int i = 0; i < ThirstAPI.instance().registeredPoisonAPI.length; i++) {
+						if(ThirstAPI.instance().registeredPoisonAPI[i] != null) {
+							ThirstAPI.instance().registeredPoisonAPI[i].onPoisonStopped();
+						}
+					}
 					isPoisoned = false;
 					poisonPlayer = false;
 				}
@@ -106,6 +124,18 @@ public class PoisonController {
 		biomesList.put("Ice Mountains", 0.1f);
 		biomesList.put("River", 0.2f);
 		biomesList.put("Other", 0.3f);
+		
+		for(int i = 0; i < BiomeGenBase.biomeList.length; i++) {
+			String biomeName = BiomeGenBase.biomeList[i].biomeName;
+			for(int j = 0; j < ThirstAPI.instance().registeredPoisonAPI.length; j++) {
+				if(ThirstAPI.instance().registeredPoisonAPI[i] != null) {
+					if(ThirstAPI.instance().registeredPoisonAPI[i].getPoisonAmount(biomeName) != 0.0f) {
+						biomesList.put(biomeName, ThirstAPI.instance().registeredPoisonAPI[i].getPoisonAmount(biomeName));
+						
+					}
+				}
+			}
+		}
 	}
 	
 	/**

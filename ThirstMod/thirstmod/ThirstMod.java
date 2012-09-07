@@ -1,32 +1,27 @@
 package net.minecraft.src.thirstmod;
 
-import java.lang.reflect.Field;
 import java.util.Random;
-
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.client.*;
+import cpw.mods.fml.client.registry.*;
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.*;
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.common.network.NetworkMod;
-import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.*;
 import cpw.mods.fml.common.registry.*;
 import net.minecraft.client.Minecraft;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.*;
 import net.minecraft.src.thirstmod.*;
-import net.minecraft.src.thirstmod.api.IDrinkAPI;
-import net.minecraft.src.thirstmod.api.ThirstAPI;
+import net.minecraft.src.thirstmod.api.*;
 import net.minecraft.src.thirstmod.blocks.*;
 import net.minecraft.src.thirstmod.gui.*;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.*;
 import net.minecraftforge.event.*;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.player.AttackEntityEvent;
-import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.event.entity.living.*;
+import net.minecraftforge.event.entity.player.*;
+import net.minecraftforge.event.world.*;
 
 @Mod(modid = "ThirstMod", name = "Thirst Mod", version = "1.0.4")
 @NetworkMod(serverSideRequired = false, clientSideRequired = true)
@@ -82,7 +77,7 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 		DrinkController.addDrink(Item.potion, 5, 1f);
 		DrinkController.addDrink(Item.bucketMilk, 10, 3f);
 		DrinkController.addDrink(Item.bowlSoup, 7, 2f);
-		ThirstAPI.instance().registerDrinkAPI(this);
+		ThirstAPI.instance().registerAPI(this);
 	}
 
 	/**
@@ -100,7 +95,14 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 					FMLClientHandler.instance().displayGuiScreen(minecraft.thePlayer, new GuiUpdate());
 					isUpdate = false;
 				}
-				ThirstUtils.readNbt(ThirstUtils.getPlayerMp().getEntityData());
+				
+				MinecraftServer minecraftServer = FMLClientHandler.instance().getServer();
+				String allNames[] = minecraftServer.getAllUsernames().clone();
+				for(int i = 0; i < allNames.length; i++) {
+					EntityPlayerMP player = minecraftServer.getConfigurationManager().getPlayerForUsername(allNames[i]);
+					ThirstUtils.readNbt(player.getEntityData());
+				}
+				
 				new ThirstUtils();
 				loadedMod = true;
 			}
@@ -130,7 +132,12 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 	@ForgeSubscribe
 	public void onSave(WorldEvent.Save save) {
 		try {
-			ThirstUtils.writeNbt(ThirstUtils.getPlayerMp().getEntityData());
+			MinecraftServer minecraft = FMLClientHandler.instance().getServer();
+			String allNames[] = minecraft.getAllUsernames().clone();
+			for(int i = 0; i < allNames.length; i++) {
+				EntityPlayerMP player = minecraft.getConfigurationManager().getPlayerForUsername(allNames[i]);
+				ThirstUtils.writeNbt(player.getEntityData());
+			}
 		} catch(Exception e) {
 		}
  	}
@@ -198,6 +205,9 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 		return null;
 	}
 
+	/**
+	 * Called when an item is drunk.
+	 */
 	@Override
 	public void onItemDrunk(ItemStack item, int levelAdded, float saturationAdded) {
 		if(item.getItem() == Item.potion && item.getItemDamage() == 0) {
@@ -208,6 +218,9 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 		}
 	}
 
+	/**
+	 * Called when an item is being drunk. Not used yet...
+	 */
 	@Override
 	public void onItemBeingDrunk(ItemStack item, int timeRemaining) {
 	}

@@ -3,6 +3,8 @@ package net.minecraft.src.thirstmod;
 import java.io.*;
 import net.minecraft.src.*;
 import net.minecraft.src.thirstmod.*;
+import net.minecraft.src.thirstmod.api.ThirstAPI;
+
 import java.util.*;
 import net.minecraft.client.Minecraft;
 
@@ -11,6 +13,7 @@ public class ContentLoader
 	private static List addedfiles = new ArrayList();
 	private String directory;
 	private String textureFile;
+	private String fileName;
 	
 	public ContentLoader() {
 		loadMainFiles();
@@ -60,6 +63,7 @@ public class ContentLoader
 					{
 						try
 						{
+							fileName = files[i].getName();
 							init(new BufferedReader(new FileReader(files[i])));
 							addedfiles.add(files[i].getName());
 							new ContentDrink(directory, textureFile);
@@ -137,6 +141,11 @@ public class ContentLoader
 		if(colon[0].equals("Texture"))
 		{
 			textureFile = "/Content/Textures/" + colon[1];
+		}
+		for(int i = 0; i < ThirstAPI.instance().registeredContentAPI.length; i++) {
+			if(ThirstAPI.instance().registeredContentAPI[i] != null) {
+				ThirstAPI.instance().registeredContentAPI[i].onMainContentLoad(fileName, colon.clone(), directory, textureFile);
+			}
 		}
 	}
 }

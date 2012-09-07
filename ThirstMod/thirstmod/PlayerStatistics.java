@@ -45,6 +45,11 @@ public class PlayerStatistics {
 				if (player.getHealth() > 10 || difSet >= 3 || player.getHealth() > 1 && difSet >= 2) {
 					healhurtTimer = 0;
 					ThirstUtils.getPlayerMp().attackEntityFrom(DamageSource.starve, 1);
+					for(int i = 0; i < ThirstAPI.instance().registeredStatsAPI.length; i++) {
+						if(ThirstAPI.instance().registeredStatsAPI[i] != null) {
+							ThirstAPI.instance().registeredStatsAPI[i].onPlayerHurtFromDehydration();
+						}
+					}
 				}
 			}
 		}
@@ -57,6 +62,11 @@ public class PlayerStatistics {
 				if(poisonCon.getBiomesList().containsKey(ThirstUtils.getCurrentBiome(player)) && ConfigHelper.poisonOn == true) {
 					if(random.nextFloat() < poisonCon.getBiomePoison(ThirstUtils.getCurrentBiome(player))) {
 						PoisonController.startPoison();
+					}
+				}
+				for(int i = 0; i < ThirstAPI.instance().registeredStatsAPI.length; i++) {
+					if(ThirstAPI.instance().registeredStatsAPI[i] != null) {
+						ThirstAPI.instance().registeredStatsAPI[i].onPlayerDrink();
 					}
 				}
 				drinkTimer = 0;
@@ -98,6 +108,11 @@ public class PlayerStatistics {
 		} else {
 			addExhaustion(0.160f);
 		}
+		for(int i = 0; i < ThirstAPI.instance().registeredStatsAPI.length; i++) {
+			if(ThirstAPI.instance().registeredStatsAPI[i] != null) {
+				ThirstAPI.instance().registeredStatsAPI[i].onAddExhaustion(movement, tweak, multiplier);
+			}
+		}
 	}
 	
 	/**
@@ -115,7 +130,9 @@ public class PlayerStatistics {
 	 */
 	public void addStats(int par1, float par2) {
 		for(int i = 0; i < ThirstAPI.instance().registeredStatsAPI.length; i++) {
-			ThirstAPI.instance().registeredStatsAPI[i].onStatsAdded(par1, par2);
+			if(ThirstAPI.instance().registeredStatsAPI[i] != null) {
+				ThirstAPI.instance().registeredStatsAPI[i].onStatsAdded(par1, par2);
+			}
 		}
 		level = Math.min(par1 + level, 20);
 		saturation = Math.min(saturation + (float) par1 * par2 * 2.0F, level);
