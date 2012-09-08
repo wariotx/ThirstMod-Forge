@@ -167,10 +167,5 @@ public class ContentDrink extends ContentLoader {
 			potionAmplifier = Integer.parseInt(colon[3]);
 			potionEffectProbability = 1;
 		}
-		for(int i = 0; i < ThirstAPI.instance().registeredContentAPI.length; i++) {
-			if(ThirstAPI.instance().registeredContentAPI[i] != null) {
-				ThirstAPI.instance().registeredContentAPI[i].onDrinkContentLoad(fileName, colon.clone());
-			}
-		}
 	}
 }

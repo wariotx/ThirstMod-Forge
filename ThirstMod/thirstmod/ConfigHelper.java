@@ -30,6 +30,7 @@ public class ConfigHelper {
 	public static int rcId;
 	public static int filterId;
 	public static int dFilterId;
+	public static int canteenId;
 	
 	private static boolean setupConfig() {
 		config.load();
@@ -51,6 +52,7 @@ public class ConfigHelper {
 		freshWaterId = Integer.parseInt(config.getOrCreateIntProperty("Fresh Water", "Item", 803).value);
 		filterId = Integer.parseInt(config.getOrCreateIntProperty("Filter", "Item", 805).value);
 		dFilterId = Integer.parseInt(config.getOrCreateIntProperty("Dirty Filter", "Item", 806).value);
+		canteenId = Integer.parseInt(config.getOrCreateIntProperty("Canteen", "Item", 807).value);
 		
 		jmId = Integer.parseInt(config.getOrCreateBlockIdProperty("Drinks Brewer", 3505).value);
 		rcId = Integer.parseInt(config.getOrCreateBlockIdProperty("Rain Collector", 3506).value);

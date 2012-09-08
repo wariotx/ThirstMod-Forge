@@ -7,6 +7,7 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 import net.minecraft.src.*;
+import net.minecraft.src.thirstmod.ThirstUtils;
 
 public class GuiUpdate extends GuiScreen
 {
@@ -70,7 +71,7 @@ public class GuiUpdate extends GuiScreen
         drawGradientRect(0, 0, width, height, 0x60500000, 0xa0803030);
         GL11.glPushMatrix();
         GL11.glScalef(2.0F, 2.0F, 2.0F);
-        drawCenteredString(fontRenderer, "Do you want to update ThirstMod", width / 2 / 2, 40, 0xffffff);
+        drawCenteredString(fontRenderer, "Do you want to update ThirstMod to " + ThirstUtils.getReleasedVersion(), width / 2 / 2, 40, 0xffffff);
         GL11.glPopMatrix();
         super.drawScreen(par1, par2, par3);
     }

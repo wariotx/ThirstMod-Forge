@@ -142,10 +142,5 @@ public class ContentLoader
 		{
 			textureFile = "/Content/Textures/" + colon[1];
 		}
-		for(int i = 0; i < ThirstAPI.instance().registeredContentAPI.length; i++) {
-			if(ThirstAPI.instance().registeredContentAPI[i] != null) {
-				ThirstAPI.instance().registeredContentAPI[i].onMainContentLoad(fileName, colon.clone(), directory, textureFile);
-			}
-		}
 	}
 }

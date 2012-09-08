@@ -54,7 +54,6 @@ public class PoisonController {
 					if(ThirstAPI.instance().registeredPoisonAPI[i] != null) {
 						ThirstAPI.instance().registeredPoisonAPI[i].onPlayerPoisoned(poisonTimeRemain());
 					}
-					
 				}
 				poisonTimer++;
 				isPoisoned = true;
@@ -124,18 +123,6 @@ public class PoisonController {
 		biomesList.put("Ice Mountains", 0.1f);
 		biomesList.put("River", 0.2f);
 		biomesList.put("Other", 0.3f);
-		
-		for(int i = 0; i < BiomeGenBase.biomeList.length; i++) {
-			String biomeName = BiomeGenBase.biomeList[i].biomeName;
-			for(int j = 0; j < ThirstAPI.instance().registeredPoisonAPI.length; j++) {
-				if(ThirstAPI.instance().registeredPoisonAPI[i] != null) {
-					if(ThirstAPI.instance().registeredPoisonAPI[i].getPoisonAmount(biomeName) != 0.0f) {
-						biomesList.put(biomeName, ThirstAPI.instance().registeredPoisonAPI[i].getPoisonAmount(biomeName));
-						
-					}
-				}
-			}
-		}
 	}
 	
 	/**

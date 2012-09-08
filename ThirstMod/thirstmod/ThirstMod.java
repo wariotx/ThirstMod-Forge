@@ -23,7 +23,7 @@ import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.*;
 import net.minecraftforge.event.world.*;
 
-@Mod(modid = "ThirstMod", name = "Thirst Mod", version = "1.0.4")
+@Mod(modid = ThirstUtils.ID, name = ThirstUtils.NAME, version = ThirstUtils.VERSION)
 @NetworkMod(serverSideRequired = false, clientSideRequired = true)
 public class ThirstMod implements IGuiHandler, IDrinkAPI {
 	public static final Block waterCollector = new BlockRC(ConfigHelper.rcId).setBlockName("waterCollector").setResistance(5F).setHardness(4F).setCreativeTab(CreativeTabs.tabBlock);
@@ -64,7 +64,7 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 		{ "***", "*!*", "***", Character.valueOf('*'), Block.planks, Character.valueOf('!'), Item.silk });
 		GameRegistry.addShapelessRecipe(new ItemStack(Filter), new Object[]
 		{ Item.silk, dFilter });
-
+		
 		new ContentLoader();
 		new DrinkLoader().loadDrinks();
 		new ThirstAPI();
@@ -77,7 +77,7 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 		DrinkController.addDrink(Item.potion, 5, 1f);
 		DrinkController.addDrink(Item.bucketMilk, 10, 3f);
 		DrinkController.addDrink(Item.bowlSoup, 7, 2f);
-		ThirstAPI.instance().registerAPI(this);
+		ThirstAPI.instance().registerAPIDrink(this);
 	}
 
 	/**
@@ -95,14 +95,7 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 					FMLClientHandler.instance().displayGuiScreen(minecraft.thePlayer, new GuiUpdate());
 					isUpdate = false;
 				}
-				
-				MinecraftServer minecraftServer = FMLClientHandler.instance().getServer();
-				String allNames[] = minecraftServer.getAllUsernames().clone();
-				for(int i = 0; i < allNames.length; i++) {
-					EntityPlayerMP player = minecraftServer.getConfigurationManager().getPlayerForUsername(allNames[i]);
-					ThirstUtils.readNbt(player.getEntityData());
-				}
-				
+				onLoadNBT();
 				new ThirstUtils();
 				loadedMod = true;
 			}
@@ -143,6 +136,22 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
  	}
 	
 	/**
+	 * Loads data from the NBT. Throws exception if something goes wrong.
+	 */
+	public void onLoadNBT() {
+		try {
+			MinecraftServer minecraftServer = FMLClientHandler.instance().getServer();
+			String allNames[] = minecraftServer.getAllUsernames().clone();
+			for(int i = 0; i < allNames.length; i++) {
+				EntityPlayerMP player = minecraftServer.getConfigurationManager().getPlayerForUsername(allNames[i]);
+				ThirstUtils.readNbt(player.getEntityData());
+			}
+		} catch(Exception e) {
+			//Error.
+		}
+	}
+	
+	/**
 	 * Called when the player right clicks on a living entity.
 	 * @param attack
 	 */
@@ -177,6 +186,17 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 	 */
 	public static void setIcon(Item item, int i) {
 		item.setIconIndex(i);
+	}
+	
+	/**
+	 * Does everything related to the API.
+	 */
+	public void doAPI() {
+		for(int i = 0; i < ThirstAPI.instance().registeredRegisterAPI.length; i++) {
+			if(ThirstAPI.instance().registeredRegisterAPI[i] != null) {
+				DrinkController.addOtherDrink(ThirstAPI.instance().registeredRegisterAPI[i].register());
+			}
+		}
 	}
 	
 	/**
@@ -222,6 +242,5 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 	 * Called when an item is being drunk. Not used yet...
 	 */
 	@Override
-	public void onItemBeingDrunk(ItemStack item, int timeRemaining) {
-	}
+	public void onItemBeingDrunk(ItemStack item, int timeRemaining) {}
 }

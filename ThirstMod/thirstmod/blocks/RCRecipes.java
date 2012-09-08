@@ -2,6 +2,7 @@ package net.minecraft.src.thirstmod.blocks;
 
 import java.util.HashMap;
 import net.minecraft.src.*;
+import net.minecraft.src.thirstmod.ConfigHelper;
 import net.minecraft.src.thirstmod.DrinkLoader;
 
 import java.util.Map;
@@ -17,6 +18,9 @@ public class RCRecipes {
 	private RCRecipes() {
 		solidifyingList = new HashMap();
 		addRecipe(Item.glassBottle.shiftedIndex, new ItemStack(DrinkLoader.freshWater));
+		if(ConfigHelper.wantFBucket == true) {
+			addRecipe(Item.bucketEmpty.shiftedIndex, new ItemStack(ConfigHelper.fBucketId, 1, 0));
+		}
 	}
 
 	public void addRecipe(int i, ItemStack itemstack) {
