@@ -3,6 +3,7 @@ package net.minecraft.src.thirstmod;
 import java.util.*;
 
 import net.minecraft.src.BiomeGenBase;
+import net.minecraft.src.thirstmod.api.APIHooks;
 import net.minecraft.src.thirstmod.api.ThirstAPI;
 
 public class PoisonController {
@@ -26,10 +27,12 @@ public class PoisonController {
 	}
 	
 	/**
-	 * Prepares the poison so that it may be activated instantly.
+	 * Starts the poison.
 	 */
 	public static void startPoison() {
-		poisonPlayer = true;
+		if(APIHooks.shouldPoison() == true) {
+			poisonPlayer = true;
+		}
 	}
 	
 	/**
@@ -50,19 +53,12 @@ public class PoisonController {
 	private void poisonPlayer() {
 		if(ConfigHelper.poisonOn == true) {
 			if(poisonPlayer == true) {
-				for(int i = 0; i < ThirstAPI.instance().registeredPoisonAPI.length; i++) {
-					if(ThirstAPI.instance().registeredPoisonAPI[i] != null) {
-						ThirstAPI.instance().registeredPoisonAPI[i].onPlayerPoisoned(poisonTimeRemain());
-					}
-				}
 				poisonTimer++;
+				ThirstUtils.getStats().addExhaustion(0.052777777777778f);
+				APIHooks.onPlayerPoisoned(360 - poisonTimer);
 				isPoisoned = true;
 				if(poisonTimer > 360) {
-					for(int i = 0; i < ThirstAPI.instance().registeredPoisonAPI.length; i++) {
-						if(ThirstAPI.instance().registeredPoisonAPI[i] != null) {
-							ThirstAPI.instance().registeredPoisonAPI[i].onPoisonStopped();
-						}
-					}
+					APIHooks.onPoisonStopped();
 					isPoisoned = false;
 					poisonPlayer = false;
 				}

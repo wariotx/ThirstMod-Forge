@@ -3,6 +3,7 @@ package net.minecraft.src.thirstmod;
 import java.util.*;
 
 import net.minecraft.src.*;
+import net.minecraft.src.thirstmod.api.APIHooks;
 import net.minecraft.src.thirstmod.api.ThirstAPI;
 
 public class PlayerStatistics {
@@ -45,11 +46,7 @@ public class PlayerStatistics {
 				if (player.getHealth() > 10 || difSet >= 3 || player.getHealth() > 1 && difSet >= 2) {
 					healhurtTimer = 0;
 					ThirstUtils.getPlayerMp().attackEntityFrom(DamageSource.starve, 1);
-					for(int i = 0; i < ThirstAPI.instance().registeredStatsAPI.length; i++) {
-						if(ThirstAPI.instance().registeredStatsAPI[i] != null) {
-							ThirstAPI.instance().registeredStatsAPI[i].onPlayerHurtFromDehydration();
-						}
-					}
+					APIHooks.onPlayerHurtFromThirst();
 				}
 			}
 		}
@@ -57,16 +54,13 @@ public class PlayerStatistics {
 		if(player.isSneaking() && player.isInWater()) {
 			drinkTimer++;
 			if(drinkTimer > 16) {
-				addStats(1, 0.3F);
-				ThirstUtils.getPlayerMp().worldObj.playSoundAtEntity(ThirstUtils.getPlayerMp(), "random.drink", 0.5F, player.worldObj.rand.nextFloat() * 0.1F + 0.9F);
-				if(poisonCon.getBiomesList().containsKey(ThirstUtils.getCurrentBiome(player)) && ConfigHelper.poisonOn == true) {
-					if(random.nextFloat() < poisonCon.getBiomePoison(ThirstUtils.getCurrentBiome(player))) {
-						PoisonController.startPoison();
-					}
-				}
-				for(int i = 0; i < ThirstAPI.instance().registeredStatsAPI.length; i++) {
-					if(ThirstAPI.instance().registeredStatsAPI[i] != null) {
-						ThirstAPI.instance().registeredStatsAPI[i].onPlayerDrink();
+				if(APIHooks.onPlayerDrink() == true) {
+					addStats(1, 0.3F);
+					ThirstUtils.getPlayerMp().worldObj.playSoundAtEntity(ThirstUtils.getPlayerMp(), "random.drink", 0.5F, player.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+					if(poisonCon.getBiomesList().containsKey(ThirstUtils.getCurrentBiome(player)) && ConfigHelper.poisonOn == true) {
+						if(random.nextFloat() < poisonCon.getBiomePoison(ThirstUtils.getCurrentBiome(player))) {
+							PoisonController.startPoison();
+						}
 					}
 				}
 				drinkTimer = 0;
@@ -108,11 +102,7 @@ public class PlayerStatistics {
 		} else {
 			addExhaustion(0.160f);
 		}
-		for(int i = 0; i < ThirstAPI.instance().registeredStatsAPI.length; i++) {
-			if(ThirstAPI.instance().registeredStatsAPI[i] != null) {
-				ThirstAPI.instance().registeredStatsAPI[i].onAddExhaustion(movement, tweak, multiplier);
-			}
-		}
+		APIHooks.onExhaust(movement, tweak, multiplier);
 	}
 	
 	/**
@@ -129,12 +119,8 @@ public class PlayerStatistics {
 	 * @param par2 Amount to saturation.
 	 */
 	public void addStats(int par1, float par2) {
-		for(int i = 0; i < ThirstAPI.instance().registeredStatsAPI.length; i++) {
-			if(ThirstAPI.instance().registeredStatsAPI[i] != null) {
-				ThirstAPI.instance().registeredStatsAPI[i].onStatsAdded(par1, par2);
-			}
-		}
 		level = Math.min(par1 + level, 20);
 		saturation = Math.min(saturation + (float) par1 * par2 * 2.0F, level);
+		APIHooks.onAddStats(par1, par2);
 	}
 }

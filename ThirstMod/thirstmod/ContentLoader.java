@@ -3,6 +3,7 @@ package net.minecraft.src.thirstmod;
 import java.io.*;
 import net.minecraft.src.*;
 import net.minecraft.src.thirstmod.*;
+import net.minecraft.src.thirstmod.api.APIHooks;
 import net.minecraft.src.thirstmod.api.ThirstAPI;
 
 import java.util.*;
@@ -135,6 +136,7 @@ public class ContentLoader
 	 */
 	public void read(String[] colon)
 	{
+		APIHooks.onRead(fileName, colon, getClass());
 		if(colon[0].equals("Directory")) {
 			directory = Minecraft.getMinecraftDir().toString() + "/mods/ThirstMod/Content/Files/" + colon[1];
 		}

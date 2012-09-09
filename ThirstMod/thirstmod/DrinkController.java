@@ -6,6 +6,7 @@ import java.util.Random;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.*;
+import net.minecraft.src.thirstmod.api.APIHooks;
 import net.minecraft.src.thirstmod.api.ThirstAPI;
 
 public class DrinkController {
@@ -19,12 +20,6 @@ public class DrinkController {
 		if(item != null) {
 			if(levelMap.containsKey(item.getItem())) {
 				onItemBeingDrunk(item);
-				for(int i = 0; i < ThirstAPI.instance().registeredDrinkAPI.length; i++) {
-					if(ThirstAPI.instance().registeredDrinkAPI[i] != null) {
-						int remainingTime = item.getMaxStackSize() - itemHeal;
-						ThirstAPI.instance().registeredDrinkAPI[i].onItemBeingDrunk(item, remainingTime);
-					}
-				}
 			}
 		} else if(itemHeal > 0 && itemHeal <= 23) {
 			itemHeal = 0;
@@ -45,16 +40,12 @@ public class DrinkController {
 	 */
 	public void onItemBeingDrunk(ItemStack item) {
 		if(levelMap.containsKey(item.getItem())) {
+			APIHooks.onItemBeingDrunk(item, item.getMaxItemUseDuration() - itemHeal);
 			itemHeal++;
 			if(itemHeal == item.getMaxItemUseDuration()) {
-				for(int i = 0; i < ThirstAPI.instance().registeredDrinkAPI.length; i++) {
-					if(ThirstAPI.instance().registeredDrinkAPI[i] != null) {
-						int level = (Integer)levelMap.get(item.getItem());
-						float saturation = (Float)saturationMap.get(item.getItem());
-						ThirstAPI.instance().registeredDrinkAPI[i].onItemDrunk(item, level, saturation);
-					}
+				if(APIHooks.onItemDrunk(item, (Integer)levelMap.get(item.getItem()), (Float)saturationMap.get(item.getItem())) == true) {
+					ThirstUtils.getStats().addStats((Integer)levelMap.get(item.getItem()), (Float)saturationMap.get(item.getItem()));
 				}
-				ThirstUtils.getStats().addStats((Integer)levelMap.get(item.getItem()), (Float)saturationMap.get(item.getItem()));
 				itemHeal = 0;
 			}
 		}
@@ -62,10 +53,8 @@ public class DrinkController {
 	
 	public void onOtherItemBeingDrunk(ItemStack item) {
 		if(itemHeal == item.getMaxItemUseDuration()) {
-			for(int i = 0; i < ThirstAPI.instance().registeredDrinkAPI.length; i++) {
-				if(ThirstAPI.instance().registeredDrinkAPI[i] != null) {
-					ThirstAPI.instance().registeredDrinkAPI[i].onItemDrunk(item, 0, 0);
-				}
+			if(APIHooks.onItemDrunk(item, (Integer)levelMap.get(item.getItem()), (Float)saturationMap.get(item.getItem())) == true) {
+				ThirstUtils.getStats().addStats((Integer)levelMap.get(item.getItem()), (Float)saturationMap.get(item.getItem()));
 			}
 		}
 		itemHeal = 0;

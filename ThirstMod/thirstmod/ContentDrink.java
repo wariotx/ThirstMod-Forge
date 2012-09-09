@@ -12,6 +12,7 @@ import java.util.List;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.src.Item;
 import net.minecraft.src.ItemStack;
+import net.minecraft.src.thirstmod.api.APIHooks;
 import net.minecraft.src.thirstmod.api.ThirstAPI;
 
 import net.minecraft.client.Minecraft;
@@ -106,6 +107,7 @@ public class ContentDrink extends ContentLoader {
 	@Override
 	public void read(String[] colon) {
 		super.read(colon);
+		APIHooks.onRead(fileName, colon, getClass());
 		if (colon[0].equals("ID"))
 		{
 			id = Integer.parseInt(colon[1]);

@@ -50,18 +50,24 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 	public void onLoad(FMLInitializationEvent event) {
 		GameRegistry.registerBlock(waterCollector);
 		GameRegistry.registerBlock(juiceMaker);
+		
 		GameRegistry.registerTileEntity(TileEntityRC.class, "Rain Collector");
 		GameRegistry.registerTileEntity(TileEntityJM.class, "Juice Maker");
+		
 		LanguageRegistry.addName(waterCollector, "Rain Collector");
 		LanguageRegistry.addName(juiceMaker, "Drinks Brewer");
 		LanguageRegistry.addName(Filter, "Clean Filter");
 		LanguageRegistry.addName(dFilter, "Dirty Filter");
+		
 		GameRegistry.addRecipe(new ItemStack(waterCollector, 1), new Object[] 
 		{ "***", "*#*", "***", Character.valueOf('*'), Block.cobblestone, Character.valueOf('#'), Item.bucketEmpty, });
+		
 		GameRegistry.addRecipe(new ItemStack(juiceMaker, 1), new Object[] 
 		{ "***", "*#*", "***", Character.valueOf('*'), Block.cobblestone, Character.valueOf('#'), Item.glassBottle, });
+		
 		GameRegistry.addRecipe(new ItemStack(Filter), new Object[] 
 		{ "***", "*!*", "***", Character.valueOf('*'), Block.planks, Character.valueOf('!'), Item.silk });
+		
 		GameRegistry.addShapelessRecipe(new ItemStack(Filter), new Object[]
 		{ Item.silk, dFilter });
 		
@@ -69,15 +75,19 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 		new DrinkLoader().loadDrinks();
 		new ThirstAPI();
 		
-		MinecraftForgeClient.preloadTexture("/thirstmod/textures/icons.png");
 		isUpdate = ThirstUtils.checkForUpdate();
+		
 		TickRegistry.registerTickHandler(new TickHandler(), Side.CLIENT);
+		MinecraftForgeClient.preloadTexture("/thirstmod/textures/icons.png");
 		MinecraftForge.EVENT_BUS.register(INSTANCE);
 		NetworkRegistry.instance().registerGuiHandler(this, this);
+		
+		APIHooks.registerDrinks();
 		DrinkController.addDrink(Item.potion, 5, 1f);
 		DrinkController.addDrink(Item.bucketMilk, 10, 3f);
 		DrinkController.addDrink(Item.bowlSoup, 7, 2f);
-		ThirstAPI.instance().registerAPIDrink(this);
+		
+		ThirstAPI.registerAPIDrink(this);
 	}
 
 	/**
@@ -189,17 +199,6 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 	}
 	
 	/**
-	 * Does everything related to the API.
-	 */
-	public void doAPI() {
-		for(int i = 0; i < ThirstAPI.instance().registeredRegisterAPI.length; i++) {
-			if(ThirstAPI.instance().registeredRegisterAPI[i] != null) {
-				DrinkController.addOtherDrink(ThirstAPI.instance().registeredRegisterAPI[i].register());
-			}
-		}
-	}
-	
-	/**
 	 * Gets the server container. 
 	 */
 	@Override
@@ -229,13 +228,14 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 	 * Called when an item is drunk.
 	 */
 	@Override
-	public void onItemDrunk(ItemStack item, int levelAdded, float saturationAdded) {
+	public boolean onItemDrunk(ItemStack item, int levelAdded, float saturationAdded) {
 		if(item.getItem() == Item.potion && item.getItemDamage() == 0) {
 			Random rand = new Random(); 
 			if(rand.nextFloat() < 0.3f) {
 				PoisonController.startPoison();
 			}
 		}
+		return true;
 	}
 
 	/**
