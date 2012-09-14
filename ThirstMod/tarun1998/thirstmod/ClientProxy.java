@@ -1,9 +1,13 @@
 package tarun1998.thirstmod;
 
+import tarun1998.thirstmod.blocks.TileEntityJM;
+import tarun1998.thirstmod.blocks.TileEntityRC;
 import tarun1998.thirstmod.gui.GuiThirst;
 import tarun1998.thirstmod.gui.GuiUpdate;
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import net.minecraft.client.Minecraft;
@@ -18,6 +22,7 @@ public class ClientProxy extends CommonProxy {
 	public boolean loadedMod = false;
 	private boolean changedGui = false;
 	private boolean isUpdate = false;
+	private int intDat;
 	
 	@Override
 	public void onLoad() {
@@ -28,6 +33,8 @@ public class ClientProxy extends CommonProxy {
 		LanguageRegistry.addName(ThirstMod.juiceMaker, "Drinks Brewer");
 		LanguageRegistry.addName(ThirstMod.Filter, "Clean Filter");
 		LanguageRegistry.addName(ThirstMod.dFilter, "Dirty Filter");
+		GameRegistry.registerTileEntity(TileEntityJM.class, "DrinksBrewer");
+		GameRegistry.registerTileEntity(TileEntityRC.class, "WaterCollector");
 		
 		isUpdate = ThirstUtils.checkForUpdate();
 		new ContentLoader(FMLClientHandler.instance().getSide());
@@ -40,23 +47,33 @@ public class ClientProxy extends CommonProxy {
 			onTickInGUI(minecraft.currentScreen);
 		}
 		
-		if(getPlayerMp().capabilities.isCreativeMode == false) {
-			if(loadedMod == false) {
-				if(isUpdate == true) {
-					FMLClientHandler.instance().displayGuiScreen(minecraft.thePlayer, new GuiUpdate());
-					isUpdate = false;
+		if(minecraft.thePlayer != null) {
+			if(getPlayerMp().capabilities.isCreativeMode == false) {
+				if(loadedMod == false) {
+					if(isUpdate == true) {
+						FMLClientHandler.instance().displayGuiScreen(minecraft.thePlayer, new GuiUpdate());
+						isUpdate = false;
+					}
+					if(changedGui == false) {
+						minecraft.ingameGUI = new GuiThirst();
+						changedGui = true;
+					}
+					if(PacketHandler.isRemote == false) {
+						onLoadNBT();
+					}
+					
+					new ThirstUtils();
+					loadedMod = true;
 				}
-				if(changedGui == false) {
-					minecraft.ingameGUI = new GuiThirst();
-					changedGui = true;
-				}
-				onLoadNBT();
-				new ThirstUtils();
-				loadedMod = true;
+			}
+			dc.onTick(minecraft.thePlayer, Side.CLIENT);
+			ThirstUtils.getStats().onTick(getPlayer());
+			
+			intDat++;
+			if(PacketHandler.isRemote == true & intDat > 100) {
+				PacketHandler.sendData(getPlayerMp().username, ThirstUtils.getStats());
 			}
 		}
-		dc.onTick(minecraft.thePlayer, Side.CLIENT );
-		ThirstUtils.getStats().onTick(getPlayer());
 	}
 	
 	public void onTickInGUI(GuiScreen gui) {
@@ -67,6 +84,7 @@ public class ClientProxy extends CommonProxy {
 		if(gui instanceof GuiGameOver) {
 			ThirstUtils.setDefaults();
 		}
+		System.out.println(gui.getClass());
 	}
 	
 	public void onLoadNBT() {

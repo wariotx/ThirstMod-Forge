@@ -16,9 +16,7 @@ public class TickHandler implements ITickHandler {
 	 */
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
-		if(FMLClientHandler.instance().getClient().thePlayer != null) {
-			ThirstMod.INSTANCE.onTickInGame();
-		}
+		ThirstMod.INSTANCE.onTickInGame();
 	}
 
 	@Override

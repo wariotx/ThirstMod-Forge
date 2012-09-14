@@ -1,6 +1,5 @@
 package tarun1998.thirstmod;
 
-import java.lang.reflect.Field;
 import java.util.Random;
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.Mod.Init;
@@ -79,7 +78,7 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 		MinecraftForge.EVENT_BUS.register(INSTANCE);
 		MinecraftForge.EVENT_BUS.register(proxy);
 		NetworkRegistry.instance().registerGuiHandler(this, this);
-		GameRegistry.registerPlayerTracker(new PacketHandler());
+		NetworkRegistry.instance().registerConnectionHandler(new PacketHandler());
 		
 		APIHooks.registerDrinks();
 		DrinkController.addDrink(Item.potion, 5, 1f);

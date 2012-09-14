@@ -3,6 +3,8 @@ package tarun1998.thirstmod;
 import java.io.*;
 import java.util.*;
 import com.google.common.io.*;
+
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.*;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.*;
@@ -13,8 +15,9 @@ import cpw.mods.fml.common.network.*;
  * This class is here so that data is saved for a specific player is sent to the dedicated server so that it is saved.
  */
 
-public class PacketHandler implements IPacketHandler, IPlayerTracker {
+public class PacketHandler implements IPacketHandler, IConnectionHandler {
 	public static Map playerInstance = new HashMap();
+	public static boolean isRemote = false;
 	
 	@Override
 	public void onPacketData(NetworkManager manager, Packet250CustomPayload packet, Player player) {
@@ -68,10 +71,9 @@ public class PacketHandler implements IPacketHandler, IPlayerTracker {
 	 * Reads data from an individual player nbt storage.
 	 * @param s player username
 	 */
-	public void readData(String s) {
+	public void readData(String s, ThirstUtils utils) {
 		EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(s);
 		NBTTagCompound nbt = player.getEntityData();
-		ThirstUtils utils = (ThirstUtils) playerInstance.get(s);
 		if(nbt.hasKey("tmLevel")) {
 			utils.getStats().level = nbt.getInteger("tmLevel");
 			utils.getStats().exhaustion = nbt.getFloat("tmExhaustion");
@@ -86,10 +88,10 @@ public class PacketHandler implements IPacketHandler, IPlayerTracker {
 	
 	/**
 	 * Sends data for a specific player back to the client or server.
-	 * @param s
-	 * @param stats
+	 * @param s username
+	 * @param stats instance
 	 */
-	public void sendData(String s, PlayerStatistics stats) {
+	public static void sendData(String s, PlayerStatistics stats) {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream(110);
 		DataOutputStream dos = new DataOutputStream(bos);
 		
@@ -109,32 +111,38 @@ public class PacketHandler implements IPacketHandler, IPlayerTracker {
 		pkt.data = bos.toByteArray();
 		pkt.length = bos.size();
 		pkt.isChunkDataPacket = false;
-		FMLClientHandler.instance().sendPacket(pkt);
+		if(FMLCommonHandler.instance().getSide() == Side.CLIENT) PacketDispatcher.sendPacketToServer(pkt);
+		if(FMLCommonHandler.instance().getSide() == Side.SERVER) {
+			EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(s);
+			PacketDispatcher.sendPacketToPlayer(pkt, (Player) player);
+		}
 	}
-
+	
 	@Override
-	public void onPlayerLogin(EntityPlayer player) {
+	public void playerLoggedIn(Player other, NetHandler netHandler, NetworkManager manager) {
+		EntityPlayer player = netHandler.getPlayer();
 		if(FMLCommonHandler.instance().getSide() == Side.SERVER) {
 			playerInstance.put(player.username, new ThirstUtils());
-			readData(player.username);
 			ThirstUtils utils = (ThirstUtils) playerInstance.get(player.username);
-			sendData(player.username, utils.getStats());
+			readData(player.username, (ThirstUtils) playerInstance.get(player.username));
 		}
 	}
-
+	
 	@Override
-	public void onPlayerLogout(EntityPlayer player) {
-		if(FMLCommonHandler.instance().getSide() == Side.CLIENT) {
-			sendData(player.username, ThirstUtils.getStats());
-		}
+	public void connectionClosed(NetworkManager manager) {
+		if(FMLCommonHandler.instance().getSide() == Side.CLIENT) ThirstUtils.setDefaults(); ThirstUtils.setModUnloaded(); 
+		isRemote = false;
 	}
 
 	@Override
-	public void onPlayerChangedDimension(EntityPlayer player) {}
+	public String connectionReceived(NetLoginHandler netHandler, NetworkManager manager) { return null; }
 
 	@Override
-	public void onPlayerRespawn(EntityPlayer player) {
-		ThirstUtils utils = (ThirstUtils) playerInstance.get(player.username);
-		utils.setDefaults();
-	}
+	public void connectionOpened(NetHandler netClientHandler, String server, int port, NetworkManager manager) { isRemote = true; }
+
+	@Override
+	public void connectionOpened(NetHandler netClientHandler, MinecraftServer server, NetworkManager manager) { isRemote = true; }
+
+	@Override
+	public void clientLoggedIn(NetHandler clientHandler, NetworkManager manager, Packet1Login login) {}
 }
