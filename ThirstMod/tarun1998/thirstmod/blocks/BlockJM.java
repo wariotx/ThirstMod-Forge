@@ -134,6 +134,6 @@ public class BlockJM extends BlockContainer {
 
 	@Override
 	public String getTextureFile() {
-		return "/thirstmod/textures/icons.png";
+		return "/tarun1998/thirstmod/textures/icons.png";
 	}
 }

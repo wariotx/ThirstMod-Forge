@@ -1,5 +1,7 @@
 package tarun1998.thirstmod;
 
+import java.util.List;
+
 import net.minecraft.src.*;
 
 public class ItemCanteen extends Item {
@@ -10,6 +12,8 @@ public class ItemCanteen extends Item {
 		setMaxStackSize(1);
 		setMaxDamage(0);
 		setHasSubtypes(true);
+		setIconIndex(19);
+		setTextureFile("/tarun1998/thirstmod/textures/icons.png");
 	}
 
 	@Override
@@ -65,6 +69,11 @@ public class ItemCanteen extends Item {
 			}
 		}
 		return itemstack;
-
+	}
+	
+	@Override
+	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) {
+		par3List.add(new ItemStack(this, 1, 5));
+		par3List.add(new ItemStack(this, 1, 10));
 	}
 }

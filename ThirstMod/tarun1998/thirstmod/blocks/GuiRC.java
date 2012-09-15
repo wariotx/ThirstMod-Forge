@@ -25,7 +25,7 @@ public class GuiRC extends GuiContainer {
 
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 		World world = minecraft.theWorld;
-        int var4 = minecraft.renderEngine.getTexture("/thirstmod/textures/waterCollector.png");
+        int var4 = minecraft.renderEngine.getTexture("/tarun1998/thirstmod/textures/waterCollector.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         minecraft.renderEngine.bindTexture(var4);
         int var5 = (width - xSize) / 2;

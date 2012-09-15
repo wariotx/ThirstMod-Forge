@@ -10,6 +10,6 @@ public class ItemThirst extends Item {
 	
 	@Override
 	public String getTextureFile() {
-		return "/thirstmod/textures/icons.png";
+		return "/tarun1998/thirstmod/textures/icons.png";
 	}
 }

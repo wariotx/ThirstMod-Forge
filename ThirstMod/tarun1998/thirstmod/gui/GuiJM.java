@@ -26,7 +26,7 @@ public class GuiJM extends GuiContainer
 
     protected void drawGuiContainerBackgroundLayer(float f, int i, int j)
     {
-        int k = mc.renderEngine.getTexture("/ThirstMod/textures/drinksBrewer.png");
+        int k = mc.renderEngine.getTexture("/tarun1998/thirstMod/textures/drinksBrewer.png");
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         mc.renderEngine.bindTexture(k);
         int l = (width - xSize) / 2;

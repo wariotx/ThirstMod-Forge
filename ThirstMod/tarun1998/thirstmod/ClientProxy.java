@@ -26,7 +26,7 @@ public class ClientProxy extends CommonProxy {
 	
 	@Override
 	public void onLoad() {
-		MinecraftForgeClient.preloadTexture("/thirstmod/textures/icons.png");
+		MinecraftForgeClient.preloadTexture("/tarun1998/thirstmod/textures/icons.png");
 		TickRegistry.registerTickHandler(new TickHandler(), Side.CLIENT);
 		
 		LanguageRegistry.addName(ThirstMod.waterCollector, "Rain Collector");
@@ -58,11 +58,9 @@ public class ClientProxy extends CommonProxy {
 						minecraft.ingameGUI = new GuiThirst();
 						changedGui = true;
 					}
-					if(PacketHandler.isRemote == false) {
-						onLoadNBT();
-					}
 					
 					new ThirstUtils();
+					onLoadNBT();
 					loadedMod = true;
 				}
 			}
@@ -79,12 +77,11 @@ public class ClientProxy extends CommonProxy {
 	public void onTickInGUI(GuiScreen gui) {
 		if(gui instanceof GuiMainMenu) {
 			ThirstUtils.setDefaults();
-			ThirstUtils.setModUnloaded();
+			loadedMod = false;
 		}
 		if(gui instanceof GuiGameOver) {
 			ThirstUtils.setDefaults();
 		}
-		System.out.println(gui.getClass());
 	}
 	
 	public void onLoadNBT() {

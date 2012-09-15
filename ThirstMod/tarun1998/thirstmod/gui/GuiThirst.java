@@ -298,7 +298,7 @@ public class GuiThirst extends GuiIngame
                     }
                 }
                 
-                GL11.glBindTexture(3553 /*GL_TEXTURE_2D*/, mc.renderEngine.getTexture("/ThirstMod/textures/thirstBar.png"));
+                GL11.glBindTexture(3553 /*GL_TEXTURE_2D*/, mc.renderEngine.getTexture("/tarun1998/thirstMod/textures/thirstBar.png"));
                 PlayerStatistics thirststats = ThirstUtils.getStats();
                 int thirstLvl = thirststats.level;
                 for(int i13 = 0; i13 < 10; i13++)
