@@ -65,7 +65,7 @@ public class ClientProxy extends CommonProxy {
 				}
 			}
 			dc.onTick(minecraft.thePlayer, Side.CLIENT);
-			ThirstUtils.getStats().onTick(getPlayer());
+			ThirstUtils.getStats().onTick(getPlayer(), getPlayerMp());
 			
 			intDat++;
 			if(PacketHandler.isRemote == true & intDat > 100) {
@@ -122,11 +122,11 @@ public class ClientProxy extends CommonProxy {
 	 * Gets an EntityPlayerMP.class instance.
 	 * @return EntityPlayerMP.class instance.
 	 */
-	public static EntityPlayer getPlayerMp() {
+	public static EntityPlayerMP getPlayerMp() {
 		try {
 			return (EntityPlayerMP) FMLClientHandler.instance().getServer().getConfigurationManager().playerEntityList.iterator().next();
 		} catch(Exception e) {
-			return FMLClientHandler.instance().getClient().thePlayer;
+			return null;
 		}
 	}
 }

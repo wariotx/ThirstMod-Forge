@@ -1,9 +1,8 @@
-package tarun1998.thirstmod.blocks;
+package tarun1998.thirstmod.gui;
 
 import org.lwjgl.opengl.GL11;
-
+import tarun1998.thirstmod.blocks.*;
 import cpw.mods.fml.client.FMLClientHandler;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.*;
 

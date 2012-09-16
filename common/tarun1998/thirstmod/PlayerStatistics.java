@@ -26,10 +26,10 @@ public class PlayerStatistics {
 	 * Holds the Thirst Logic. Controls everything related to that Thirst Bar.
 	 * @param player EntityPlayer instance.
 	 */
-	public void onTick(EntityPlayer player) {
+	public void onTick(EntityPlayer player, EntityPlayerMP playerMp) {
 		int difSet = player.worldObj.difficultySetting;;
 		if(ConfigHelper.peacefulOn == true) {
-			difSet = 0;
+			difSet = 1;
 		}
 		if(exhaustion > 4f) {
 			exhaustion = 0f;
@@ -42,9 +42,9 @@ public class PlayerStatistics {
 		if(level == 0) {
 			healhurtTimer++;
 			if(healhurtTimer > 80) {
-				if (player.getHealth() > 10 || difSet >= 3 || player.getHealth() > 1 && difSet >= 2) {
+				if (playerMp.getHealth() > 10 || difSet >= 3 || playerMp.getHealth() > 1 && difSet >= 2) {
 					healhurtTimer = 0;
-					player.attackEntityFrom(DamageSource.starve, 1);
+					playerMp.attackEntityFrom(DamageSource.starve, 1);
 					APIHooks.onPlayerHurtFromThirst();
 				}
 			}
@@ -55,9 +55,9 @@ public class PlayerStatistics {
 			if(drinkTimer > 16) {
 				if(APIHooks.onPlayerDrink() == true) {
 					addStats(1, 0.3F);
-					player.worldObj.playSoundAtEntity(player, "random.drink", 0.5F, player.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+					playerMp.worldObj.playSoundAtEntity(player, "random.drink", 0.5F, player.worldObj.rand.nextFloat() * 0.1F + 0.9F);
 					if(poisonCon.getBiomesList().containsKey(ThirstUtils.getCurrentBiome(player)) && ConfigHelper.poisonOn == true) {
-						if(random.nextFloat() < poisonCon.getBiomePoison(ThirstUtils.getCurrentBiome(player))) {
+						if(random.nextFloat() < poisonCon.getBiomePoison(ThirstUtils.getCurrentBiome(playerMp))) {
 							PoisonController.startPoison();
 						}
 					}

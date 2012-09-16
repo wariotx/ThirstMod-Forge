@@ -1,21 +1,23 @@
-/**
- * Loads the custom drinks.
- */
 package tarun1998.thirstmod;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
-import tarun1998.thirstmod.api.APIHooks;
+import java.io.*;
+
+import net.minecraft.src.*;
+import tarun1998.thirstmod.api.*;
+
+import java.util.*;
+
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.registry.LanguageRegistry;
-import net.minecraft.src.Item;
-import net.minecraft.src.ItemStack;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.MinecraftForgeClient;
 
-public class ContentDrink extends ContentLoader {
+public class ContentLoader
+{
+	private static List addedfiles = new ArrayList();
+	private String textureFile;
+	private String fileName;
+	
 	public static int id;
 	public static int metadata;
 	public static int texture;
@@ -39,46 +41,45 @@ public class ContentDrink extends ContentLoader {
 	public static int potionAmplifier;
 	public static float potionEffectProbability;
 	
-	private static List addedDrinks = new ArrayList();
-	private String fileName;
+	public ContentLoader(Side side) {
+		loadMainFiles(side);
+	}
 	
-	public ContentDrink(String fileDir, String textureFile, Side side) {
-		super(side);
-		File apiDir = new File(fileDir);
+	public void loadMainFiles(Side side)
+	{
+		boolean deletedBad = false;
+		File contentDir = new File(ThirstUtils.getDir(), "/mods/ThirstMod/Content/");
+		contentDir.mkdirs();
 		
-		boolean deleted = false;
-		
-		List<File> filesList = new ArrayList<File>();
-		for (File file : apiDir.listFiles())
-		{
-			if (file.isDirectory())
-			{
-				continue;
-			}
-			filesList.add(file);
+		if(deletedBad == false) {
+			ThirstUtils.deleteFiles(ThirstUtils.getDir() + "/mods/ThirstMod/Content/", ".DS_Store");
+			ThirstUtils.deleteFiles(ThirstUtils.getDir() + "/mods/ThirstMod/Content/", ".ini");
+			deletedBad = true;
 		}
-		for (File file : filesList)
-		{
-			File[] files = apiDir.listFiles();
-			if (files.length == 0)
-			{
-				System.out.println("No Files found");
-			} else
-			{
-				for (int i = 0; i < files.length; i++)
-				{
-					if (deleted == false)
-					{
-						ThirstUtils.deleteFiles(fileDir, ".DS_Store");
-						ThirstUtils.deleteFiles(fileDir, ".ini");
-						deleted = true;
+		
+		if(deletedBad == true) {
+			LinkedList<File> contentList = new LinkedList<File>();
+			LinkedList<String> drinkList = new LinkedList<String>();
+			if(contentDir.listFiles().length > 0) {
+				for(int i = 0; i < contentDir.listFiles().length; i++) {
+					if(contentDir.listFiles()[i].getName() != "Textures") {
+						contentList.add(contentDir.listFiles()[i]);
 					}
-					if (!addedDrinks.contains(files[i].getName()) && deleted == true)
-					{
-						try
-						{
-							fileName = files[i].getName();
-							init(new BufferedReader(new FileReader(files[i])));
+				}
+			}
+			
+			for(int i = 0; i < contentList.size(); i++) {
+				File files = contentList.get(i);
+				ThirstUtils.deleteFiles(files.getAbsolutePath(), ".DS_Store");
+				ThirstUtils.deleteFiles(files.getAbsolutePath(), ".ini");
+				
+				for(int j = 0; j < files.listFiles().length; j++) {
+					File fileInDir = files.listFiles()[j];
+					if(fileInDir.getName().endsWith(".txt")) {
+						drinkList.add(fileInDir.getName());
+						try {
+							init(new BufferedReader(new FileReader(fileInDir)), files.getName());
+							
 							Item drink = (((Drink) new Drink(id, replenish, saturation, alwaysDrinkable).setItemName(shortName)
 									.setMaxStackSize(maxStackSize)).setEffect(isShiny)).setPoisoningChance(chance)
 									.setPotionEffect(potionId, potionDuration, potionDuration, potionEffectProbability)
@@ -86,32 +87,56 @@ public class ContentDrink extends ContentLoader {
 							drink.setIconIndex(texPos);
 							LanguageRegistry.addName(drink, name);
 							ThirstUtils.addJMRecipe(jmTop, metadata, new ItemStack(drink));
-							addedDrinks.add(files[i].getName());
 							DrinkController.addOtherDrink(drink);
 							
 							if(side.equals(Side.CLIENT)) {
 								MinecraftForgeClient.preloadTexture(textureFile);
 							}
-						} catch (Exception e)
-						{
-							System.out.println("Drink not loaded:" + files[i].getName());
+							System.out.println(textureFile);
+						} catch (Exception e) {
 							e.printStackTrace();
 						}
 					}
 				}
 			}
 		}
-		String loaded = addedDrinks.toString().replace("[", "").replace("]", "").replace(".txt", "");
-		System.out.println("Thirst Mod loaded the following files: " + loaded);
 	}
 	
-	@Override
-	public void read(String[] colon) {
-		super.read(colon);
+	public void init(BufferedReader br, String fileDir)
+	{
+		while (true) 
+		{
+			String line = null;
+			try 
+			{
+				line = br.readLine();
+			} 
+			catch (Exception e) 
+			{
+				break;
+			}
+			if (line == null) 
+			{
+				break;
+			}
+			String[] colon = line.split(":");
+			read(colon, fileDir);
+		}
+	}
+	
+	/**
+	 * Reads the text file.
+	 * @param colon The character that all the information is written after. In this case ':'
+	 */
+	public void read(String[] colon, String fileDir)
+	{
 		APIHooks.onRead(fileName, colon, getClass());
 		if (colon[0].equals("ID"))
 		{
 			id = Integer.parseInt(colon[1]);
+		}
+		if(colon[0].equals("TextureFile")) {
+			textureFile = "/Content/" + fileDir + "/" + colon[1];
 		}
 		if(colon[0].equals("TexturePos")) 
 		{

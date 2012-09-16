@@ -1,0 +1,21 @@
+[
+{
+  "modid": "ThirstMod",
+  "name": "Thirst Mod",
+  "description": "Adds a thirst bar like hunger bar + drinks, Drinks Brewers and Rain Collectors. AND Custom Drinks!",
+  "version": "1.0.3",
+  "mcversion": "1.3.2",
+  "url": "http://www.minecraftforum.net/topic/1143097-132-ssplan-thirst-mod-now-with-custom-drinks/",
+  "updateUrl": "",
+  "authors": [
+        "tarun1998"
+  ],
+  "credits": "By tarun1998, based on an original idea by Medievor",
+  "logoFile": "",
+  "screenshots": [
+  ],
+  "parent":"",
+  "dependencies": [
+  ]
+}
+]

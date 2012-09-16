@@ -1,0 +1,13 @@
+ID:608
+Name:Glistering Melon Juice
+ShortName:gmj
+TexturePos:3
+TextureFile:moDrinks.png
+Replenish:8
+Saturation:2.1
+DBRecipe:382:0
+AlwaysDrinkable:false
+MaxStackSize:4
+PoisonChance:0
+Shiny:true
+FoodHeal:0:0
