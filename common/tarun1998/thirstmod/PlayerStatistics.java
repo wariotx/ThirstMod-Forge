@@ -2,6 +2,8 @@ package tarun1998.thirstmod;
 
 import java.util.*;
 
+import cpw.mods.fml.relauncher.ReflectionHelper;
+
 import net.minecraft.src.*;
 import tarun1998.thirstmod.api.*;
 
@@ -65,6 +67,9 @@ public class PlayerStatistics {
 				drinkTimer = 0;
 			}
 		}
+		if(level < 6) {
+			player.setSprinting(false);
+		} 
 		exhaustPlayer(player);
 	}
 	

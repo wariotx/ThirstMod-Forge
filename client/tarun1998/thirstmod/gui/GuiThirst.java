@@ -364,20 +364,29 @@ public class GuiThirst extends GuiIngame
                     var52 = MathHelper.ceiling_double_int((double)var25 * 10.0D / 300.0D) - var26;
                     
                     int y = 0;
+                    int x = 0;
                     
-                    if(var23 > 0) {
-                    	y = -10;
+                    if(ConfigHelper.meterOnLeft == true) {
+                    	if(var23 > 0) {
+                    		y = -10;
+                    	}
+                    } else if(ConfigHelper.meterOnLeft == false) {
+                    	if(var23 > 0) {
+                    		y = -10;
+                    	} else {
+                    		x = -101;
+                    	}
                     }
                     
                     for (var28 = 0; var28 < var26 + var52; ++var28)
                     {
                         if (var28 < var26)
                         {
-                            this.drawTexturedModalRect(var19 - var28 * 8 - 9, var22 + y, 16, 18, 9, 9);
+                            this.drawTexturedModalRect(var19 - var28 * 8 - 9 + x, var22 + y, 16, 18, 9, 9);
                         }
                         else
                         {
-                            this.drawTexturedModalRect(var19 - var28 * 8 - 9, var22 + y, 25, 18, 9, 9);
+                            this.drawTexturedModalRect(var19 - var28 * 8 - 9 + x, var22 + y, 25, 18, 9, 9);
                         }
                     }
                 }

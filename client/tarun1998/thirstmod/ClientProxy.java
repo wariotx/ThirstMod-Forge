@@ -3,7 +3,6 @@ package tarun1998.thirstmod;
 import tarun1998.thirstmod.blocks.TileEntityJM;
 import tarun1998.thirstmod.blocks.TileEntityRC;
 import tarun1998.thirstmod.gui.GuiThirst;
-import tarun1998.thirstmod.gui.GuiUpdate;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.Side;
@@ -21,7 +20,6 @@ import net.minecraftforge.event.world.WorldEvent;
 public class ClientProxy extends CommonProxy {
 	public boolean loadedMod = false;
 	private boolean changedGui = false;
-	private boolean isUpdate = false;
 	private int intDat;
 	
 	@Override
@@ -36,7 +34,6 @@ public class ClientProxy extends CommonProxy {
 		GameRegistry.registerTileEntity(TileEntityJM.class, "DrinksBrewer");
 		GameRegistry.registerTileEntity(TileEntityRC.class, "WaterCollector");
 		
-		isUpdate = ThirstUtils.checkForUpdate();
 		new ContentLoader(FMLClientHandler.instance().getSide());
 	}
 	
@@ -50,10 +47,6 @@ public class ClientProxy extends CommonProxy {
 		if(minecraft.thePlayer != null) {
 			if(getPlayerMp().capabilities.isCreativeMode == false) {
 				if(loadedMod == false) {
-					if(isUpdate == true) {
-						FMLClientHandler.instance().displayGuiScreen(minecraft.thePlayer, new GuiUpdate());
-						isUpdate = false;
-					}
 					if(changedGui == false) {
 						minecraft.ingameGUI = new GuiThirst();
 						changedGui = true;

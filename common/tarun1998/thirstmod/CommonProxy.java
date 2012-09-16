@@ -1,7 +1,5 @@
 package tarun1998.thirstmod;
 
-import tarun1998.thirstmod.gui.GuiThirst;
-import tarun1998.thirstmod.gui.GuiUpdate;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.server.FMLServerHandler;

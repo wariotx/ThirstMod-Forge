@@ -10,7 +10,7 @@ import net.minecraft.src.*;
 public class ThirstUtils {
 	public static final String NAME = "Thirst mod";
 	public static final String ID = "ThirstMod";
-	public static final String VERSION = "1.0.4";
+	public static final String VERSION = "1.1.0";
 	
 	private static String currentDir;
 	
@@ -55,44 +55,6 @@ public class ThirstUtils {
 	public static String getCurrentBiome(EntityPlayer entityplayer) {
     	return entityplayer.worldObj.getWorldChunkManager().getBiomeGenAt((int)entityplayer.posX, (int)entityplayer.posZ).biomeName;
     }
-	
-	/** 
-	 * Checks if there is a update available for Thirst Mod.
-	 * @return true if a update is available. Triggers a update screen to be displayed upon loading a save file.
-	 * @throws Exception
-	 */
-	public static boolean checkForUpdate() {
-		try {
-			URL file = new URL("http://dl.dropbox.com/u/47453096/VersionMod.txt");
-			BufferedReader br = new BufferedReader(new InputStreamReader(file.openStream()));
-			String version = br.readLine();
-			if(getModVersion().equals(version)) {
-				return false;
-			} else {
-				System.out.println("New mod version found: " + version);
-				return true;
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-	
-	/**
-	 * Checks the latest mod version.
-	 * @return
-	 */
-	public static String getReleasedVersion() {
-		try {
-			URL file = new URL("http://dl.dropbox.com/u/47453096/VersionMod.txt");
-			BufferedReader br = new BufferedReader(new InputStreamReader(file.openStream()));
-			String version = br.readLine();
-			return version;
-		} catch(Exception e) {
-			e.printStackTrace();
-			return getModVersion();
-		}
-	}
 	
 	/**
 	 * Writes all the data in PlayerStatistics to the NBT.
