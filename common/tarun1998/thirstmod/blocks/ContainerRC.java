@@ -6,12 +6,12 @@ public class ContainerRC extends Container {
 	private TileEntityRC rc;
 	private int lastRainMeter = 0;
 	private int lastInternalBucket = 0;
-	
+
 	public ContainerRC(InventoryPlayer ip, TileEntityRC tile) {
 		rc = tile;
 		addSlotToContainer(new Slot(tile, 0, 56, 53));
 		addSlotToContainer(new SlotFurnace(ip.player, tile, 1, 116, 35));
-		
+
 		int var3;
 		for (var3 = 0; var3 < 3; ++var3) {
 			for (int var4 = 0; var4 < 9; ++var4) {
@@ -23,7 +23,7 @@ public class ContainerRC extends Container {
 			addSlotToContainer(new Slot(ip, var3, 8 + var3 * 18, 142));
 		}
 	}
-	
+
 	@Override
 	public ItemStack transferStackInSlot(int par1) {
 		ItemStack var2 = null;
@@ -52,11 +52,11 @@ public class ContainerRC extends Container {
 		}
 		return var2;
 	}
-	
+
 	@Override
 	public void updateCraftingResults() {
 		super.updateCraftingResults();
-		
+
 		for (int var1 = 0; var1 < crafters.size(); ++var1) {
 			ICrafting var2 = (ICrafting) crafters.get(var1);
 			if (lastRainMeter != rc.RainMeter) {
@@ -71,7 +71,7 @@ public class ContainerRC extends Container {
 		lastRainMeter = rc.RainMeter;
 		lastInternalBucket = rc.internalBucket;
 	}
-	
+
 	@Override
 	public void updateProgressBar(int i, int j) {
 		super.updateProgressBar(i, j);
@@ -88,13 +88,13 @@ public class ContainerRC extends Container {
 		}
 
 	}
-	
+
 	@Override
 	public void addCraftingToCrafters(ICrafting par1ICrafting) {
-        super.addCraftingToCrafters(par1ICrafting);
-        par1ICrafting.updateCraftingInventoryInfo(this, 0, this.rc.RainMeter);
-        par1ICrafting.updateCraftingInventoryInfo(this, 1, this.rc.internalBucket);
-    }
+		super.addCraftingToCrafters(par1ICrafting);
+		par1ICrafting.updateCraftingInventoryInfo(this, 0, this.rc.RainMeter);
+		par1ICrafting.updateCraftingInventoryInfo(this, 1, this.rc.internalBucket);
+	}
 
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {

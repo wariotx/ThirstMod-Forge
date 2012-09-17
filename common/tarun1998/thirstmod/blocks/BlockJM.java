@@ -1,31 +1,29 @@
 package tarun1998.thirstmod.blocks;
 
 import java.util.Random;
-
 import tarun1998.thirstmod.ThirstMod;
-
 import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.src.*;
 
 public class BlockJM extends BlockContainer {
 	private Random random = new Random();
 	private static boolean keepFreezerInventory = false;
-	
+
 	public BlockJM(int par1) {
 		super(par1, Material.rock);
 	}
-	
+
 	@Override
 	public int idDropped(int i, Random random, int j) {
 		return ThirstMod.INSTANCE.juiceMaker.blockID;
 	}
-	
+
 	@Override
 	public boolean onBlockActivated(World par1World, int x, int y, int z, EntityPlayer entityplayer, int j, float f, float f1, float f2) {
 		entityplayer.openGui(ThirstMod.INSTANCE, 90, par1World, x, y, z);
 		return true;
 	}
-	
+
 	@Override
 	public void onBlockAdded(World world, int i, int j, int k) {
 		super.onBlockAdded(world, i, j, k);
@@ -36,7 +34,7 @@ public class BlockJM extends BlockContainer {
 	public TileEntity createNewTileEntity(World world) {
 		return new TileEntityJM();
 	}
-	
+
 	@Override
 	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving) {
 		int l = MathHelper.floor_double((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
@@ -53,7 +51,7 @@ public class BlockJM extends BlockContainer {
 			world.setBlockMetadataWithNotify(i, j, k, 4);
 		}
 	}
-	
+
 	@Override
 	public void breakBlock(World par1World, int par2, int par3, int par4, int par5, int par6) {
 		if (!keepFreezerInventory) {
@@ -85,7 +83,7 @@ public class BlockJM extends BlockContainer {
 			}
 		}
 	}
-	
+
 	@Override
 	public int getBlockTextureFromSide(int i) {
 		if (i == 3) {

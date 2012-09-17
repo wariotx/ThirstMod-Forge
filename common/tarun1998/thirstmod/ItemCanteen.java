@@ -1,11 +1,11 @@
 package tarun1998.thirstmod;
 
 import java.util.List;
-
 import net.minecraft.src.*;
 
 public class ItemCanteen extends Item {
-	private String[] canteenNames = {"Canteen0", "Canteen1", "Canteen2", "Canteen3", "Canteen4", "Canteen5", "Canteen6", "Canteen7", "Canteen8", "Canteen9", "Canteen10"};
+	private String[] canteenNames =
+	{ "Canteen0", "Canteen1", "Canteen2", "Canteen3", "Canteen4", "Canteen5", "Canteen6", "Canteen7", "Canteen8", "Canteen9", "Canteen10" };
 
 	public ItemCanteen(int i) {
 		super(i);
@@ -70,7 +70,7 @@ public class ItemCanteen extends Item {
 		}
 		return itemstack;
 	}
-	
+
 	@Override
 	public void getSubItems(int par1, CreativeTabs par2CreativeTabs, List par3List) {
 		par3List.add(new ItemStack(this, 1, 5));

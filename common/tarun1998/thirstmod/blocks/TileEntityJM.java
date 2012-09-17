@@ -7,105 +7,80 @@ import net.minecraftforge.common.ISidedInventory;
 
 public class TileEntityJM extends TileEntity implements IInventory, ISidedInventory {
 	private ItemStack stacks[];
-    public int brewrbrewTime;
-    public int currentItemCoolTime;
-    public int brewrCoolTime;
-    public int makeTime;
-    
-    public TileEntityJM() {
-        stacks = new ItemStack[4];
-        brewrbrewTime = 0;
-        currentItemCoolTime = 0;
-        brewrCoolTime = 0;
-        makeTime = 0;
-    }
-    
-    public void updateEntity()
-    {
-        boolean flag = brewrbrewTime > 0;
-        boolean flag1 = false;
-        if (brewrbrewTime > 0)
-        {
-            brewrbrewTime--;
-        }
-        if(makeTime > 0)
-        {
-        	makeTime--;
-        }
-        if (!worldObj.isRemote)
-        {
-        	if(makeTime == 0 && canSolidify())
-            {
-            	makeTime = getItemMake(stacks[3]);
-            	if(makeTime > 0)
-                {
-                	if (stacks[3] != null)
-                    {
-                        if (stacks[3].getItem().hasContainerItem())
-                        {
-                            stacks[3] = new ItemStack(stacks[3].getItem().getContainerItem());
-                        }
-                        else
-                        {
-                            stacks[3].stackSize--;
-                        }
-                        if (stacks[3].stackSize == 0)
-                        {
-                            stacks[3] = null;
-                        }
-                    }
-                }
-            }
-            if (brewrbrewTime == 0 && makeTime > 0 && canSolidify())
-            {
-                currentItemCoolTime = brewrbrewTime = getItembrewTime(stacks[1]);
-                if (brewrbrewTime > 0)
-                {
-                    flag1 = true;
-                    if (stacks[1] != null)
-                    {
-                        if (stacks[1].getItem().hasContainerItem())
-                        {
-                            stacks[1] = new ItemStack(stacks[1].getItem().getContainerItem());
-                        }
-                        else
-                        {
-                            stacks[1].stackSize--;
-                        }
-                        if (stacks[1].stackSize == 0)
-                        {
-                            stacks[1] = null;
-                        }
-                    }
-                }
-            }
-            if (isFreezing() && canSolidify())
-            {
-                brewrCoolTime++;
-                if (brewrCoolTime == 200)
-                {
-                    brewrCoolTime = 0;
-                    solidifyItem();
-                    flag1 = true;
-                }
-            }
-            else
-            {
-                brewrCoolTime = 0;
-            }
-        }
-        if (flag != (brewrbrewTime > 0))
-        {
-            flag1 = true;
-        }
-        if (flag1)
-        {
-            onInventoryChanged();
-        }
-    }
+	public int brewrbrewTime;
+	public int currentItemCoolTime;
+	public int brewrCoolTime;
+	public int makeTime;
 
-    
-    @Override
+	public TileEntityJM() {
+		stacks = new ItemStack[4];
+		brewrbrewTime = 0;
+		currentItemCoolTime = 0;
+		brewrCoolTime = 0;
+		makeTime = 0;
+	}
+
+	public void updateEntity() {
+		boolean flag = brewrbrewTime > 0;
+		boolean flag1 = false;
+		if (brewrbrewTime > 0) {
+			brewrbrewTime--;
+		}
+		if (makeTime > 0) {
+			makeTime--;
+		}
+		if (!worldObj.isRemote) {
+			if (makeTime == 0 && canSolidify()) {
+				makeTime = getItemMake(stacks[3]);
+				if (makeTime > 0) {
+					if (stacks[3] != null) {
+						if (stacks[3].getItem().hasContainerItem()) {
+							stacks[3] = new ItemStack(stacks[3].getItem().getContainerItem());
+						} else {
+							stacks[3].stackSize--;
+						}
+						if (stacks[3].stackSize == 0) {
+							stacks[3] = null;
+						}
+					}
+				}
+			}
+			if (brewrbrewTime == 0 && makeTime > 0 && canSolidify()) {
+				currentItemCoolTime = brewrbrewTime = getItembrewTime(stacks[1]);
+				if (brewrbrewTime > 0) {
+					flag1 = true;
+					if (stacks[1] != null) {
+						if (stacks[1].getItem().hasContainerItem()) {
+							stacks[1] = new ItemStack(stacks[1].getItem().getContainerItem());
+						} else {
+							stacks[1].stackSize--;
+						}
+						if (stacks[1].stackSize == 0) {
+							stacks[1] = null;
+						}
+					}
+				}
+			}
+			if (isFreezing() && canSolidify()) {
+				brewrCoolTime++;
+				if (brewrCoolTime == 200) {
+					brewrCoolTime = 0;
+					solidifyItem();
+					flag1 = true;
+				}
+			} else {
+				brewrCoolTime = 0;
+			}
+		}
+		if (flag != (brewrbrewTime > 0)) {
+			flag1 = true;
+		}
+		if (flag1) {
+			onInventoryChanged();
+		}
+	}
+
+	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
 		NBTTagList nbttaglist = nbttagcompound.getTagList("Items");
@@ -123,8 +98,8 @@ public class TileEntityJM extends TileEntity implements IInventory, ISidedInvent
 		currentItemCoolTime = getItembrewTime(stacks[1]);
 		makeTime = nbttagcompound.getShort("SomeTime");
 	}
-    
-    @Override
+
+	@Override
 	public void writeToNBT(NBTTagCompound nbttagcompound) {
 		super.writeToNBT(nbttagcompound);
 		nbttagcompound.setShort("brewTime", (short) brewrbrewTime);
@@ -142,7 +117,7 @@ public class TileEntityJM extends TileEntity implements IInventory, ISidedInvent
 
 		nbttagcompound.setTag("Items", nbttaglist);
 	}
-	
+
 	@Override
 	public int getSizeInventory() {
 		return stacks.length;
@@ -150,7 +125,7 @@ public class TileEntityJM extends TileEntity implements IInventory, ISidedInvent
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		 return stacks[i];
+		return stacks[i];
 	}
 
 	@Override
@@ -185,15 +160,14 @@ public class TileEntityJM extends TileEntity implements IInventory, ISidedInvent
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
 		stacks[i] = itemstack;
-        if (itemstack != null && itemstack.stackSize > getInventoryStackLimit())
-        {
-            itemstack.stackSize = getInventoryStackLimit();
-        }
+		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
+			itemstack.stackSize = getInventoryStackLimit();
+		}
 	}
 
 	@Override
 	public String getInvName() {
-		//Is this even needed??? I think this is used for mc language stuff.
+		// Is this even needed??? I think this is used for mc language stuff.
 		return "Juice Maker";
 	}
 
@@ -218,7 +192,7 @@ public class TileEntityJM extends TileEntity implements IInventory, ISidedInvent
 	@Override
 	public void closeChest() {
 	}
-	
+
 	public static int getItembrewTime(ItemStack itemstack) {
 		int fail = 0;
 		if (itemstack == null) {
@@ -231,18 +205,15 @@ public class TileEntityJM extends TileEntity implements IInventory, ISidedInvent
 			return fail;
 		}
 	}
-	
+
 	private boolean canSolidify() {
 		if (this.stacks[0] == null) {
 			return false;
 		} else {
 			ItemStack var1 = JMRecipes.solidifying().getSmeltingResult(this.stacks[0]);
-			if (var1 == null)
-				return false;
-			if (this.stacks[2] == null)
-				return true;
-			if (!this.stacks[2].isItemEqual(var1))
-				return false;
+			if (var1 == null) return false;
+			if (this.stacks[2] == null) return true;
+			if (!this.stacks[2].isItemEqual(var1)) return false;
 			int result = stacks[2].stackSize + var1.stackSize;
 			return (result <= getInventoryStackLimit() && result <= var1.getMaxStackSize());
 		}
@@ -265,7 +236,7 @@ public class TileEntityJM extends TileEntity implements IInventory, ISidedInvent
 			}
 		}
 	}
-	
+
 	public static int getItemMake(ItemStack itemstack) {
 		if (itemstack == null) {
 			return 0;
@@ -297,7 +268,7 @@ public class TileEntityJM extends TileEntity implements IInventory, ISidedInvent
 			return GameRegistry.getFuelValue(itemstack);
 		}
 	}
-	
+
 	public boolean isFreezing() {
 		return brewrbrewTime > 0;
 	}
@@ -312,18 +283,15 @@ public class TileEntityJM extends TileEntity implements IInventory, ISidedInvent
 		}
 		return (makeTime * i) / currentItemCoolTime;
 	}
-	
-	public static boolean isItemFuel(ItemStack par0ItemStack)
-    {
-        return getItembrewTime(par0ItemStack) > 0;
-    }
-	
+
+	public static boolean isItemFuel(ItemStack par0ItemStack) {
+		return getItembrewTime(par0ItemStack) > 0;
+	}
+
 	@Override
 	public int getStartInventorySide(ForgeDirection side) {
-		if (side == ForgeDirection.DOWN)
-			return 1;
-		if (side == ForgeDirection.UP)
-			return 0;
+		if (side == ForgeDirection.DOWN) return 1;
+		if (side == ForgeDirection.UP) return 0;
 		return 2;
 	}
 

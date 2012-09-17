@@ -11,13 +11,13 @@ public class TileEntityRC extends TileEntity implements IInventory, ISidedInvent
 	public int RainMeter;
 	public int internalBucket;
 	public static boolean isActive;
-	
+
 	public TileEntityRC() {
 		rainItemStacks = new ItemStack[2];
 		RainMeter = 0;
 		internalBucket = 0;
 	}
-	
+
 	@Override
 	public void updateEntity() {
 		if (worldObj != null) {
@@ -51,7 +51,7 @@ public class TileEntityRC extends TileEntity implements IInventory, ISidedInvent
 			}
 		}
 	}
-	
+
 	@Override
 	public int getSizeInventory() {
 		return 2;
@@ -117,17 +117,17 @@ public class TileEntityRC extends TileEntity implements IInventory, ISidedInvent
 			return entityplayer.getDistanceSq((double) xCoord + 0.5D, (double) yCoord + 0.5D, (double) zCoord + 0.5D) <= 64D;
 		}
 	}
-	
+
 	@Override
 	public void openChest() {
-		
+
 	}
 
 	@Override
 	public void closeChest() {
-		
+
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
 		super.readFromNBT(nbttagcompound);
@@ -161,7 +161,7 @@ public class TileEntityRC extends TileEntity implements IInventory, ISidedInvent
 		}
 		nbttagcompound.setTag("Items", nbttaglist);
 	}
-	
+
 	public void fillItem() {
 		if (!canFill()) {
 			return;
@@ -185,7 +185,7 @@ public class TileEntityRC extends TileEntity implements IInventory, ISidedInvent
 			rainItemStacks[0] = null;
 		}
 	}
-	
+
 	private boolean canFill() {
 		if (rainItemStacks[0] == null) {
 			return false;
@@ -211,7 +211,7 @@ public class TileEntityRC extends TileEntity implements IInventory, ISidedInvent
 
 		return rainItemStacks[1].stackSize < itemstack.getMaxStackSize();
 	}
-	
+
 	public boolean canRainOn(int i, int j, int k, World world) {
 		for (int l = j + 1; l < 255; l++) {
 			if (world.getBlockId(i, l, k) != 0) {
@@ -220,7 +220,7 @@ public class TileEntityRC extends TileEntity implements IInventory, ISidedInvent
 		}
 		return true;
 	}
-	
+
 	public int getRainMeterScaled(int i) {
 		return (RainMeter * i) / 200;
 	}
@@ -228,13 +228,11 @@ public class TileEntityRC extends TileEntity implements IInventory, ISidedInvent
 	public int getInternalBucketScaled(int i) {
 		return (internalBucket * i) / 2000;
 	}
-	
+
 	@Override
 	public int getStartInventorySide(ForgeDirection side) {
-		if (side == ForgeDirection.DOWN)
-			return 1;
-		if (side == ForgeDirection.UP)
-			return 0;
+		if (side == ForgeDirection.DOWN) return 1;
+		if (side == ForgeDirection.UP) return 0;
 		return 2;
 	}
 

@@ -1,7 +1,6 @@
 package tarun1998.thirstmod;
 
 import java.util.*;
-
 import net.minecraft.src.BiomeGenBase;
 import tarun1998.thirstmod.api.*;
 
@@ -11,52 +10,52 @@ public class PoisonController {
 	private static boolean isPoisoned = false;
 	private static Map biomesList = new HashMap();
 	private boolean loadedClass = false;
-	
+
 	/**
 	 * PoisonControler ticks. Called from PlayerStatistics.class.
 	 */
 	public void onTick() {
-		if(shouldPoison() == true) {
+		if (shouldPoison() == true) {
 			poisonPlayer();
 		}
-		if(loadedClass == false) {
+		if (loadedClass == false) {
 			addBiomePoison();
 			loadedClass = true;
 		}
 	}
-	
+
 	/**
 	 * Starts the poison.
 	 */
 	public static void startPoison() {
-		if(APIHooks.shouldPoison() == true) {
+		if (APIHooks.shouldPoison() == true) {
 			poisonPlayer = true;
 		}
 	}
-	
+
 	/**
 	 * Checks if the game should poison.
 	 * @return if can poison.
 	 */
 	public static boolean shouldPoison() {
-		if(poisonPlayer == true) {
+		if (poisonPlayer == true) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Poison the Player.
 	 */
 	private void poisonPlayer() {
-		if(ConfigHelper.poisonOn == true) {
-			if(poisonPlayer == true) {
+		if (ConfigHelper.poisonOn == true) {
+			if (poisonPlayer == true) {
 				poisonTimer++;
 				ThirstUtils.getStats().addExhaustion(0.052777777777778f);
 				APIHooks.onPlayerPoisoned(360 - poisonTimer);
 				isPoisoned = true;
-				if(poisonTimer > 360) {
+				if (poisonTimer > 360) {
 					APIHooks.onPoisonStopped();
 					isPoisoned = false;
 					poisonPlayer = false;
@@ -64,45 +63,46 @@ public class PoisonController {
 			}
 		}
 	}
-	
+
 	/**
 	 * Checks if the player is currently poisoned.
 	 * @return if the player is poisoned.
 	 */
 	public static boolean isPoisoned() {
-		if(isPoisoned == true) {
+		if (isPoisoned == true) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Checks how much time is remaining until the poison stops.
 	 * @return remaining time until poison stops.
 	 */
 	public static int poisonTimeRemain() {
-		if(poisonTimer > 0) {
+		if (poisonTimer > 0) {
 			return 360 - poisonTimer;
 		} else {
 			return 0;
 		}
 	}
-	
+
 	/**
-	 * Shows the poison rate for a particular biome. If biome is not found will return 0.3f or "Other".
+	 * Shows the poison rate for a particular biome. If biome is not found will
+	 * return 0.3f or "Other".
 	 * @param biome String of biomes name. Available in BiomeGenBase.class.
 	 * @return poison rate in float.
 	 */
 	public static float getBiomePoison(String biome) {
-		if(biomesList.containsKey(biome)) {
+		if (biomesList.containsKey(biome)) {
 			return (Float) biomesList.get(biome);
 		} else {
 			return (Float) biomesList.get("Other");
 		}
 	}
-	
-	/** 
+
+	/**
 	 * Adds a biome and its poison value to the Map.
 	 */
 	public void addBiomePoison() {
@@ -119,7 +119,7 @@ public class PoisonController {
 		biomesList.put("River", 0.2f);
 		biomesList.put("Other", 0.3f);
 	}
-	
+
 	/**
 	 * Get the biomes poison list.
 	 * @return the biomes list.
@@ -127,4 +127,4 @@ public class PoisonController {
 	public static Map getBiomesList() {
 		return biomesList;
 	}
- }
+}

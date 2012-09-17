@@ -11,17 +11,17 @@ import net.minecraftforge.event.world.WorldEvent;
 public class CommonProxy {
 	public DrinkController dc = new DrinkController();
 	public boolean loadedMod = false;
-	
+
 	public void onLoad() {
 		TickRegistry.registerTickHandler(new TickHanderServer(), Side.SERVER);
 		new ContentLoader(FMLServerHandler.instance().getSide());
 	}
-	
+
 	public void onTickInGame() {
 		String[] names = FMLServerHandler.instance().getServer().getAllUsernames();
-		for(int i = 0; i < names.length; i++) {
+		for (int i = 0; i < names.length; i++) {
 			EntityPlayerMP player = FMLServerHandler.instance().getServer().getConfigurationManager().getPlayerForUsername(names[i]);
-			if(player.capabilities.isCreativeMode == false) {
+			if (player.capabilities.isCreativeMode == false) {
 				dc.onTick(player, Side.SERVER);
 				ThirstUtils.getStats().onTick(player, player);
 			}

@@ -28,26 +28,30 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 
 	public static int jmFront = 1;
 	public static int rcTop = 0;
-	
+
 	@Instance
 	public static ThirstMod INSTANCE;
-	
+
 	@SidedProxy(clientSide = "tarun1998.thirstmod.ClientProxy", serverSide = "tarun1998.thirstmod.CommonProxy")
 	public static CommonProxy proxy;
-	
+
 	private boolean changedGui = false;
 	public boolean loadedMod = false;
+	public static boolean modOff = false;
 	
+	public static boolean shouldTellPlayer0 = false;
+	public static boolean shouldTellPlayer1 = false;
+
 	/**
-	 *  Called before the mod is loaded.
-	 *  @param event
+	 * Called before the mod is loaded.
+	 * @param event
 	 */
 	@PreInit
 	public void beforeLoad(FMLPreInitializationEvent event) {
 		new ConfigHelper();
 		ThirstUtils.setupCurrentDir(event);
 	}
-	
+
 	/**
 	 * Called when the mod is loaded.
 	 * @param event
@@ -56,35 +60,35 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 	public void onLoad(FMLInitializationEvent event) {
 		GameRegistry.registerBlock(waterCollector);
 		GameRegistry.registerBlock(juiceMaker);
-		
+
 		GameRegistry.registerTileEntity(TileEntityRC.class, "Rain Collector");
 		GameRegistry.registerTileEntity(TileEntityJM.class, "Juice Maker");
-		
-		GameRegistry.addRecipe(new ItemStack(waterCollector, 1), new Object[] 
+
+		GameRegistry.addRecipe(new ItemStack(waterCollector, 1), new Object[]
 		{ "***", "*#*", "***", Character.valueOf('*'), Block.cobblestone, Character.valueOf('#'), Item.bucketEmpty, });
-		
-		GameRegistry.addRecipe(new ItemStack(juiceMaker, 1), new Object[] 
+
+		GameRegistry.addRecipe(new ItemStack(juiceMaker, 1), new Object[]
 		{ "***", "*#*", "***", Character.valueOf('*'), Block.cobblestone, Character.valueOf('#'), Item.glassBottle, });
-		
-		GameRegistry.addRecipe(new ItemStack(Filter), new Object[] 
+
+		GameRegistry.addRecipe(new ItemStack(Filter), new Object[]
 		{ "***", "*!*", "***", Character.valueOf('*'), Block.planks, Character.valueOf('!'), Item.silk });
-		
+
 		GameRegistry.addShapelessRecipe(new ItemStack(Filter), new Object[]
 		{ Item.silk, dFilter });
-		
+
 		new DrinkLoader().loadDrinks();
 		new ThirstAPI();
-		
+
 		MinecraftForge.EVENT_BUS.register(INSTANCE);
 		MinecraftForge.EVENT_BUS.register(proxy);
 		NetworkRegistry.instance().registerGuiHandler(this, this);
 		NetworkRegistry.instance().registerConnectionHandler(new PacketHandler());
-		
+
 		APIHooks.registerDrinks();
 		DrinkController.addDrink(Item.potion, 5, 1f);
 		DrinkController.addDrink(Item.bucketMilk, 10, 3f);
 		DrinkController.addDrink(Item.bowlSoup, 7, 2f);
-		
+
 		ThirstAPI.registerHandler(this);
 		proxy.onLoad();
 	}
@@ -94,9 +98,11 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 	 * @param minecraft
 	 */
 	public void onTickInGame() {
-		proxy.onTickInGame();
-	} 
-	
+		if (modOff == false) {
+			proxy.onTickInGame();
+		}
+	}
+
 	/**
 	 * Called when the player right clicks on a living entity.
 	 * @param attack
@@ -105,26 +111,26 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 	public void onAttack(AttackEntityEvent attack) {
 		ThirstUtils.getStats().addExhaustion(0.3f);
 	}
-	
+
 	/**
 	 * Called when the player is damaged. i.e when loses health.
 	 * @param hurt
 	 */
 	@ForgeSubscribe
 	public void onHurt(LivingHurtEvent hurt) {
-		if(hurt.entityLiving instanceof EntityPlayer) {
+		if (hurt.entityLiving instanceof EntityPlayer) {
 			ThirstUtils.getStats().addExhaustion(0.3f);
 		}
 	}
-	
-	/** 
+
+	/**
 	 * Determines if the player is jumping.
 	 * @return
 	 */
 	public static boolean isJumping(EntityPlayer player) {
 		return player.onGround == false;
 	}
-	
+
 	/**
 	 * Sets an icon index for an item.
 	 * @param item The Item
@@ -133,16 +139,18 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 	public static void setIcon(Item item, int i) {
 		item.setIconIndex(i);
 	}
-	
+
 	/**
-	 * Gets the server container. 
+	 * Gets the server container.
 	 */
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
-		switch(ID) {
-			case 90: return new ContainerJM(player.inventory, (TileEntityJM) tile);
-			case 91: return new ContainerRC(player.inventory, (TileEntityRC) tile);
+		switch (ID) {
+		case 90:
+			return new ContainerJM(player.inventory, (TileEntityJM) tile);
+		case 91:
+			return new ContainerRC(player.inventory, (TileEntityRC) tile);
 		}
 		return null;
 	}
@@ -153,9 +161,11 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity tile = world.getBlockTileEntity(x, y, z);
-		switch(ID) {
-			case 90: return new GuiJM(player.inventory, (TileEntityJM) tile);
-			case 91: return new GuiRC(player.inventory, (TileEntityRC) tile);
+		switch (ID) {
+		case 90:
+			return new GuiJM(player.inventory, (TileEntityJM) tile);
+		case 91:
+			return new GuiRC(player.inventory, (TileEntityRC) tile);
 		}
 		return null;
 	}
@@ -165,9 +175,9 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 	 */
 	@Override
 	public boolean onItemDrunk(ItemStack item, int levelAdded, float saturationAdded) {
-		if(item.getItem() == Item.potion && item.getItemDamage() == 0) {
-			Random rand = new Random(); 
-			if(rand.nextFloat() < 0.3f) {
+		if (item.getItem() == Item.potion && item.getItemDamage() == 0) {
+			Random rand = new Random();
+			if (rand.nextFloat() < 0.3f) {
 				PoisonController.startPoison();
 			}
 		}
@@ -178,5 +188,6 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 	 * Called when an item is being drunk. Not used yet...
 	 */
 	@Override
-	public void onItemBeingDrunk(ItemStack item, int timeRemaining) {}
+	public void onItemBeingDrunk(ItemStack item, int timeRemaining) {
+	}
 }

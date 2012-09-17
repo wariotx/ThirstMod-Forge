@@ -6,12 +6,10 @@ package tarun1998.thirstmod;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-
 import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.src.*;
 
-public class Drink extends Item
-{
+public class Drink extends Item {
 	private final int healAmount;
 	private final float saturationThirstModifier;
 	private boolean alwaysDrinkable;
@@ -23,87 +21,73 @@ public class Drink extends Item
 	private Random rand = new Random();
 	private String texture;
 	private Item returnItem = Item.glassBottle;
-	
+
 	private float poisonChance;
-	
+
 	private int foodHeal;
 	private float satHeal;
 
-	public Drink(int id, int thirstReplenish, float saturationModifier, boolean alwaysDrinkable)
-	{
+	public Drink(int id, int thirstReplenish, float saturationModifier, boolean alwaysDrinkable) {
 		super(id);
 		healAmount = thirstReplenish;
 		saturationThirstModifier = saturationModifier;
-		if (alwaysDrinkable == true)
-		{
+		if (alwaysDrinkable == true) {
 			this.alwaysDrinkable = true;
 		}
 		setTabToDisplayOn(CreativeTabs.tabFood);
 	}
 
-	public Drink(int i, int j, boolean flag)
-	{
+	public Drink(int i, int j, boolean flag) {
 		this(i, j, 0.2F, flag);
 	}
 
-	public ItemStack onFoodEaten(ItemStack itemstack, World world, EntityPlayer entityplayer)
-	{
+	public ItemStack onFoodEaten(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 		itemstack.stackSize--;
 		ThirstUtils.getStats().addStats(healAmount, saturationThirstModifier);
-		if (!world.isRemote && potionId > 0 && world.rand.nextFloat() < potionEffectProbability)
-		{
+		if (!world.isRemote && potionId > 0 && world.rand.nextFloat() < potionEffectProbability) {
 			entityplayer.addPotionEffect(new PotionEffect(potionId, potionDuration * 20, potionAmplifier));
 		}
-		
-		if(poisonChance > 0)
-		{
+
+		if (poisonChance > 0) {
 			PoisonController.startPoison();
 		}
-		
-		if(foodHeal > 0 && satHeal > 0)
-		{
+
+		if (foodHeal > 0 && satHeal > 0) {
 			entityplayer.getFoodStats().addStats(foodHeal, satHeal);
 		}
-		
-		if (itemstack.stackSize <= 0)
-		{
+
+		if (itemstack.stackSize <= 0) {
 			return new ItemStack(returnItem);
-		} else
-		{
+		} else {
 			entityplayer.inventory.addItemStackToInventory(new ItemStack(returnItem));
 			return itemstack;
 		}
 	}
 
-	public int getMaxItemUseDuration(ItemStack itemstack)
-	{
+	public int getMaxItemUseDuration(ItemStack itemstack) {
 		return 32;
 	}
 
-	public EnumAction getItemUseAction(ItemStack itemstack)
-	{
+	public EnumAction getItemUseAction(ItemStack itemstack) {
 		return EnumAction.drink;
 	}
 
-	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer)
-	{
-		if(canDrink() == true) {
+	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
+		if (canDrink() == true) {
 			entityplayer.setItemInUse(itemstack, getMaxItemUseDuration(itemstack));
 		}
 		return itemstack;
 	}
 
-	public int getHealAmount()
-	{
+	public int getHealAmount() {
 		return healAmount;
 	}
 
-	public float getThirstSaturationModifier()
-	{
+	public float getThirstSaturationModifier() {
 		return saturationThirstModifier;
 	}
 
-	/** 
+	/**
 	 * Sets a potion effect when the drink is drunk.
 	 * @param i Potion ID
 	 * @param j Duration
@@ -111,8 +95,7 @@ public class Drink extends Item
 	 * @param f Probability
 	 * @return
 	 */
-	public Drink setPotionEffect(int i, int j, int k, float f)
-	{
+	public Drink setPotionEffect(int i, int j, int k, float f) {
 		potionId = i;
 		potionDuration = j;
 		potionAmplifier = k;
@@ -120,13 +103,10 @@ public class Drink extends Item
 		return this;
 	}
 
-	public boolean hasEffect(ItemStack itemstack)
-	{
-		if (hasEffect == true)
-		{
+	public boolean hasEffect(ItemStack itemstack) {
+		if (hasEffect == true) {
 			return true;
-		} else
-		{
+		} else {
 			return false;
 		}
 	}
@@ -136,8 +116,7 @@ public class Drink extends Item
 	 * @param chance Chance. 0.6f = 60% approximately.
 	 * @return
 	 */
-	public Drink setPoisoningChance(float chance)
-	{
+	public Drink setPoisoningChance(float chance) {
 		poisonChance = chance;
 		return this;
 	}
@@ -146,38 +125,33 @@ public class Drink extends Item
 	 * Makes the item shiny like Golden Apple.
 	 * @return this
 	 */
-	public Item setHasEffect()
-	{
+	public Item setHasEffect() {
 		hasEffect = true;
 		return this;
 	}
-	
+
 	/**
-	 * Makes the item shiny like Golden Apple. This one is for ContentDrink cause its a boolean.
+	 * Makes the item shiny like Golden Apple. This one is for ContentDrink
+	 * cause its a boolean.
 	 * @return this
 	 */
 
-	public Drink setEffect(boolean b)
-	{
-		if(b == true)
-		{
+	public Drink setEffect(boolean b) {
+		if (b == true) {
 			hasEffect = true;
-		}
-		else if(b == false)
-		{
-			//Do nothing!
+		} else if (b == false) {
+			// Do nothing!
 		}
 		return this;
 	}
-	
+
 	/**
 	 * Allows the drink to heal the food bar.
 	 * @param level amount level.
 	 * @param saturation amount satuation.
 	 * @return
 	 */
-	public Drink healFood(int level, float saturation)
-	{
+	public Drink healFood(int level, float saturation) {
 		foodHeal = level;
 		satHeal = saturation;
 		return this;
@@ -187,22 +161,21 @@ public class Drink extends Item
 	 * Can the person drink.
 	 * @return
 	 */
-	public static boolean canDrink()
-	{	
-		if(ThirstUtils.getStats().level < 20) {
+	public static boolean canDrink() {
+		if (ThirstUtils.getStats().level < 20) {
 			return true;
-		} else if(FMLClientHandler.instance().getClient().thePlayer.capabilities.isCreativeMode == true) {
+		} else if (FMLClientHandler.instance().getClient().thePlayer.capabilities.isCreativeMode == true) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	public Item setReturn(Item item) {
 		returnItem = item;
 		return this;
 	}
-	
-	/** 
+
+	/**
 	 * Sets the items 256*256 sprite sheet. Used for forge.
 	 * @param tex
 	 * @return
@@ -211,7 +184,7 @@ public class Drink extends Item
 		texture = tex;
 		return this;
 	}
-	
+
 	@Override
 	public String getTextureFile() {
 		return texture;

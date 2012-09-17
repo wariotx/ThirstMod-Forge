@@ -1,9 +1,7 @@
 package tarun1998.thirstmod.blocks;
 
 import java.util.Random;
-
 import tarun1998.thirstmod.ThirstMod;
-
 import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.src.*;
 
@@ -19,13 +17,13 @@ public class BlockRC extends BlockContainer {
 	public int idDropped(int par1, Random par2Random, int par3) {
 		return ThirstMod.waterCollector.blockID;
 	}
-	
+
 	@Override
 	public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9) {
 		par5EntityPlayer.openGui(ThirstMod.INSTANCE, 91, par1World, par2, par3, par4);
 		return true;
 	}
-	
+
 	@Override
 	public TileEntity createNewTileEntity(World world) {
 		return new TileEntityRC();
@@ -137,7 +135,7 @@ public class BlockRC extends BlockContainer {
 
 		super.breakBlock(par1World, par2, par3, par4, par5, par6);
 	}
-	
+
 	@Override
 	public int getBlockTextureFromSide(int i) {
 		if (i == 1) {
@@ -154,7 +152,7 @@ public class BlockRC extends BlockContainer {
 		}
 		return 3;
 	}
-	
+
 	@Override
 	public String getTextureFile() {
 		return "/tarun1998/thirstmod/textures/icons.png";

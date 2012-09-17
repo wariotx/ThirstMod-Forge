@@ -7,7 +7,7 @@ public class ContainerJM extends Container {
 	private int lastCookTime = 0;
 	private int lastBurnTime = 0;
 	private int lastItemBurnTime = 0;
-	
+
 	public ContainerJM(InventoryPlayer par1InventoryPlayer, TileEntityJM par2TileEntityFurnace) {
 		this.furnace = par2TileEntityFurnace;
 		this.addSlotToContainer(new Slot(par2TileEntityFurnace, 0, 58, 24));
@@ -26,7 +26,7 @@ public class ContainerJM extends Container {
 			this.addSlotToContainer(new Slot(par1InventoryPlayer, var3, 8 + var3 * 18, 142));
 		}
 	}
-	
+
 	@Override
 	public void updateCraftingResults() {
 		super.updateCraftingResults();
@@ -51,7 +51,7 @@ public class ContainerJM extends Container {
 		this.lastBurnTime = this.furnace.brewrbrewTime;
 		this.lastItemBurnTime = this.furnace.currentItemCoolTime;
 	}
-	
+
 	@Override
 	public void updateProgressBar(int par1, int par2) {
 		if (par1 == 0) {
@@ -70,85 +70,63 @@ public class ContainerJM extends Container {
 	@Override
 	public ItemStack transferStackInSlot(int par1) {
 		ItemStack var2 = null;
-        Slot var3 = (Slot)this.inventorySlots.get(par1);
+		Slot var3 = (Slot) this.inventorySlots.get(par1);
 
-        if (var3 != null && var3.getHasStack())
-        {
-            ItemStack var4 = var3.getStack();
-            var2 = var4.copy();
+		if (var3 != null && var3.getHasStack()) {
+			ItemStack var4 = var3.getStack();
+			var2 = var4.copy();
 
-            if (par1 == 2)
-            {
-                if (!this.mergeItemStack(var4, 3, 39, true))
-                {
-                    return null;
-                }
+			if (par1 == 2) {
+				if (!this.mergeItemStack(var4, 3, 39, true)) {
+					return null;
+				}
 
-                var3.onSlotChange(var4, var2);
-            }
-            else if (par1 != 1 && par1 != 0 && par1 != 3)
-            {
-                if (JMRecipes.solidifying().getSmeltingResult(var4) != null)
-                {
-                    if (!this.mergeItemStack(var4, 0, 1, false))
-                    {
-                        return null;
-                    }
-                }
-                else if (var4.getItem().shiftedIndex == Item.glassBottle.shiftedIndex)
-                {
-                    if (!this.mergeItemStack(var4, 1, 2, false))
-                    {
-                        return null;
-                    }
-                }
-                else if (par1 >= 4 && par1 < 30)
-                {
-                    if (!this.mergeItemStack(var4, 30, 39, false))
-                    {
-                        return null;
-                    }
-                }
-                else if (par1 >= 30 && par1 < 39 && !this.mergeItemStack(var4, 0, 30, false))
-                {
-                    return null;
-                }
-            }
-            else if (!this.mergeItemStack(var4, 4, 39, false))
-            {
-                return null;
-            }
+				var3.onSlotChange(var4, var2);
+			} else if (par1 != 1 && par1 != 0 && par1 != 3) {
+				if (JMRecipes.solidifying().getSmeltingResult(var4) != null) {
+					if (!this.mergeItemStack(var4, 0, 1, false)) {
+						return null;
+					}
+				} else if (var4.getItem().shiftedIndex == Item.glassBottle.shiftedIndex) {
+					if (!this.mergeItemStack(var4, 1, 2, false)) {
+						return null;
+					}
+				} else if (par1 >= 4 && par1 < 30) {
+					if (!this.mergeItemStack(var4, 30, 39, false)) {
+						return null;
+					}
+				} else if (par1 >= 30 && par1 < 39 && !this.mergeItemStack(var4, 0, 30, false)) {
+					return null;
+				}
+			} else if (!this.mergeItemStack(var4, 4, 39, false)) {
+				return null;
+			}
 
-            if (var4.stackSize == 0)
-            {
-                var3.putStack((ItemStack)null);
-            }
-            else
-            {
-                var3.onSlotChanged();
-            }
+			if (var4.stackSize == 0) {
+				var3.putStack((ItemStack) null);
+			} else {
+				var3.onSlotChanged();
+			}
 
-            if (var4.stackSize == var2.stackSize)
-            {
-                return null;
-            }
+			if (var4.stackSize == var2.stackSize) {
+				return null;
+			}
 
-            var3.onPickupFromSlot(var4);
-        }
+			var3.onPickupFromSlot(var4);
+		}
 
-        System.out.println(par1);
-        return var2;
+		System.out.println(par1);
+		return var2;
 	}
-	
+
 	@Override
-	public void addCraftingToCrafters(ICrafting par1ICrafting)
-    {
-        super.addCraftingToCrafters(par1ICrafting);
-        par1ICrafting.updateCraftingInventoryInfo(this, 0, this.furnace.brewrbrewTime);
-        par1ICrafting.updateCraftingInventoryInfo(this, 1, this.furnace.brewrCoolTime);
-        par1ICrafting.updateCraftingInventoryInfo(this, 2, this.furnace.currentItemCoolTime);
-        par1ICrafting.updateCraftingInventoryInfo(this, 3, this.furnace.makeTime);
-    }
+	public void addCraftingToCrafters(ICrafting par1ICrafting) {
+		super.addCraftingToCrafters(par1ICrafting);
+		par1ICrafting.updateCraftingInventoryInfo(this, 0, this.furnace.brewrbrewTime);
+		par1ICrafting.updateCraftingInventoryInfo(this, 1, this.furnace.brewrCoolTime);
+		par1ICrafting.updateCraftingInventoryInfo(this, 2, this.furnace.currentItemCoolTime);
+		par1ICrafting.updateCraftingInventoryInfo(this, 3, this.furnace.makeTime);
+	}
 
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {

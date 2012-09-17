@@ -16,8 +16,8 @@ public class DrinkLoader {
 		GameRegistry.addSmelting(Item.potion.shiftedIndex, new ItemStack(freshWater, 1), 0.3f);
 		GameRegistry.addShapelessRecipe(new ItemStack(freshWater, 1), new Object[]
 		{ ThirstMod.Filter, new ItemStack(Item.potion, 0) });
-		
-		GameRegistry.addRecipe(new ItemStack(canteen, 1, 0), new Object[] 
+
+		GameRegistry.addRecipe(new ItemStack(canteen, 1, 0), new Object[]
 		{ "* *", " * ", Character.valueOf('*'), Item.leather });
 		LanguageRegistry.addName(new ItemStack(canteen.shiftedIndex, 1, 5), "Canteen 5/5");
 		LanguageRegistry.addName(new ItemStack(canteen.shiftedIndex, 1, 4), "Canteen 4/5");
@@ -30,9 +30,9 @@ public class DrinkLoader {
 		LanguageRegistry.addName(new ItemStack(canteen.shiftedIndex, 1, 8), "Filtered Canteen 3/5");
 		LanguageRegistry.addName(new ItemStack(canteen.shiftedIndex, 1, 7), "Filtered Canteen 2/5");
 		LanguageRegistry.addName(new ItemStack(canteen.shiftedIndex, 1, 6), "Filtered Canteen 1/5");
-		for(int i = 0; i < 6; i++) {
-			GameRegistry.addShapelessRecipe(new ItemStack(canteen, 1, 10), new Object[] 
-			{ThirstMod.Filter, new ItemStack(canteen, 1, i)});
+		for (int i = 0; i < 6; i++) {
+			GameRegistry.addShapelessRecipe(new ItemStack(canteen, 1, 10), new Object[]
+			{ ThirstMod.Filter, new ItemStack(canteen, 1, i) });
 		}
 		DrinkController.addOtherDrink(canteen);
 
@@ -54,8 +54,10 @@ public class DrinkLoader {
 			Item fBucket = ((Drink) ((Drink) new Drink(ConfigHelper.fBucketId, 10, 1.4f, false).setIconCoord(4, 1).setItemName("freshBucket").setMaxStackSize(ConfigHelper.maxStackSize)).setReturn(Item.bucketEmpty)).setTexFile("/tarun1998/thirstmod/textures/icons.png");
 			LanguageRegistry.addName(fBucket, "Fresh Water Bucket");
 			GameRegistry.addSmelting(Item.bucketWater.shiftedIndex, new ItemStack(fBucket, 1), 0.4f);
-			/*ModLoader.addShapelessRecipe(new ItemStack(fBucket, 1), new Object[]
-			{ Item.bucketWater, ThirstMod.Filter, }); */ 
+			/*
+			 * ModLoader.addShapelessRecipe(new ItemStack(fBucket, 1), new
+			 * Object[] { Item.bucketWater, ThirstMod.Filter, });
+			 */
 			DrinkController.addOtherDrink(fBucket);
 		}
 	}
