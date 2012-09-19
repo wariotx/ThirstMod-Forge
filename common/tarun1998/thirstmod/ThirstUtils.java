@@ -67,6 +67,8 @@ public class ThirstUtils {
 		nbt.setFloat("tmSaturation", getStats().saturation);
 		nbt.setInteger("tmTimer", getStats().healhurtTimer);
 		nbt.setInteger("tmTimer2", getStats().drinkTimer);
+		nbt.setBoolean("tmPoisoned", PoisonController.isPoisoned());
+		nbt.setInteger("tmPoisonTime", PoisonController.poisonTimeRemain());
 	}
 
 	/**
@@ -81,6 +83,8 @@ public class ThirstUtils {
 			getStats().saturation = nbt.getFloat("tmSaturation");
 			getStats().healhurtTimer = nbt.getInteger("tmTimer");
 			getStats().drinkTimer = nbt.getInteger("tmTimer2");
+			PoisonController.setPoisonedTo(nbt.getBoolean("tmPoisoned"));
+			PoisonController.setPoisonTime(nbt.getInteger("tmPoisonTime"));
 		} else {
 			setDefaults();
 		}
@@ -95,6 +99,8 @@ public class ThirstUtils {
 		getStats().saturation = 5f;
 		getStats().healhurtTimer = 0;
 		getStats().drinkTimer = 0;
+		PoisonController.setPoisonedTo(false);
+		PoisonController.setPoisonTime(0);
 	}
 
 	public static void setModUnloaded() {

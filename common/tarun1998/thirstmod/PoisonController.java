@@ -57,6 +57,7 @@ public class PoisonController {
 				isPoisoned = true;
 				if (poisonTimer > 360) {
 					APIHooks.onPoisonStopped();
+					poisonTimer = 0;
 					isPoisoned = false;
 					poisonPlayer = false;
 				}
@@ -82,7 +83,7 @@ public class PoisonController {
 	 */
 	public static int poisonTimeRemain() {
 		if (poisonTimer > 0) {
-			return 360 - poisonTimer;
+			return poisonTimer;
 		} else {
 			return 0;
 		}
@@ -126,5 +127,13 @@ public class PoisonController {
 	 */
 	public static Map getBiomesList() {
 		return biomesList;
+	}
+	
+	public static void setPoisonedTo(boolean what) {
+		poisonPlayer = what;
+	}
+	
+	public static void setPoisonTime(int what) {
+		poisonTimer = what;
 	}
 }
