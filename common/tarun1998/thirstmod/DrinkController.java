@@ -9,34 +9,21 @@ import net.minecraft.src.*;
 import tarun1998.thirstmod.api.*;
 
 public class DrinkController {
-	private int itemHeal = 0;
 	private static HashMap otherMap = new HashMap();
 	private static HashMap levelMap = new HashMap();
 	private static HashMap saturationMap = new HashMap();
 
 	public void onTick(EntityPlayer player, Side side) {
-		// 35 server 38 client for itemInUse field.
-		ItemStack item;
-		if (side == Side.CLIENT) {
-			item = ObfuscationReflectionHelper.getPrivateValue(EntityPlayer.class, player, 38);
-		} else {
-			item = ObfuscationReflectionHelper.getPrivateValue(EntityPlayer.class, player, 35);
-		}
+		ItemStack item = player.getItemInUse();
+		
 		if (item != null) {
 			if (levelMap.containsKey(item.getItem())) {
-				onItemBeingDrunk(item);
+				onItemBeingDrunk(item, player);
 			}
-		} else if (itemHeal > 0 && itemHeal <= 23) {
-			itemHeal = 0;
-		}
-
-		if (item != null) {
 			if (otherMap.containsKey(item.getItem())) {
-				onOtherItemBeingDrunk(item);
+				onOtherItemBeingDrunk(item, player);
 			}
-		} else if (itemHeal > 0 && itemHeal <= 23) {
-			itemHeal = 0;
-		}
+		} 
 	}
 
 	/**
@@ -44,26 +31,24 @@ public class DrinkController {
 	 * Alternative to Reflection used before.
 	 * @param item The itemstack being consumed.
 	 */
-	public void onItemBeingDrunk(ItemStack item) {
+	public void onItemBeingDrunk(ItemStack item, EntityPlayer player) {
 		if (levelMap.containsKey(item.getItem())) {
-			APIHooks.onItemBeingDrunk(item, item.getMaxItemUseDuration() - itemHeal);
-			itemHeal++;
-			if (itemHeal == item.getMaxItemUseDuration()) {
+			APIHooks.onItemBeingDrunk(item, player.getItemInUseCount());
+			if(player.getItemInUseCount() == 0) {
 				if (APIHooks.onItemDrunk(item, (Integer) levelMap.get(item.getItem()), (Float) saturationMap.get(item.getItem())) == true) {
 					ThirstUtils.getStats().addStats((Integer) levelMap.get(item.getItem()), (Float) saturationMap.get(item.getItem()));
 				}
-				itemHeal = 0;
 			}
 		}
 	}
 
-	public void onOtherItemBeingDrunk(ItemStack item) {
-		if (itemHeal == item.getMaxItemUseDuration()) {
-			if (APIHooks.onItemDrunk(item, (Integer) levelMap.get(item.getItem()), (Float) saturationMap.get(item.getItem())) == true) {
-				ThirstUtils.getStats().addStats((Integer) levelMap.get(item.getItem()), (Float) saturationMap.get(item.getItem()));
+	public void onOtherItemBeingDrunk(ItemStack item, EntityPlayer player) {
+		APIHooks.onItemBeingDrunk(item, player.getItemInUseCount());
+		if(player.getItemInUseCount() == 0) {
+			if (APIHooks.onItemDrunk(item, 0, 0f) == true) {
+				//Why would you cancel this one?
 			}
 		}
-		itemHeal = 0;
 	}
 
 	/**

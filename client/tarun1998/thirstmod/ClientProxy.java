@@ -42,31 +42,35 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void onTickInGame() {
-		Minecraft minecraft = FMLClientHandler.instance().getClient();
-		if (minecraft.currentScreen != null) {
-			onTickInGUI(minecraft.currentScreen);
-		}
+		try {
+			Minecraft minecraft = FMLClientHandler.instance().getClient();
+			if (minecraft.currentScreen != null) {
+				onTickInGUI(minecraft.currentScreen);
+			}
 
-		if (minecraft.thePlayer != null) {
-			if (getPlayerMp().capabilities.isCreativeMode == false) {
-				if (loadedMod == false) {
-					if (changedGui == false) {
-						minecraft.ingameGUI = new GuiThirst();
-						changedGui = true;
+			if (minecraft.thePlayer != null) {
+				if (getPlayerMp().capabilities.isCreativeMode == false) {
+					if (loadedMod == false) {
+						if (changedGui == false) {
+							minecraft.ingameGUI = new GuiThirst();
+							changedGui = true;
+						}
+
+						new ThirstUtils();
+						onLoadNBT();
+						loadedMod = true;
 					}
+				}
+				dc.onTick(minecraft.thePlayer, Side.CLIENT);
+				ThirstUtils.getStats().onTick(getPlayer(), getPlayerMp());
 
-					new ThirstUtils();
-					onLoadNBT();
-					loadedMod = true;
+				intDat++;
+				if (PacketHandler.isRemote == true & intDat > 100) {
+					PacketHandler.sendData(getPlayerMp().username, ThirstUtils.getStats());
 				}
 			}
-			dc.onTick(minecraft.thePlayer, Side.CLIENT);
-			ThirstUtils.getStats().onTick(getPlayer(), getPlayerMp());
-
-			intDat++;
-			if (PacketHandler.isRemote == true & intDat > 100) {
-				PacketHandler.sendData(getPlayerMp().username, ThirstUtils.getStats());
-			}
+		} catch(Exception e) {
+			//Don't crash the game cause I know you will!
 		}
 	}
 
