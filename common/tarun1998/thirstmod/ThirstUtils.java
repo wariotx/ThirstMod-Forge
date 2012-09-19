@@ -3,6 +3,8 @@ package tarun1998.thirstmod;
 import java.io.*;
 import java.net.*;
 import tarun1998.thirstmod.blocks.JMRecipes;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import net.minecraft.src.*;
 
@@ -173,6 +175,11 @@ public class ThirstUtils {
 		JMRecipes.solidifying().addSolidifying(id, metadata, item);
 	}
 
+	/**
+	 * Setups the current directory as Minecraft.getMinecraftDir does not work
+	 * on the server side.
+	 * @param event
+	 */
 	public static void setupCurrentDir(FMLPreInitializationEvent event) {
 		File one = event.getSuggestedConfigurationFile();
 		File two = one.getParentFile();
@@ -182,6 +189,19 @@ public class ThirstUtils {
 
 	public static String getDir() {
 		return currentDir;
+	}
+
+	/**
+	 * Prints to either the console or the minecraft server window depending on
+	 * which side we are current at.
+	 * @param obj something to print.
+	 */
+	public static void print(Object obj) {
+		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+			System.out.println("[ThirstMod] " + obj);
+		} else {
+			FMLCommonHandler.instance().getMinecraftServerInstance().logInfoMessage("[ThirstMod] "+ obj.toString());
+		}
 	}
 }
 

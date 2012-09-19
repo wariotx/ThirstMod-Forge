@@ -85,12 +85,15 @@ public class ContentLoader {
 							if (side.equals(Side.CLIENT)) {
 								MinecraftForgeClient.preloadTexture(textureFile);
 							}
+							String output = fileInDir.getName().replace(".txt", "");
+							addedfiles.add(output);
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
 					}
 				}
 			}
+			ThirstUtils.print("Loaded the following drinks: " + addedfiles.toString().replace("[", "").replace("]", ""));
 		}
 	}
 
