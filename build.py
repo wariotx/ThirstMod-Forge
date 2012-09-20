@@ -81,7 +81,7 @@ def main():
     config_dir = resource_dir + '/mods/ThirstMod/' + "Config.txt"
     mcmod_dir =  resource_dir + '/mods/ThirstMod/' + "mcmod.info"
     shutil.copy(config_dir, base_dir + 'Config.txt')
-    shutil.copy(config_dir, base_dir + 'mcmod.info')
+    shutil.copy(mcmod_dir, base_dir + 'mcmod.info')
     
     zip_dir(cache_dir + '/ThirstMod', build_dir + '/latest build.zip')
     # Ends producing 'latest build.zip' file.
