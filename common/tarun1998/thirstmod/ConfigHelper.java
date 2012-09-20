@@ -28,7 +28,9 @@ public class ConfigHelper {
 	public static int rcId;
 	public static int filterId;
 	public static int dFilterId;
-	public static int canteenId;
+	public static int woodGlassId;
+	public static int woodWaterId;
+	public static int woodFWaterId;
 
 	private static boolean setupConfig() {
 		config.load();
@@ -50,7 +52,9 @@ public class ConfigHelper {
 		freshWaterId = Integer.parseInt(config.getOrCreateIntProperty("Fresh Water", "Item", 803).value);
 		filterId = Integer.parseInt(config.getOrCreateIntProperty("Filter", "Item", 805).value);
 		dFilterId = Integer.parseInt(config.getOrCreateIntProperty("Dirty Filter", "Item", 806).value);
-		canteenId = Integer.parseInt(config.getOrCreateIntProperty("Canteen", "Item", 807).value);
+		woodGlassId = Integer.parseInt(config.getOrCreateIntProperty("Wood Glass", "Item", 807).value);
+		woodWaterId = Integer.parseInt(config.getOrCreateIntProperty("Wood-Glass Water", "Item", 808).value);
+		woodFWaterId = Integer.parseInt(config.getOrCreateIntProperty("Wood-Glass Filter Water", "Item", 809).value);
 
 		jmId = Integer.parseInt(config.getOrCreateBlockIdProperty("Drinks Brewer", 3505).value);
 		rcId = Integer.parseInt(config.getOrCreateBlockIdProperty("Rain Collector", 3506).value);

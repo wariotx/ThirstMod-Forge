@@ -49,7 +49,10 @@ public class Drink extends Item {
 		}
 
 		if (poisonChance > 0) {
-			PoisonController.startPoison();
+			Random rand = new Random();
+			if(rand.nextFloat() < poisonChance) {
+				PoisonController.startPoison();
+			}
 		}
 
 		if (foodHeal > 0 && satHeal > 0) {
@@ -131,7 +134,7 @@ public class Drink extends Item {
 	}
 
 	/**
-	 * Makes the item shiny like Golden Apple. This one is for ContentDrink
+	 * Makes the item shiny like Golden Apple. This one is for ContentLoader
 	 * cause its a boolean.
 	 * @return this
 	 */

@@ -7,8 +7,10 @@ import net.minecraft.src.*;
 public class DrinkLoader {
 	public static Item freshWater;
 	public static Item milk;
-	public static final Item canteen = new ItemCanteen(ConfigHelper.canteenId).setTabToDisplayOn(CreativeTabs.tabFood);
-
+	public static Item woodGlass = new ItemThirst(ConfigHelper.woodGlassId).setItemName("woodGlass").setIconCoord(5, 1);
+	public static Item woodWater = ((Drink) ((Drink) ((Drink) new Drink(ConfigHelper.woodWaterId, 3, 1.2f, false).setItemName("woodWater")).setTexFile("/tarun1998/thirstmod/textures/icons.png").setMaxStackSize(ConfigHelper.maxStackSize)).setReturn(woodGlass)).setPoisoningChance(0.3f).setIconCoord(6, 1);
+	public static Item woodFWater = ((Drink) ((Drink) new Drink(ConfigHelper.woodFWaterId, 4, 1.3f, false).setItemName("woodFWater")).setTexFile("/tarun1998/thirstmod/textures/icons.png").setMaxStackSize(ConfigHelper.maxStackSize)).setReturn(woodGlass).setIconCoord(7, 1);
+	
 	public void loadDrinks() {
 		freshWater = ((Drink) new Drink(ConfigHelper.freshWaterId, 6, 2.3f, false).setItemName("freshWater").setIconCoord(2, 1)).setTexFile("/tarun1998/thirstmod/textures/icons.png").setMaxStackSize(ConfigHelper.maxStackSize);
 		DrinkController.addOtherDrink(freshWater);
@@ -16,25 +18,6 @@ public class DrinkLoader {
 		GameRegistry.addSmelting(Item.potion.shiftedIndex, new ItemStack(freshWater, 1), 0.3f);
 		GameRegistry.addShapelessRecipe(new ItemStack(freshWater, 1), new Object[]
 		{ ThirstMod.Filter, new ItemStack(Item.potion, 0) });
-
-		GameRegistry.addRecipe(new ItemStack(canteen, 1, 0), new Object[]
-		{ "* *", " * ", Character.valueOf('*'), Item.leather });
-		LanguageRegistry.addName(new ItemStack(canteen.shiftedIndex, 1, 5), "Canteen 5/5");
-		LanguageRegistry.addName(new ItemStack(canteen.shiftedIndex, 1, 4), "Canteen 4/5");
-		LanguageRegistry.addName(new ItemStack(canteen.shiftedIndex, 1, 3), "Canteen 3/5");
-		LanguageRegistry.addName(new ItemStack(canteen.shiftedIndex, 1, 2), "Canteen 2/5");
-		LanguageRegistry.addName(new ItemStack(canteen.shiftedIndex, 1, 1), "Canteen 1/5");
-		LanguageRegistry.addName(new ItemStack(canteen.shiftedIndex, 1, 0), "Canteen 0/5");
-		LanguageRegistry.addName(new ItemStack(canteen.shiftedIndex, 1, 10), "Filtered Canteen 5/5");
-		LanguageRegistry.addName(new ItemStack(canteen.shiftedIndex, 1, 9), "Filtered Canteen 4/5");
-		LanguageRegistry.addName(new ItemStack(canteen.shiftedIndex, 1, 8), "Filtered Canteen 3/5");
-		LanguageRegistry.addName(new ItemStack(canteen.shiftedIndex, 1, 7), "Filtered Canteen 2/5");
-		LanguageRegistry.addName(new ItemStack(canteen.shiftedIndex, 1, 6), "Filtered Canteen 1/5");
-		for (int i = 0; i < 6; i++) {
-			GameRegistry.addShapelessRecipe(new ItemStack(canteen, 1, 10), new Object[]
-			{ ThirstMod.Filter, new ItemStack(canteen, 1, i) });
-		}
-		DrinkController.addOtherDrink(canteen);
 
 		if (ConfigHelper.wantMilk == true) {
 			DrinkController.addOtherDrink(milk);
