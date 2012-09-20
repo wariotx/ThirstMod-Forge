@@ -12,6 +12,10 @@ public class DrinkLoader {
 	public static Item woodFWater = ((Drink) ((Drink) new Drink(ConfigHelper.woodFWaterId, 4, 1.3f, false).setItemName("woodFWater")).setTexFile("/tarun1998/thirstmod/textures/icons.png").setMaxStackSize(ConfigHelper.maxStackSize)).setReturn(woodGlass).setIconCoord(7, 1);
 	
 	public void loadDrinks() {
+		LanguageRegistry.addName(woodGlass, "Empty Glass");
+		LanguageRegistry.addName(woodWater, "Glass of Water");
+		LanguageRegistry.addName(woodFWater, "Glass of Clean Water");
+		
 		freshWater = ((Drink) new Drink(ConfigHelper.freshWaterId, 6, 2.3f, false).setItemName("freshWater").setIconCoord(2, 1)).setTexFile("/tarun1998/thirstmod/textures/icons.png").setMaxStackSize(ConfigHelper.maxStackSize);
 		DrinkController.addOtherDrink(freshWater);
 		LanguageRegistry.addName(freshWater, "Fresh Water");
@@ -37,7 +41,7 @@ public class DrinkLoader {
 			Item fBucket = ((Drink) ((Drink) new Drink(ConfigHelper.fBucketId, 10, 1.4f, false).setIconCoord(4, 1).setItemName("freshBucket").setMaxStackSize(ConfigHelper.maxStackSize)).setReturn(Item.bucketEmpty)).setTexFile("/tarun1998/thirstmod/textures/icons.png");
 			LanguageRegistry.addName(fBucket, "Fresh Water Bucket");
 			GameRegistry.addSmelting(Item.bucketWater.shiftedIndex, new ItemStack(fBucket, 1), 0.4f);
-			/*
+			/* This doesn't work.
 			 * ModLoader.addShapelessRecipe(new ItemStack(fBucket, 1), new
 			 * Object[] { Item.bucketWater, ThirstMod.Filter, });
 			 */

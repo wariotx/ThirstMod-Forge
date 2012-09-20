@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Side;
 import net.minecraft.src.*;
 
 public class Drink extends Item {
@@ -76,8 +78,10 @@ public class Drink extends Item {
 	}
 
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (canDrink() == true) {
-			entityplayer.setItemInUse(itemstack, getMaxItemUseDuration(itemstack));
+		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+			if (canDrink() == true || alwaysDrinkable == true) {
+				entityplayer.setItemInUse(itemstack, getMaxItemUseDuration(itemstack));
+			}
 		}
 		return itemstack;
 	}
