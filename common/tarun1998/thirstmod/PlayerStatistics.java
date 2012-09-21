@@ -51,7 +51,7 @@ public class PlayerStatistics {
 			}
 		}
 		poisonCon.onTick();
-		if (player.isSneaking() && player.isInWater()) {
+		if (player.isSneaking() && player.isInWater() && level < 20) {
 			drinkTimer++;
 			if (drinkTimer > 16) {
 				if (APIHooks.onPlayerDrink() == true) {
@@ -66,7 +66,7 @@ public class PlayerStatistics {
 				drinkTimer = 0;
 			}
 		}
-		if (level < 6) {
+		if (level <= 6) {
 			player.setSprinting(false);
 		}
 		exhaustPlayer(player);

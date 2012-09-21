@@ -288,6 +288,7 @@ public class GuiThirst extends GuiIngame {
 					int height = var5.getScaledHeight() - 49;
 					int textureXStart = 2;
 					int textureYStart = 2;
+					int textureYStart1 = 2;
 					int textureEndY = 9;
 					int textureEndX = 8;
 					byte byte5 = 0;
@@ -304,7 +305,7 @@ public class GuiThirst extends GuiIngame {
 						textureYStart = 12;
 					}
 
-					drawTexturedModalRect(width, height, textureXStart, textureYStart, textureEndX, textureEndY);
+					drawTexturedModalRect(width, height, textureXStart, textureYStart1, textureEndX, textureEndY);
 
 					if (PoisonController.isPoisoned() == false) {
 						if (i13 * 2 + 1 < thirstLvl) {

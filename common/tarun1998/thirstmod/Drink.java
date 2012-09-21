@@ -42,7 +42,7 @@ public class Drink extends Item {
 				entityplayer.addPotionEffect(new PotionEffect(potionId, potionDuration * 20, potionAmplifier));
 			}
 
-			if (poisonChance > 0) {
+			if (poisonChance > 0 && ConfigHelper.poisonOn == true) {
 				Random rand = new Random();
 				if(rand.nextFloat() < poisonChance) {
 					PoisonController.startPoison();

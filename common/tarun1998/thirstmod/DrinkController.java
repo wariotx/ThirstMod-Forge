@@ -2,6 +2,7 @@ package tarun1998.thirstmod;
 
 import java.util.HashMap;
 import java.util.Random;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.Side;
 import net.minecraft.client.Minecraft;
@@ -13,13 +14,15 @@ public class DrinkController {
 	private static HashMap saturationMap = new HashMap();
 
 	public void onTick(EntityPlayer player, Side side) {
-		ItemStack item = player.getItemInUse();
-		
-		if (item != null) {
-			if (levelMap.containsKey(item.getItem())) {
-				onItemBeingDrunk(item, player);
-			}
-		} 
+		if(FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+			ItemStack item = player.getItemInUse();
+			
+			if (item != null) {
+				if (levelMap.containsKey(item.getItem())) {
+					onItemBeingDrunk(item, player);
+				}
+			} 
+		}
 	}
 
 	/**
