@@ -36,31 +36,28 @@ public class Drink extends Item {
 	}
 
 	public ItemStack onFoodEaten(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if(FMLCommonHandler.instance().getSide() == Side.CLIENT) {
-			itemstack.stackSize--;
-			if (!world.isRemote && potionId > 0 && world.rand.nextFloat() < potionEffectProbability) {
-				entityplayer.addPotionEffect(new PotionEffect(potionId, potionDuration * 20, potionAmplifier));
-			}
+		itemstack.stackSize--;
+		if (!world.isRemote && potionId > 0 && world.rand.nextFloat() < potionEffectProbability) {
+			entityplayer.addPotionEffect(new PotionEffect(potionId, potionDuration * 20, potionAmplifier));
+		}
 
-			if (poisonChance > 0 && ConfigHelper.poisonOn == true) {
-				Random rand = new Random();
-				if(rand.nextFloat() < poisonChance) {
-					PoisonController.startPoison();
-				}
-			}
-
-			if (foodHeal > 0 && satHeal > 0) {
-				entityplayer.getFoodStats().addStats(foodHeal, satHeal);
-			}
-
-			if (itemstack.stackSize <= 0) {
-				return new ItemStack(returnItem);
-			} else {
-				entityplayer.inventory.addItemStackToInventory(new ItemStack(returnItem));
-				return itemstack;
+		if (poisonChance > 0 && ConfigHelper.poisonOn == true) {
+			Random rand = new Random();
+			if(rand.nextFloat() < poisonChance) {
+				PoisonController.startPoison();
 			}
 		}
-		return itemstack;
+
+		if (foodHeal > 0 && satHeal > 0) {
+			entityplayer.getFoodStats().addStats(foodHeal, satHeal);
+		}
+
+		if (itemstack.stackSize <= 0) {
+			return new ItemStack(returnItem);
+		} else {
+			entityplayer.inventory.addItemStackToInventory(new ItemStack(returnItem));
+			return itemstack;
+		}
 	}
 
 	public int getMaxItemUseDuration(ItemStack itemstack) {
@@ -72,10 +69,8 @@ public class Drink extends Item {
 	}
 
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
-			if (canDrink() == true || alwaysDrinkable == true) {
-				entityplayer.setItemInUse(itemstack, getMaxItemUseDuration(itemstack));
-			}
+		if (canDrink() == true || alwaysDrinkable == true) {
+			entityplayer.setItemInUse(itemstack, getMaxItemUseDuration(itemstack));
 		}
 		return itemstack;
 	}
