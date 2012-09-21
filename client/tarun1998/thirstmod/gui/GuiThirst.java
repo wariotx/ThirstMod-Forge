@@ -266,7 +266,7 @@ public class GuiThirst extends GuiIngame {
 				if(ThirstMod.shouldTellPlayer0 == true) {
 					tellingPlayer++;
 					if(tellingPlayer < 60) {
-						drawCenteredString(var8, modTurnedOff, var5.getScaledWidth() - 200, var5.getScaledHeight() - 200, 16777215);
+						drawCenteredString(var8, modTurnedOff, var5.getScaledWidth() / 2, var5.getScaledHeight() / 2, 16777215);
 					} else {
 						tellingPlayer = 0;
 						ThirstMod.shouldTellPlayer0 = false;
@@ -274,7 +274,7 @@ public class GuiThirst extends GuiIngame {
 				} else if(ThirstMod.shouldTellPlayer1 == true) {
 					tellingPlayer++;
 					if(tellingPlayer < 60) {
-						drawCenteredString(var8, modTurnedOn, var5.getScaledWidth() - 200, var5.getScaledHeight() - 200, 16777215);
+						drawCenteredString(var8, modTurnedOn, var5.getScaledWidth() / 2, var5.getScaledHeight() / 2, 16777215);
 					} else {
 						tellingPlayer = 0;
 						ThirstMod.shouldTellPlayer1 = false;

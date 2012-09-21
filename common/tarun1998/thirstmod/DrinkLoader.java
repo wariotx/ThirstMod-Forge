@@ -15,6 +15,8 @@ public class DrinkLoader {
 		LanguageRegistry.addName(woodGlass, "Empty Glass");
 		LanguageRegistry.addName(woodWater, "Glass of Water");
 		LanguageRegistry.addName(woodFWater, "Glass of Clean Water");
+		DrinkController.addDrink(woodWater, 3, 1.2f);
+		DrinkController.addDrink(woodFWater, 4, 1.4f);
 		
 		freshWater = ((Drink) new Drink(ConfigHelper.freshWaterId, false).setItemName("freshWater").setIconCoord(2, 1)).setTexFile("/tarun1998/thirstmod/textures/icons.png").setMaxStackSize(ConfigHelper.maxStackSize);
 		DrinkController.addDrink(freshWater, 6, 2.3f);
