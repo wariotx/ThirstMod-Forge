@@ -12,8 +12,6 @@ import cpw.mods.fml.common.Side;
 import net.minecraft.src.*;
 
 public class Drink extends Item {
-	private final int healAmount;
-	private final float saturationThirstModifier;
 	private boolean alwaysDrinkable;
 	private int potionId;
 	private int potionDuration;
@@ -29,44 +27,40 @@ public class Drink extends Item {
 	private int foodHeal;
 	private float satHeal;
 
-	public Drink(int id, int thirstReplenish, float saturationModifier, boolean alwaysDrinkable) {
+	public Drink(int id, boolean alwaysDrinkable) {
 		super(id);
-		healAmount = thirstReplenish;
-		saturationThirstModifier = saturationModifier;
 		if (alwaysDrinkable == true) {
 			this.alwaysDrinkable = true;
 		}
 		setTabToDisplayOn(CreativeTabs.tabFood);
 	}
 
-	public Drink(int i, int j, boolean flag) {
-		this(i, j, 0.2F, flag);
-	}
-
 	public ItemStack onFoodEaten(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		itemstack.stackSize--;
-		ThirstUtils.getStats().addStats(healAmount, saturationThirstModifier);
-		if (!world.isRemote && potionId > 0 && world.rand.nextFloat() < potionEffectProbability) {
-			entityplayer.addPotionEffect(new PotionEffect(potionId, potionDuration * 20, potionAmplifier));
-		}
+		if(FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+			itemstack.stackSize--;
+			if (!world.isRemote && potionId > 0 && world.rand.nextFloat() < potionEffectProbability) {
+				entityplayer.addPotionEffect(new PotionEffect(potionId, potionDuration * 20, potionAmplifier));
+			}
 
-		if (poisonChance > 0) {
-			Random rand = new Random();
-			if(rand.nextFloat() < poisonChance) {
-				PoisonController.startPoison();
+			if (poisonChance > 0) {
+				Random rand = new Random();
+				if(rand.nextFloat() < poisonChance) {
+					PoisonController.startPoison();
+				}
+			}
+
+			if (foodHeal > 0 && satHeal > 0) {
+				entityplayer.getFoodStats().addStats(foodHeal, satHeal);
+			}
+
+			if (itemstack.stackSize <= 0) {
+				return new ItemStack(returnItem);
+			} else {
+				entityplayer.inventory.addItemStackToInventory(new ItemStack(returnItem));
+				return itemstack;
 			}
 		}
-
-		if (foodHeal > 0 && satHeal > 0) {
-			entityplayer.getFoodStats().addStats(foodHeal, satHeal);
-		}
-
-		if (itemstack.stackSize <= 0) {
-			return new ItemStack(returnItem);
-		} else {
-			entityplayer.inventory.addItemStackToInventory(new ItemStack(returnItem));
-			return itemstack;
-		}
+		return itemstack;
 	}
 
 	public int getMaxItemUseDuration(ItemStack itemstack) {
@@ -84,14 +78,6 @@ public class Drink extends Item {
 			}
 		}
 		return itemstack;
-	}
-
-	public int getHealAmount() {
-		return healAmount;
-	}
-
-	public float getThirstSaturationModifier() {
-		return saturationThirstModifier;
 	}
 
 	/**

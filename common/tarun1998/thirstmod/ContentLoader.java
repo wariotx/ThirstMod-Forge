@@ -75,12 +75,12 @@ public class ContentLoader {
 						try {
 							init(new BufferedReader(new FileReader(fileInDir)), files.getName());
 
-							Item drink = (((Drink) new Drink(id, replenish, saturation, alwaysDrinkable).setItemName(shortName).setMaxStackSize(maxStackSize)).setEffect(isShiny)).setPoisoningChance(chance).setPotionEffect(potionId, potionDuration, potionDuration, potionEffectProbability).setTexFile(textureFile);
+							Item drink = (((Drink) new Drink(id, alwaysDrinkable).setItemName(shortName).setMaxStackSize(maxStackSize)).setEffect(isShiny)).setPoisoningChance(chance).setPotionEffect(potionId, potionDuration, potionDuration, potionEffectProbability).setTexFile(textureFile);
 
 							drink.setIconIndex(texPos);
 							LanguageRegistry.addName(drink, name);
 							ThirstUtils.addJMRecipe(jmTop, metadata, new ItemStack(drink));
-							DrinkController.addOtherDrink(drink);
+							DrinkController.addDrink(drink, replenish, saturation);
 
 							if (side.equals(Side.CLIENT)) {
 								MinecraftForgeClient.preloadTexture(textureFile);

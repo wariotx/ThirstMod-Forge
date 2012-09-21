@@ -9,7 +9,6 @@ import net.minecraft.src.*;
 import tarun1998.thirstmod.api.*;
 
 public class DrinkController {
-	private static HashMap otherMap = new HashMap();
 	private static HashMap levelMap = new HashMap();
 	private static HashMap saturationMap = new HashMap();
 
@@ -19,9 +18,6 @@ public class DrinkController {
 		if (item != null) {
 			if (levelMap.containsKey(item.getItem())) {
 				onItemBeingDrunk(item, player);
-			}
-			if (otherMap.containsKey(item.getItem())) {
-				onOtherItemBeingDrunk(item, player);
 			}
 		} 
 	}
@@ -42,15 +38,6 @@ public class DrinkController {
 		}
 	}
 
-	public void onOtherItemBeingDrunk(ItemStack item, EntityPlayer player) {
-		APIHooks.onItemBeingDrunk(item, player.getItemInUseCount());
-		if(player.getItemInUseCount() == 0) {
-			if (APIHooks.onItemDrunk(item, 0, 0f) == true) {
-				//Why would you cancel this one?
-			}
-		}
-	}
-
 	/**
 	 * Adds a item to the list. Must already be using EnumAction.drink
 	 * @param item The item
@@ -60,9 +47,5 @@ public class DrinkController {
 	public static void addDrink(Item item, int level, float saturation) {
 		levelMap.put(item, level);
 		saturationMap.put(item, saturation);
-	}
-
-	public static void addOtherDrink(Item item) {
-		otherMap.put(item, 0);
 	}
 }

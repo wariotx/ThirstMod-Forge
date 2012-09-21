@@ -1,22 +1,18 @@
 package tarun1998.thirstmod;
 
-import tarun1998.thirstmod.blocks.TileEntityJM;
-import tarun1998.thirstmod.blocks.TileEntityRC;
-import tarun1998.thirstmod.gui.GuiThirst;
-import tarun1998.thirstmod.utils.KeyHandler;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.KeyBindingRegistry;
+import tarun1998.thirstmod.blocks.*;
+import tarun1998.thirstmod.gui.*;
+import tarun1998.thirstmod.utils.*;
+import cpw.mods.fml.client.*;
+import cpw.mods.fml.client.registry.*;
 import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
-import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.common.registry.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.*;
-import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.client.*;
+import net.minecraftforge.common.*;
+import net.minecraftforge.event.*;
 import net.minecraftforge.event.world.WorldEvent;
 
 public class ClientProxy extends CommonProxy {
@@ -70,7 +66,6 @@ public class ClientProxy extends CommonProxy {
 				}
 			}
 		} catch(Exception e) {
-			//Don't crash the game cause I know you will!
 		}
 	}
 
@@ -93,7 +88,6 @@ public class ClientProxy extends CommonProxy {
 				ThirstUtils.readNbt(player.getEntityData());
 			}
 		} catch (Exception e) {
-			// Error.
 		}
 	}
 

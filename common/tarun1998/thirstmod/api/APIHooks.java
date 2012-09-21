@@ -79,7 +79,7 @@ public class APIHooks {
 
 	public static void registerDrinks() {
 		for (IRegisterDrink drink : drinkRegisterAPI) {
-			DrinkController.addOtherDrink(drink.register());
+			DrinkController.addDrink(drink.register(), 0, 0);
 		}
 	}
 
