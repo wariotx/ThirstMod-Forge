@@ -18,6 +18,7 @@ public class ThirstUtils {
 	private static String currentDir;
 
 	private static PlayerStatistics stats = new PlayerStatistics();
+	public static PlayerStatisticsMP statsMp = new PlayerStatisticsMP();
 
 	/**
 	 * Gets the mod version.

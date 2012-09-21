@@ -29,7 +29,14 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler {
 			float saturation = dat.readFloat();
 			float exhaustion = dat.readFloat();
 			String playerName = dat.readLine();
+			
 			writeData(level, healTimer, drinkTimer, saturation, exhaustion, playerName);
+			
+			CommonProxy.getStatsMP().level = level;
+			CommonProxy.getStatsMP().healhurtTimer = healTimer;
+			CommonProxy.getStatsMP().drinkTimer = drinkTimer;
+			CommonProxy.getStatsMP().saturation = saturation;
+			CommonProxy.getStatsMP().exhaustion = exhaustion;
 		}
 		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
 			ByteArrayDataInput dat = ByteStreams.newDataInput(packet.data);
@@ -57,11 +64,11 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler {
 	 * @param l exhaustion
 	 * @param s playerName
 	 */
-	public void writeData(int i, int j, int k, float f, float l, String s) {
+	public void writeData(int i, int j, int k, float f, float g, String s) {
 		EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(s);
 		NBTTagCompound nbt = player.getEntityData();
 		nbt.setInteger("tmLevel", i);
-		nbt.setFloat("tmExhaustion", l);
+		nbt.setFloat("tmExhaustion", g);
 		nbt.setFloat("tmSaturation", f);
 		nbt.setInteger("tmTimer", k);
 		nbt.setInteger("tmTimer2", j);
@@ -147,7 +154,6 @@ public class PacketHandler implements IPacketHandler, IConnectionHandler {
 
 	@Override
 	public void connectionOpened(NetHandler netClientHandler, MinecraftServer server, NetworkManager manager) {
-		isRemote = true;
 	}
 
 	@Override

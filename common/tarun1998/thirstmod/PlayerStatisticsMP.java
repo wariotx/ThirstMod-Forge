@@ -8,28 +8,30 @@ import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.src.*;
 import tarun1998.thirstmod.api.*;
 
-public class PlayerStatistics {
+public class PlayerStatisticsMP extends PlayerStatistics {
 	public int level;
 	public float saturation;
 	public float exhaustion;
 	public int healhurtTimer;
 	public int drinkTimer;
+	public int serverHurt;
 	private Random random = new Random();
 	private PoisonController poisonCon = new PoisonController();
 
-	public PlayerStatistics() {
+	public PlayerStatisticsMP() {
 		level = 20;
 		saturation = 5f;
 		exhaustion = 0f;
 		healhurtTimer = 0;
 		drinkTimer = 0;
+		serverHurt = 0;
 	}
 
 	/**
 	 * Holds the Thirst Logic. Controls everything related to that Thirst Bar.
 	 * @param player EntityPlayer instance.
 	 */
-	public void onTick(EntityPlayer player) {
+	public void onTick(EntityPlayer player, EntityPlayerMP playerMp) {
 		int difSet = player.worldObj.difficultySetting;
 		if (ConfigHelper.peacefulOn == true) {
 			difSet = 1;
@@ -42,15 +44,13 @@ public class PlayerStatistics {
 				level = level - 1;
 			}
 		}
-		if(PacketHandler.isRemote == false) {
-			if (level == 0) {
-				healhurtTimer++;
-				if (healhurtTimer > 80) {
-					if (ClientProxy.getPlayerMp().getHealth() > 10 || difSet >= 3 || ClientProxy.getPlayerMp().getHealth() > 1 && difSet >= 2) {
-						healhurtTimer = 0;
-						ClientProxy.getPlayerMp().attackEntityFrom(DamageSource.starve, 1);
-						APIHooks.onPlayerHurtFromThirst();
-					}
+		if (level == 0) {
+			serverHurt++;
+			if (serverHurt > 80) {
+				if (playerMp.getHealth() > 10 || difSet >= 3 || playerMp.getHealth() > 1 && difSet >= 2) {
+					serverHurt = 0;
+					playerMp.attackEntityFrom(DamageSource.starve, 1);
+					APIHooks.onPlayerHurtFromThirst();
 				}
 			}
 		}
@@ -60,24 +60,17 @@ public class PlayerStatistics {
 			if (drinkTimer > 16) {
 				if (APIHooks.onPlayerDrink() == true) {
 					addStats(1, 0.3F);
-					if(PacketHandler.isRemote == false) {
-						ClientProxy.getPlayerMp().worldObj.playSoundAtEntity(player, "random.drink", 0.5F, player.worldObj.rand.nextFloat() * 0.1F + 0.9F);
-					}
 					if (poisonCon.getBiomesList().containsKey(ThirstUtils.getCurrentBiome(player)) && ConfigHelper.poisonOn == true) {
-						if (random.nextFloat() < poisonCon.getBiomePoison(ThirstUtils.getCurrentBiome(player))) {
+						if (random.nextFloat() < poisonCon.getBiomePoison(ThirstUtils.getCurrentBiome(playerMp))) {
 							PoisonController.startPoison();
 						}
 					}
-					
 				}
 				drinkTimer = 0;
 			}
 		}
 		if (level <= 6) {
 			player.setSprinting(false);
-		}
-		if (level < 0) {
-			level = 0;
 		}
 		exhaustPlayer(player);
 	}

@@ -5,6 +5,7 @@ import tarun1998.thirstmod.gui.*;
 import tarun1998.thirstmod.utils.*;
 import cpw.mods.fml.client.*;
 import cpw.mods.fml.client.registry.*;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.registry.*;
 import net.minecraft.client.Minecraft;
@@ -39,33 +40,34 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void onTickInGame() {
 		try {
-			Minecraft minecraft = FMLClientHandler.instance().getClient();
-			if (minecraft.currentScreen != null) {
-				onTickInGUI(minecraft.currentScreen);
-			}
-
-			if (minecraft.thePlayer != null) {
-				if (getPlayerMp().capabilities.isCreativeMode == false) {
-					if (loadedMod == false) {
-						if (changedGui == false) {
-							minecraft.ingameGUI = new GuiThirst();
-							changedGui = true;
-						}
-
-						new ThirstUtils();
-						onLoadNBT();
-						loadedMod = true;
-					}
-				}
-				dc.onTick(minecraft.thePlayer, Side.CLIENT);
-				ThirstUtils.getStats().onTick(getPlayer(), getPlayerMp());
-
-				intDat++;
-				if (PacketHandler.isRemote == true & intDat > 100) {
-					PacketHandler.sendData(getPlayerMp().username, ThirstUtils.getStats());
-				}
-			}
 		} catch(Exception e) {
+		}
+		
+		Minecraft minecraft = FMLClientHandler.instance().getClient();
+		if (minecraft.currentScreen != null) {
+			onTickInGUI(minecraft.currentScreen);
+		}
+
+		if (minecraft.thePlayer != null) {
+			if (getPlayer().capabilities.isCreativeMode == false) {
+				if (loadedMod == false) {
+					if (changedGui == false) {
+						minecraft.ingameGUI = new GuiThirst();
+						changedGui = true;
+					}
+
+					new ThirstUtils();
+					onLoadNBT();
+					loadedMod = true;
+				}
+			}
+			dc.onTick(minecraft.thePlayer, Side.CLIENT);
+			ThirstUtils.getStats().onTick(getPlayer());
+
+			intDat++;
+			if (PacketHandler.isRemote == true & intDat > 20) {
+				PacketHandler.sendData(getPlayer().username, ThirstUtils.getStats());
+			}
 		}
 	}
 
@@ -117,10 +119,8 @@ public class ClientProxy extends CommonProxy {
 	 * @return EntityPlayerMP.class instance.
 	 */
 	public static EntityPlayerMP getPlayerMp() {
-		try {
-			return (EntityPlayerMP) FMLClientHandler.instance().getServer().getConfigurationManager().playerEntityList.iterator().next();
-		} catch (Exception e) {
-			return null;
-		}
+		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+		EntityPlayerMP player = server.getConfigurationManager().getPlayerForUsername(getPlayer().username);
+		return player;
 	}
 }
