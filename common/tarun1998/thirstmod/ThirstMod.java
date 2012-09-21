@@ -48,7 +48,6 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 	 */
 	@PreInit
 	public void beforeLoad(FMLPreInitializationEvent event) {
-		new ConfigHelper();
 		ThirstUtils.setupCurrentDir(event);
 	}
 
@@ -76,6 +75,7 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 		GameRegistry.addShapelessRecipe(new ItemStack(Filter), new Object[]
 		{ Item.silk, dFilter });
 
+		new ConfigHelper();
 		new DrinkLoader().loadDrinks();
 		new ThirstAPI();
 

@@ -7,7 +7,7 @@ import java.io.File;
 import net.minecraftforge.common.Configuration;
 
 public class ConfigHelper {
-	private static Configuration config = new Configuration(new File(ThirstUtils.getDir() + "/mods/ThirstMod/" + "Config.txt"));
+	private static Configuration config = new Configuration(new File(ThirstUtils.getDir(), "/mods/ThirstMod/" + "Config.txt"));
 
 	public static boolean poisonOn = setupConfig();
 	public static boolean peacefulOn;

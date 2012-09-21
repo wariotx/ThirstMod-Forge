@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.*;
 import tarun1998.thirstmod.blocks.JMRecipes;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import net.minecraft.src.*;
@@ -188,13 +190,14 @@ public class ThirstUtils {
 	 */
 	public static void setupCurrentDir(FMLPreInitializationEvent event) {
 		File one = event.getSuggestedConfigurationFile();
-		File two = one.getParentFile();
-		File three = two.getParentFile();
+		File two = one.getParentFile(); //Config Folder
+		File three = two.getParentFile(); //Base Folder
 		currentDir = three.getAbsolutePath();
 	}
 
 	public static String getDir() {
-		return currentDir;
+		File s = ObfuscationReflectionHelper.getPrivateValue(Loader.class, Loader.instance(), "minecraftDir");
+		return s.getAbsolutePath();
 	}
 
 	/**
