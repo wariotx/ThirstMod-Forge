@@ -2,7 +2,6 @@ package tarun1998.thirstmod;
 
 import java.util.*;
 import net.minecraft.src.BiomeGenBase;
-import tarun1998.thirstmod.api.*;
 
 public class PoisonController {
 	private static int poisonTimer;
@@ -28,9 +27,7 @@ public class PoisonController {
 	 * Starts the poison.
 	 */
 	public static void startPoison() {
-		if (APIHooks.shouldPoison() == true) {
-			poisonPlayer = true;
-		}
+		poisonPlayer = true;
 	}
 
 	/**
@@ -53,10 +50,8 @@ public class PoisonController {
 			if (poisonPlayer == true) {
 				poisonTimer++;
 				ThirstUtils.getStats().addExhaustion(0.052777777777778f);
-				APIHooks.onPlayerPoisoned(360 - poisonTimer);
 				isPoisoned = true;
 				if (poisonTimer > 360) {
-					APIHooks.onPoisonStopped();
 					poisonTimer = 0;
 					isPoisoned = false;
 					poisonPlayer = false;

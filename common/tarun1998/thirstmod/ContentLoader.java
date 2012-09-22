@@ -2,7 +2,6 @@ package tarun1998.thirstmod;
 
 import java.io.*;
 import net.minecraft.src.*;
-import tarun1998.thirstmod.api.*;
 import java.util.*;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -120,7 +119,7 @@ public class ContentLoader {
 	 * this case ':'
 	 */
 	public void read(String[] colon, String fileDir) {
-		APIHooks.onRead(fileName, colon, getClass());
+		/*APIHooks.onRead(fileName, colon, getClass());*/
 		if (colon[0].equals("ID")) {
 			id = Integer.parseInt(colon[1]);
 		}

@@ -6,7 +6,6 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.src.*;
-import tarun1998.thirstmod.api.*;
 
 public class PlayerStatisticsMP extends PlayerStatistics {
 	public int level;
@@ -50,7 +49,6 @@ public class PlayerStatisticsMP extends PlayerStatistics {
 				if (playerMp.getHealth() > 10 || difSet >= 3 || playerMp.getHealth() > 1 && difSet >= 2) {
 					serverHurt = 0;
 					playerMp.attackEntityFrom(DamageSource.starve, 1);
-					APIHooks.onPlayerHurtFromThirst();
 				}
 			}
 		}
@@ -58,12 +56,10 @@ public class PlayerStatisticsMP extends PlayerStatistics {
 		if (player.isSneaking() && player.isInWater() && level < 20) {
 			drinkTimer++;
 			if (drinkTimer > 16) {
-				if (APIHooks.onPlayerDrink() == true) {
-					addStats(1, 0.3F);
-					if (poisonCon.getBiomesList().containsKey(ThirstUtils.getCurrentBiome(player)) && ConfigHelper.poisonOn == true) {
-						if (random.nextFloat() < poisonCon.getBiomePoison(ThirstUtils.getCurrentBiome(playerMp))) {
-							PoisonController.startPoison();
-						}
+				addStats(1, 0.3F);
+				if (poisonCon.getBiomesList().containsKey(ThirstUtils.getCurrentBiome(player)) && ConfigHelper.poisonOn == true) {
+					if (random.nextFloat() < poisonCon.getBiomePoison(ThirstUtils.getCurrentBiome(playerMp))) {
+						PoisonController.startPoison();
 					}
 				}
 				drinkTimer = 0;
@@ -108,7 +104,6 @@ public class PlayerStatisticsMP extends PlayerStatistics {
 		} else {
 			addExhaustion(0.160f);
 		}
-		APIHooks.onExhaust(movement, tweak, multiplier);
 	}
 
 	/**
@@ -127,6 +122,5 @@ public class PlayerStatisticsMP extends PlayerStatistics {
 	public void addStats(int par1, float par2) {
 		level = Math.min(par1 + level, 20);
 		saturation = Math.min(saturation + (float) par1 * par2 * 2.0F, level);
-		APIHooks.onAddStats(par1, par2);
 	}
 }

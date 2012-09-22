@@ -7,7 +7,6 @@ import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.common.Side;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.*;
-import tarun1998.thirstmod.api.*;
 
 public class DrinkController {
 	private static HashMap levelMap = new HashMap();
@@ -32,10 +31,14 @@ public class DrinkController {
 	 */
 	public void onItemBeingDrunk(ItemStack item, EntityPlayer player) {
 		if (levelMap.containsKey(item.getItem())) {
-			APIHooks.onItemBeingDrunk(item, player.getItemInUseCount());
 			if(player.getItemInUseCount() == 0) {
-				if (APIHooks.onItemDrunk(item, (Integer) levelMap.get(item.getItem()), (Float) saturationMap.get(item.getItem())) == true) {
-					ThirstUtils.getStats().addStats((Integer) levelMap.get(item.getItem()), (Float) saturationMap.get(item.getItem()));
+				ThirstUtils.getStats().addStats((Integer) levelMap.get(item.getItem()), (Float) saturationMap.get(item.getItem()));
+				
+				if (item.getItem() == Item.potion && item.getItemDamage() == 0) {
+					Random rand = new Random();
+					if (rand.nextFloat() < 0.3f) {
+						PoisonController.startPoison();
+					}
 				}
 			}
 		}

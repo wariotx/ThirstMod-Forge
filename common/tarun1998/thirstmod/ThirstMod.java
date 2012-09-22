@@ -9,7 +9,6 @@ import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.*;
 import cpw.mods.fml.common.registry.*;
 import net.minecraft.src.*;
-import tarun1998.thirstmod.api.*;
 import tarun1998.thirstmod.blocks.*;
 import tarun1998.thirstmod.gui.*;
 import net.minecraftforge.common.*;
@@ -20,7 +19,7 @@ import net.minecraftforge.event.world.*;
 
 @Mod(modid = ThirstUtils.ID, name = ThirstUtils.NAME, version = ThirstUtils.VERSION)
 @NetworkMod(serverSideRequired = false, clientSideRequired = true, packetHandler = PacketHandler.class, channels = { "ThirstMod" })
-public class ThirstMod implements IGuiHandler, IDrinkAPI {
+public class ThirstMod implements IGuiHandler {
 	public static final Block waterCollector = new BlockRC(ConfigHelper.rcId).setBlockName("waterCollector").setResistance(5F).setHardness(4F).setCreativeTab(CreativeTabs.tabDeco);
 	public static final Block juiceMaker = new BlockJM(ConfigHelper.jmId).setBlockName("juiceMaker").setResistance(5F).setHardness(4F).setCreativeTab(CreativeTabs.tabDeco);
 	public static final Item dFilter = (new ItemThirst(ConfigHelper.dFilterId).setItemName("dFilter").setMaxStackSize(1)).setIconIndex(33).setTabToDisplayOn(CreativeTabs.tabMisc);
@@ -77,19 +76,16 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 
 		new ConfigHelper();
 		new DrinkLoader().loadDrinks();
-		new ThirstAPI();
 
 		MinecraftForge.EVENT_BUS.register(INSTANCE);
 		MinecraftForge.EVENT_BUS.register(proxy);
 		NetworkRegistry.instance().registerGuiHandler(this, this);
 		NetworkRegistry.instance().registerConnectionHandler(new PacketHandler());
 
-		APIHooks.registerDrinks();
 		DrinkController.addDrink(Item.potion, 5, 1f);
 		DrinkController.addDrink(Item.bucketMilk, 10, 3f);
 		DrinkController.addDrink(Item.bowlSoup, 7, 2f);
 
-		ThirstAPI.registerHandler(this);
 		proxy.onLoad();
 	}
 
@@ -168,26 +164,5 @@ public class ThirstMod implements IGuiHandler, IDrinkAPI {
 			return new GuiRC(player.inventory, (TileEntityRC) tile);
 		}
 		return null;
-	}
-
-	/**
-	 * Called when an item is drunk.
-	 */
-	@Override
-	public boolean onItemDrunk(ItemStack item, int levelAdded, float saturationAdded) {
-		if (item.getItem() == Item.potion && item.getItemDamage() == 0) {
-			Random rand = new Random();
-			if (rand.nextFloat() < 0.3f) {
-				PoisonController.startPoison();
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * Called when an item is being drunk. Not used yet...
-	 */
-	@Override
-	public void onItemBeingDrunk(ItemStack item, int timeRemaining) {
 	}
 }

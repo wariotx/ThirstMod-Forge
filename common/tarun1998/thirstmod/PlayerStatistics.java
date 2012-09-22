@@ -6,7 +6,6 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.src.*;
-import tarun1998.thirstmod.api.*;
 
 public class PlayerStatistics {
 	public int level;
@@ -49,7 +48,6 @@ public class PlayerStatistics {
 					if (ClientProxy.getPlayerMp().getHealth() > 10 || difSet >= 3 || ClientProxy.getPlayerMp().getHealth() > 1 && difSet >= 2) {
 						healhurtTimer = 0;
 						ClientProxy.getPlayerMp().attackEntityFrom(DamageSource.starve, 1);
-						APIHooks.onPlayerHurtFromThirst();
 					}
 				}
 			}
@@ -58,17 +56,14 @@ public class PlayerStatistics {
 		if (player.isSneaking() && player.isInWater() && level < 20) {
 			drinkTimer++;
 			if (drinkTimer > 16) {
-				if (APIHooks.onPlayerDrink() == true) {
-					addStats(1, 0.3F);
-					if(PacketHandler.isRemote == false) {
-						ClientProxy.getPlayerMp().worldObj.playSoundAtEntity(player, "random.drink", 0.5F, player.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+				addStats(1, 0.3F);
+				if(PacketHandler.isRemote == false) {
+					ClientProxy.getPlayerMp().worldObj.playSoundAtEntity(player, "random.drink", 0.5F, player.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+				}
+				if (poisonCon.getBiomesList().containsKey(ThirstUtils.getCurrentBiome(player)) && ConfigHelper.poisonOn == true) {
+					if (random.nextFloat() < poisonCon.getBiomePoison(ThirstUtils.getCurrentBiome(player))) {
+						PoisonController.startPoison();
 					}
-					if (poisonCon.getBiomesList().containsKey(ThirstUtils.getCurrentBiome(player)) && ConfigHelper.poisonOn == true) {
-						if (random.nextFloat() < poisonCon.getBiomePoison(ThirstUtils.getCurrentBiome(player))) {
-							PoisonController.startPoison();
-						}
-					}
-					
 				}
 				drinkTimer = 0;
 			}
@@ -115,7 +110,6 @@ public class PlayerStatistics {
 		} else {
 			addExhaustion(0.160f);
 		}
-		APIHooks.onExhaust(movement, tweak, multiplier);
 	}
 
 	/**
@@ -134,6 +128,5 @@ public class PlayerStatistics {
 	public void addStats(int par1, float par2) {
 		level = Math.min(par1 + level, 20);
 		saturation = Math.min(saturation + (float) par1 * par2 * 2.0F, level);
-		APIHooks.onAddStats(par1, par2);
 	}
 }
