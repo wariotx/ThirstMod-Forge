@@ -9,6 +9,7 @@ import java.util.Random;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Side;
+import net.minecraft.client.Minecraft;
 import net.minecraft.src.*;
 
 public class Drink extends Item {
@@ -69,7 +70,7 @@ public class Drink extends Item {
 	}
 
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		if (canDrink() == true || alwaysDrinkable == true) {
+		if (canDrink() == true || alwaysDrinkable == true || entityplayer.capabilities.isCreativeMode == true) {
 			entityplayer.setItemInUse(itemstack, getMaxItemUseDuration(itemstack));
 		}
 		return itemstack;
@@ -152,9 +153,7 @@ public class Drink extends Item {
 	public static boolean canDrink() {
 		if (ThirstUtils.getStats().level < 20) {
 			return true;
-		} else if (FMLClientHandler.instance().getClient().thePlayer.capabilities.isCreativeMode == true) {
-			return true;
-		}
+		} 
 		return false;
 	}
 
