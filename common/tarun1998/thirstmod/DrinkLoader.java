@@ -18,6 +18,11 @@ public class DrinkLoader {
 		DrinkController.addDrink(woodWater, 3, 1.2f);
 		DrinkController.addDrink(woodFWater, 4, 1.4f);
 		
+		GameRegistry.addRecipe(new ItemStack(woodGlass), new Object[]
+		{ "* *", " * ", Character.valueOf('*'), Block.planks, });
+		GameRegistry.addShapelessRecipe(new ItemStack(woodFWater), new Object[]
+		{ ThirstMod.Filter, woodWater, });
+		
 		freshWater = ((Drink) new Drink(ConfigHelper.freshWaterId, false).setItemName("freshWater").setIconCoord(2, 1)).setTexFile("/tarun1998/thirstmod/textures/icons.png").setMaxStackSize(ConfigHelper.maxStackSize);
 		DrinkController.addDrink(freshWater, 6, 2.3f);
 		LanguageRegistry.addName(freshWater, "Fresh Water");
