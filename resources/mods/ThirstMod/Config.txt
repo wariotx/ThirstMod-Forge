@@ -27,7 +27,7 @@ drinks {
 general {
    Exhaustion Rate=10
    Max Stack Size=10
-   Meter on leftside=true
+   Meter on leftside=false
    Old Meter Textures=false
    Peaceful On=false
    Poisoning On=true
