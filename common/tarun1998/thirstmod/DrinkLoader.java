@@ -19,7 +19,7 @@ public class DrinkLoader {
 		DrinkController.addDrink(woodFWater, 4, 1.4f);
 		
 		GameRegistry.addRecipe(new ItemStack(woodGlass), new Object[]
-		{ "* *", " * ", Character.valueOf('*'), Block.planks, });
+		{ "* *", "* *", " * ", Character.valueOf('*'), Block.planks, });
 		GameRegistry.addShapelessRecipe(new ItemStack(woodFWater), new Object[]
 		{ ThirstMod.Filter, woodWater, });
 		
