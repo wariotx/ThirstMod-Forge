@@ -17,7 +17,7 @@ public class RCRecipes {
 		solidifyingList = new HashMap();
 		addRecipe(Item.glassBottle.shiftedIndex, new ItemStack(DrinkLoader.freshWater));
 		if (ConfigHelper.wantFBucket == true) {
-			addRecipe(Item.bucketEmpty.shiftedIndex, new ItemStack(ConfigHelper.fBucketId, 1, 0));
+			addRecipe(Item.bucketEmpty.shiftedIndex, new ItemStack(DrinkLoader.fBucket));
 		}
 	}
 

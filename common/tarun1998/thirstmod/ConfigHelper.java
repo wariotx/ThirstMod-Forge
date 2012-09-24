@@ -15,6 +15,7 @@ public class ConfigHelper {
 	public static boolean oldTextures;
 	public static int thirstRate;
 	public static int maxStackSize;
+	public static boolean lightBlueColour;
 
 	public static boolean wantMilk;
 	public static boolean wantCMilk;
@@ -41,6 +42,7 @@ public class ConfigHelper {
 		oldTextures = Boolean.parseBoolean(config.getOrCreateBooleanProperty("Old Meter Textures", "General", false).value);
 		thirstRate = Integer.parseInt(config.getOrCreateIntProperty("Exhaustion Rate", "General", 10).value);
 		maxStackSize = Integer.parseInt(config.getOrCreateIntProperty("Max Stack Size", "General", 10).value);
+		lightBlueColour = Boolean.parseBoolean(config.getOrCreateBooleanProperty("Medievor Colours", "General", false).value);
 
 		wantMilk = Boolean.parseBoolean(config.getOrCreateBooleanProperty("Milk", "Drinks", true).value);
 		wantCMilk = Boolean.parseBoolean(config.getOrCreateBooleanProperty("Chocolate Milk", "Drinks", true).value);

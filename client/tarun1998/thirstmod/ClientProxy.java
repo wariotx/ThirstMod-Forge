@@ -25,6 +25,7 @@ public class ClientProxy extends CommonProxy {
 	public void onLoad() {
 		MinecraftForgeClient.preloadTexture("/tarun1998/thirstmod/textures/icons.png");
 		TickRegistry.registerTickHandler(new TickHandler(), Side.CLIENT);
+		TickRegistry.registerTickHandler(new PlayerTick(), Side.CLIENT);
 
 		LanguageRegistry.addName(ThirstMod.waterCollector, "Rain Collector");
 		LanguageRegistry.addName(ThirstMod.juiceMaker, "Drinks Brewer");
@@ -39,10 +40,6 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void onTickInGame() {
-		try {
-		} catch(Exception e) {
-		}
-		
 		Minecraft minecraft = FMLClientHandler.instance().getClient();
 		if (minecraft.currentScreen != null) {
 			onTickInGUI(minecraft.currentScreen);
@@ -61,7 +58,6 @@ public class ClientProxy extends CommonProxy {
 					loadedMod = true;
 				}
 			}
-			dc.onTick(minecraft.thePlayer, Side.CLIENT);
 			ThirstUtils.getStats().onTick(getPlayer());
 
 			intDat++;
@@ -69,6 +65,8 @@ public class ClientProxy extends CommonProxy {
 				PacketHandler.sendData(getPlayer().username, ThirstUtils.getStats());
 			}
 		}
+		
+		//ThirstUtils.getStats().level = 0;
 	}
 
 	public void onTickInGUI(GuiScreen gui) {

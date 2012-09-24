@@ -13,6 +13,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.src.*;
 
 public class Drink extends Item {
+	private int thirstReplenish;
+	private float saturationReplenish;
 	private boolean alwaysDrinkable;
 	private int potionId;
 	private int potionDuration;
@@ -28,36 +30,41 @@ public class Drink extends Item {
 	private int foodHeal;
 	private float satHeal;
 
-	public Drink(int id, boolean alwaysDrinkable) {
+	public Drink(int id, int replenish, float saturation, boolean alwaysDrinkable) {
 		super(id);
 		if (alwaysDrinkable == true) {
 			this.alwaysDrinkable = true;
 		}
 		setTabToDisplayOn(CreativeTabs.tabFood);
+		this.thirstReplenish = replenish;
+		this.saturationReplenish = saturation;
 	}
 
 	public ItemStack onFoodEaten(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-		itemstack.stackSize--;
+		if(!world.isRemote) {
+			ThirstUtils.getStats().addStats(thirstReplenish, saturationReplenish);
+			itemstack.stackSize--;
+			if (poisonChance > 0 && ConfigHelper.poisonOn == true) {
+				Random rand = new Random();
+				if(rand.nextFloat() < poisonChance) {
+					PoisonController.startPoison();
+				}
+			}
+		
+			if (foodHeal > 0 && satHeal > 0) {
+				entityplayer.getFoodStats().addStats(foodHeal, satHeal);
+			}
+		}
+		
+		
 		if (!world.isRemote && potionId > 0 && world.rand.nextFloat() < potionEffectProbability) {
 			entityplayer.addPotionEffect(new PotionEffect(potionId, potionDuration * 20, potionAmplifier));
 		}
-
-		if (poisonChance > 0 && ConfigHelper.poisonOn == true) {
-			Random rand = new Random();
-			if(rand.nextFloat() < poisonChance) {
-				PoisonController.startPoison();
-			}
-		}
-
-		if (foodHeal > 0 && satHeal > 0) {
-			entityplayer.getFoodStats().addStats(foodHeal, satHeal);
-		}
-
-		if (itemstack.stackSize <= 0) {
+		
+		if(itemstack.stackSize > 1 && !world.isRemote) {
 			return new ItemStack(returnItem);
 		} else {
-			entityplayer.inventory.addItemStackToInventory(new ItemStack(returnItem));
-			return itemstack;
+			return new ItemStack(returnItem);
 		}
 	}
 

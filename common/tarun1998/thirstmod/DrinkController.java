@@ -12,15 +12,21 @@ public class DrinkController {
 	private static HashMap levelMap = new HashMap();
 	private static HashMap saturationMap = new HashMap();
 
+	public int itemHeal;
+	
 	public void onTick(EntityPlayer player, Side side) {
+		ItemStack item = ObfuscationReflectionHelper.getPrivateValue(EntityPlayer.class, player, "itemInUse");
+		
 		if(FMLCommonHandler.instance().getSide() == Side.CLIENT) {
-			ItemStack item = player.getItemInUse();
-			
-			if (item != null) {
-				if (levelMap.containsKey(item.getItem())) {
+			if(item != null) {
+				if(levelMap.containsKey(item.getItem())) {
 					onItemBeingDrunk(item, player);
+				} else {
+					itemHeal = 0;
 				}
-			} 
+			} else {
+				itemHeal = 0;
+			}
 		}
 	}
 
@@ -30,15 +36,13 @@ public class DrinkController {
 	 * @param item The itemstack being consumed.
 	 */
 	public void onItemBeingDrunk(ItemStack item, EntityPlayer player) {
-		if (levelMap.containsKey(item.getItem())) {
-			if(player.getItemInUseCount() == 0) {
-				ThirstUtils.getStats().addStats((Integer) levelMap.get(item.getItem()), (Float) saturationMap.get(item.getItem()));
-				
-				if (item.getItem() == Item.potion && item.getItemDamage() == 0) {
-					Random rand = new Random();
-					if (rand.nextFloat() < 0.3f) {
-						PoisonController.startPoison();
-					}
+		if(++itemHeal == item.getMaxItemUseDuration()) {
+			ThirstUtils.getStats().addStats((Integer) levelMap.get(item.getItem()), (Float) saturationMap.get(item.getItem()));
+			
+			if (item.getItem() == Item.potion && item.getItemDamage() == 0) {
+				Random rand = new Random();
+				if (rand.nextFloat() < 0.3f) {
+					PoisonController.startPoison();
 				}
 			}
 		}

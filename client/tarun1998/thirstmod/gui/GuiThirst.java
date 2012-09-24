@@ -284,44 +284,85 @@ public class GuiThirst extends GuiIngame {
 				PlayerStatistics thirststats = ThirstUtils.getStats();
 				int thirstLvl = thirststats.level;
 				for (int i13 = 0; i13 < 10; i13++) {
-					int width = var5.getScaledWidth() / 2 + 91 - i13 * 8 - 9;
-					int height = var5.getScaledHeight() - 49;
-					int textureXStart = 2;
-					int textureYStart = 2;
-					int textureYStart1 = 2;
-					int textureEndY = 9;
-					int textureEndX = 8;
-					byte byte5 = 0;
+					if(ConfigHelper.oldTextures == true) {
+						int width = var5.getScaledWidth() / 2 + 91 - i13 * 8 - 9;
+						int height = var5.getScaledHeight() - 49;
+						int textureXStart = 2;
+						int textureYStart = 2;
+						int textureYStart1 = 2;
+						int textureEndY = 9;
+						int textureEndX = 8;
 
-					if (thirststats.saturation <= 0.0F && updateCounter % (thirstLvl * 3 + 1) == 0) {
-						height += rand.nextInt(3) - 1;
-					}
-
-					if (ConfigHelper.meterOnLeft == true) {
-						width = var5.getScaledWidth() / 2 - 91 + i13 * 8;
-					}
-
-					if (ConfigHelper.oldTextures == true) {
-						textureYStart = 12;
-					}
-
-					drawTexturedModalRect(width, height, textureXStart, textureYStart1, textureEndX, textureEndY);
-
-					if (PoisonController.isPoisoned() == false) {
-						if (i13 * 2 + 1 < thirstLvl) {
-							drawTexturedModalRect(width, height, textureXStart + 9, textureYStart, textureEndX, textureEndY);
+						if (thirststats.saturation <= 0.0F && updateCounter % (thirstLvl * 3 + 1) == 0) {
+							height += rand.nextInt(3) - 1;
+						}
+						
+						if(ConfigHelper.lightBlueColour == true) {
+							textureYStart = 12;
 						}
 
-						if (i13 * 2 + 1 == thirstLvl) {
-							drawTexturedModalRect(width, height, textureXStart + 18, textureYStart, textureEndX, textureEndY);
-						}
-					} else if (PoisonController.isPoisoned() == true) {
-						if (i13 * 2 + 1 < thirstLvl) {
-							drawTexturedModalRect(width, height, textureXStart + 27, textureYStart, textureEndX, textureEndY);
+						if (ConfigHelper.meterOnLeft == true) {
+							width = var5.getScaledWidth() / 2 - 91 + i13 * 8;
 						}
 
-						if (i13 * 2 + 1 == thirstLvl) {
-							drawTexturedModalRect(width, height, textureXStart + 36, textureYStart, textureEndX, textureEndY);
+						drawTexturedModalRect(width, height, textureXStart, textureYStart1, textureEndX, textureEndY);
+
+						if (PoisonController.isPoisoned() == false) {
+							if (i13 * 2 + 1 < thirstLvl) {
+								drawTexturedModalRect(width, height, textureXStart + 9, textureYStart, textureEndX, textureEndY);
+							}
+
+							if (i13 * 2 + 1 == thirstLvl) {
+								drawTexturedModalRect(width, height, textureXStart + 18, textureYStart, textureEndX, textureEndY);
+							}
+						} else if (PoisonController.isPoisoned() == true) {
+							if (i13 * 2 + 1 < thirstLvl) {
+								drawTexturedModalRect(width, height, textureXStart + 27, textureYStart, textureEndX, textureEndY);
+							}
+
+							if (i13 * 2 + 1 == thirstLvl) {
+								drawTexturedModalRect(width, height, textureXStart + 36, textureYStart, textureEndX, textureEndY);
+							}
+						}
+					} else {
+						int width = var5.getScaledWidth() / 2 + 91 - i13 * 8 - 9;
+						int height = var5.getScaledHeight() - 49;
+						int textureXStart = 1;
+						int textureYStart = 24;
+						int textureYStart1 = 24;
+						int textureEndY = 9;
+						int textureEndX = 7;
+
+						if (thirststats.saturation <= 0.0F && updateCounter % (thirstLvl * 3 + 1) == 0) {
+							height += rand.nextInt(3) - 1;
+						}
+
+						if (ConfigHelper.meterOnLeft == true) {
+							width = var5.getScaledWidth() / 2 - 91 + i13 * 8;
+						}
+						
+						if(ConfigHelper.lightBlueColour == true) {
+							textureYStart = 34;
+						}
+
+						drawTexturedModalRect(width, height, textureXStart, textureYStart1, textureEndX, textureEndY);
+
+						if (PoisonController.isPoisoned() == false) {
+							if (i13 * 2 + 1 < thirstLvl) {
+								drawTexturedModalRect(width, height, textureXStart + 8, textureYStart, textureEndX, textureEndY);
+							}
+
+							if (i13 * 2 + 1 == thirstLvl) {
+								drawTexturedModalRect(width, height, textureXStart + 16, textureYStart, textureEndX, textureEndY);
+							}
+						} else if (PoisonController.isPoisoned() == true) {
+							if (i13 * 2 + 1 < thirstLvl) {
+								drawTexturedModalRect(width, height, textureXStart + 24, textureYStart, textureEndX, textureEndY);
+							}
+
+							if (i13 * 2 + 1 == thirstLvl) {
+								drawTexturedModalRect(width, height, textureXStart + 32, textureYStart, textureEndX, textureEndY);
+							}
 						}
 					}
 				}
