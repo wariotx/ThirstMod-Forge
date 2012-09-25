@@ -15,7 +15,7 @@ public class DrinkController {
 	public int itemHeal;
 	
 	public void onTick(EntityPlayer player, Side side) {
-		ItemStack item = ObfuscationReflectionHelper.getPrivateValue(EntityPlayer.class, player, "itemInUse");
+		ItemStack item = player.getItemInUse();
 		
 		if(FMLCommonHandler.instance().getSide() == Side.CLIENT) {
 			if(item != null) {

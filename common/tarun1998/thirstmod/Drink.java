@@ -43,7 +43,6 @@ public class Drink extends Item {
 	public ItemStack onFoodEaten(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 		if(!world.isRemote) {
 			ThirstUtils.getStats().addStats(thirstReplenish, saturationReplenish);
-			itemstack.stackSize--;
 			if (poisonChance > 0 && ConfigHelper.poisonOn == true) {
 				Random rand = new Random();
 				if(rand.nextFloat() < poisonChance) {
@@ -54,15 +53,14 @@ public class Drink extends Item {
 			if (foodHeal > 0 && satHeal > 0) {
 				entityplayer.getFoodStats().addStats(foodHeal, satHeal);
 			}
+			
+			if(potionId > 0 && world.rand.nextFloat() < potionEffectProbability) {
+				entityplayer.addPotionEffect(new PotionEffect(potionId, potionDuration * 20, potionAmplifier));
+			}
 		}
-		
-		
-		if (!world.isRemote && potionId > 0 && world.rand.nextFloat() < potionEffectProbability) {
-			entityplayer.addPotionEffect(new PotionEffect(potionId, potionDuration * 20, potionAmplifier));
-		}
-		
 		if(itemstack.stackSize > 1 && !world.isRemote) {
-			return new ItemStack(returnItem);
+			entityplayer.inventory.addItemStackToInventory(new ItemStack(returnItem));
+			return new ItemStack(this, itemstack.stackSize - 1);
 		} else {
 			return new ItemStack(returnItem);
 		}
