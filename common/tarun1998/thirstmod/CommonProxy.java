@@ -9,7 +9,6 @@ import net.minecraftforge.event.ForgeSubscribe;
 import net.minecraftforge.event.world.WorldEvent;
 
 public class CommonProxy {
-	public DrinkController dc = new DrinkController();
 	public boolean loadedMod = false;
 
 	public void onLoad() {
@@ -22,7 +21,6 @@ public class CommonProxy {
 		for (int i = 0; i < names.length; i++) {
 			EntityPlayerMP player = FMLServerHandler.instance().getServer().getConfigurationManager().getPlayerForUsername(names[i]);
 			if (player.capabilities.isCreativeMode == false) {
-				dc.onTick(player, Side.SERVER);
 				getStatsMP().onTick(player, player);
 			}
 		}

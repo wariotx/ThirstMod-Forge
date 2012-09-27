@@ -2,6 +2,7 @@ package tarun1998.thirstmod;
 
 import tarun1998.thirstmod.blocks.*;
 import tarun1998.thirstmod.gui.*;
+import tarun1998.thirstmod.packets.PacketHandleSave;
 import tarun1998.thirstmod.utils.*;
 import cpw.mods.fml.client.*;
 import cpw.mods.fml.client.registry.*;
@@ -25,7 +26,6 @@ public class ClientProxy extends CommonProxy {
 	public void onLoad() {
 		MinecraftForgeClient.preloadTexture("/tarun1998/thirstmod/textures/icons.png");
 		TickRegistry.registerTickHandler(new TickHandler(), Side.CLIENT);
-		TickRegistry.registerTickHandler(new PlayerTick(), Side.CLIENT);
 
 		LanguageRegistry.addName(ThirstMod.waterCollector, "Rain Collector");
 		LanguageRegistry.addName(ThirstMod.juiceMaker, "Drinks Brewer");
@@ -62,11 +62,9 @@ public class ClientProxy extends CommonProxy {
 
 			intDat++;
 			if (PacketHandler.isRemote == true & intDat > 20) {
-				PacketHandler.sendData(getPlayer().username, ThirstUtils.getStats());
+				PacketHandleSave.sendSaveData(getPlayer().username, ThirstUtils.getStats());
 			}
 		}
-		
-		//ThirstUtils.getStats().level = 0;
 	}
 
 	public void onTickInGUI(GuiScreen gui) {

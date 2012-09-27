@@ -1,11 +1,15 @@
 package tarun1998.thirstmod;
 
 import java.util.*;
+
+import tarun1998.thirstmod.api.ThirstAPI;
+import tarun1998.thirstmod.packets.PacketPlaySound;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.src.*;
+import net.minecraftforge.common.MinecraftForge;
 
 public class PlayerStatisticsMP extends PlayerStatistics {
 	public int level;
@@ -31,45 +35,50 @@ public class PlayerStatisticsMP extends PlayerStatistics {
 	 * @param player EntityPlayer instance.
 	 */
 	public void onTick(EntityPlayer player, EntityPlayerMP playerMp) {
-		int difSet = player.worldObj.difficultySetting;
-		if (ConfigHelper.peacefulOn == true) {
-			difSet = 1;
-		}
-		if (exhaustion > 4f) {
-			exhaustion = 0f;
-			if (saturation > 0f) {
-				saturation = saturation - 1f;
-			} else if (difSet > 0) {
-				level = level - 1;
+		if(FMLCommonHandler.instance().getSide() == Side.SERVER) {
+			int difSet = player.worldObj.difficultySetting;
+			if (ConfigHelper.peacefulOn == true) {
+				difSet = 1;
 			}
-		}
-		if (level == 0) {
-			serverHurt++;
-			if (serverHurt > 80) {
-				if (playerMp.getHealth() > 10 || difSet >= 3 || playerMp.getHealth() > 1 && difSet >= 2) {
-					serverHurt = 0;
-					playerMp.attackEntityFrom(DamageSource.starve, 1);
+			if (exhaustion > 4f) {
+				exhaustion = 0f;
+				if (saturation > 0f) {
+					saturation = saturation - 1f;
+				} else if (difSet > 0) {
+					level = level - 1;
 				}
 			}
-		}
-		poisonCon.onTick();
-		if (player.isSneaking() && player.isInWater() && level < 20) {
-			drinkTimer++;
-			if (drinkTimer > 16) {
-				addStats(1, 0.3F);
-				if (poisonCon.getBiomesList().containsKey(ThirstUtils.getCurrentBiome(player)) && ConfigHelper.poisonOn == true) {
-					if (random.nextFloat() < poisonCon.getBiomePoison(ThirstUtils.getCurrentBiome(playerMp))) {
-						PoisonController.startPoison();
+			if (level == 0) {
+				serverHurt++;
+				if (serverHurt > 80) {
+					if (playerMp.getHealth() > 10 || difSet >= 3 || playerMp.getHealth() > 1 && difSet >= 2) {
+						serverHurt = 0;
+						playerMp.attackEntityFrom(DamageSource.starve, 1);
+						MinecraftForge.EVENT_BUS.post(new ThirstAPI.OnPlayerHurt(player));
+					} 
+				}
+			}
+			poisonCon.onTick();
+			if (player.isSneaking() && player.isInWater() && level < 20) {
+				drinkTimer++;
+				if (drinkTimer > 16) {
+					addStats(1, 0.3F);
+					PacketPlaySound.sendPlaySound(player);
+					if (poisonCon.getBiomesList().containsKey(ThirstUtils.getCurrentBiome(player)) && ConfigHelper.poisonOn == true) {
+						if (random.nextFloat() < poisonCon.getBiomePoison(ThirstUtils.getCurrentBiome(playerMp))) {
+							PoisonController.startPoison();
+						}
 					}
+					MinecraftForge.EVENT_BUS.post(new ThirstAPI.OnPlayerDrinkWaterSource(player));
+					drinkTimer = 0;
 				}
-				drinkTimer = 0;
 			}
+			if (level <= 6) {
+				player.setSprinting(false);
+			}
+			exhaustPlayer(player);
 		}
-		if (level <= 6) {
-			player.setSprinting(false);
-		}
-		exhaustPlayer(player);
-	}
+	} 
 
 	/**
 	 * Exhausts the player.

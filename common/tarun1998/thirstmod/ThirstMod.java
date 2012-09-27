@@ -9,8 +9,12 @@ import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.*;
 import cpw.mods.fml.common.registry.*;
 import net.minecraft.src.*;
+import tarun1998.thirstmod.api.ThirstAPI;
 import tarun1998.thirstmod.blocks.*;
 import tarun1998.thirstmod.gui.*;
+import tarun1998.thirstmod.packets.PacketHandleSave;
+import tarun1998.thirstmod.packets.PacketPlaySound;
+import tarun1998.thirstmod.reflection.*;
 import net.minecraftforge.common.*;
 import net.minecraftforge.event.*;
 import net.minecraftforge.event.entity.living.*;
@@ -20,10 +24,10 @@ import net.minecraftforge.event.world.*;
 @Mod(modid = ThirstUtils.ID, name = ThirstUtils.NAME, version = ThirstUtils.VERSION)
 @NetworkMod(serverSideRequired = false, clientSideRequired = true, packetHandler = PacketHandler.class, channels = { "ThirstMod" })
 public class ThirstMod implements IGuiHandler {
-	public static final Block waterCollector = new BlockRC(ConfigHelper.rcId).setBlockName("waterCollector").setResistance(5F).setHardness(4F).setCreativeTab(CreativeTabs.tabDeco);
-	public static final Block juiceMaker = new BlockJM(ConfigHelper.jmId).setBlockName("juiceMaker").setResistance(5F).setHardness(4F).setCreativeTab(CreativeTabs.tabDeco);
-	public static final Item dFilter = (new ItemThirst(ConfigHelper.dFilterId).setItemName("dFilter").setMaxStackSize(1)).setIconIndex(33).setTabToDisplayOn(CreativeTabs.tabMisc);
-	public static final Item Filter = (new ItemThirst(ConfigHelper.filterId).setItemName("filter").setMaxStackSize(1)).setContainerItem(dFilter).setIconIndex(32).setTabToDisplayOn(CreativeTabs.tabMisc);
+	public static final Block waterCollector = new BlockRC(ConfigHelper.rcId).setBlockName("waterCollector").setResistance(5F).setHardness(4F).setCreativeTab(CreativeTabs.tabDecorations);
+	public static final Block juiceMaker = new BlockJM(ConfigHelper.jmId).setBlockName("juiceMaker").setResistance(5F).setHardness(4F).setCreativeTab(CreativeTabs.tabDecorations);
+	public static final Item dFilter = (new ItemThirst(ConfigHelper.dFilterId).setItemName("dFilter").setMaxStackSize(1)).setIconIndex(33).setCreativeTab(CreativeTabs.tabMisc);
+	public static final Item Filter = (new ItemThirst(ConfigHelper.filterId).setItemName("filter").setMaxStackSize(1)).setContainerItem(dFilter).setIconIndex(32).setCreativeTab(CreativeTabs.tabMisc);
 
 	public static int jmFront = 1;
 	public static int rcTop = 0;
@@ -40,6 +44,10 @@ public class ThirstMod implements IGuiHandler {
 
 	public static boolean shouldTellPlayer0 = false;
 	public static boolean shouldTellPlayer1 = false;
+	
+	//Networks
+	public PacketHandleSave savePacket = new PacketHandleSave();
+	public PacketPlaySound soundPacket = new PacketPlaySound();
 
 	/**
 	 * Called before the mod is loaded.
@@ -80,11 +88,9 @@ public class ThirstMod implements IGuiHandler {
 		MinecraftForge.EVENT_BUS.register(INSTANCE);
 		MinecraftForge.EVENT_BUS.register(proxy);
 		NetworkRegistry.instance().registerGuiHandler(this, this);
-		NetworkRegistry.instance().registerConnectionHandler(new PacketHandler());
-
-		DrinkController.addDrink(Item.potion, 5, 1f);
-		DrinkController.addDrink(Item.bucketMilk, 10, 3f);
-		DrinkController.addDrink(Item.bowlSoup, 7, 2f);
+		NetworkRegistry.instance().registerConnectionHandler(savePacket);
+		
+		replaceItems();
 
 		proxy.onLoad();
 	}
@@ -164,5 +170,28 @@ public class ThirstMod implements IGuiHandler {
 			return new GuiRC(player.inventory, (TileEntityRC) tile);
 		}
 		return null;
+	}
+	
+	public void replaceItems() {
+		/* Item index's.
+		 * Potion = 118
+		 * Milk Bucket = 80
+		 * Soup = 27
+		for(int i = 0; i < Item.class.getFields().length; i++) {
+			System.out.printf("Item: %s, ID: %d\n", Item.class.getFields()[i], i);
+		}
+		*/
+		
+		Item.itemsList[Item.potion.shiftedIndex] = null;
+		Item.itemsList[Item.bucketMilk.shiftedIndex] = null;
+		Item.itemsList[Item.bowlSoup.shiftedIndex] = null;
+		
+		ItemPotion potion = (ItemPotionMod)(new ItemPotionMod(117)).setIconCoord(13, 8).setItemName("potion");
+		Item bucketMilk = (new ItemMilkMod(79)).setIconCoord(13, 4).setItemName("milk").setContainerItem(Item.bucketEmpty);
+		Item soup = (new ItemSoupMod(26, 8)).setIconCoord(8, 4).setItemName("mushroomStew");
+		
+		ObfuscationReflectionHelper.setPrivateValue(Item.class, Item.potion, potion, 118);
+		ObfuscationReflectionHelper.setPrivateValue(Item.class, Item.bucketMilk, bucketMilk, 80);
+		ObfuscationReflectionHelper.setPrivateValue(Item.class, Item.bowlSoup, soup, 27);
 	}
 }

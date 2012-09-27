@@ -27,7 +27,7 @@ public class TileEntityRC extends TileEntity implements IInventory, ISidedInvent
 				isActive = flag && flag1;
 				if (isActive == true && canFill()) {
 					RainMeter++;
-					if (RainMeter == 200) {
+					if (RainMeter == RCRecipes.fill().getFillTimeFor(rainItemStacks[0].itemID)) {
 						RainMeter = 0;
 						fillItem();
 					}
@@ -39,7 +39,7 @@ public class TileEntityRC extends TileEntity implements IInventory, ISidedInvent
 				} else if (!isActive && canFill() && internalBucket > 0) {
 					RainMeter++;
 					internalBucket--;
-					if (RainMeter == 200) {
+					if (RainMeter == RCRecipes.fill().getFillTimeFor(rainItemStacks[0].itemID)) {
 						RainMeter = 0;
 						fillItem();
 					}
@@ -222,7 +222,11 @@ public class TileEntityRC extends TileEntity implements IInventory, ISidedInvent
 	}
 
 	public int getRainMeterScaled(int i) {
-		return (RainMeter * i) / 200;
+		int fillTime;
+		if(rainItemStacks[0] != null) {
+			fillTime = RCRecipes.fill().getFillTimeFor(rainItemStacks[0].itemID);
+		} else fillTime = 200;
+		return (RainMeter * i) / fillTime;
 	}
 
 	public int getInternalBucketScaled(int i) {

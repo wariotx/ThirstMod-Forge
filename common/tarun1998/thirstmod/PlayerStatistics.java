@@ -1,11 +1,14 @@
 package tarun1998.thirstmod;
 
 import java.util.*;
+
+import tarun1998.thirstmod.api.ThirstAPI;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.src.*;
+import net.minecraftforge.common.MinecraftForge;
 
 public class PlayerStatistics {
 	public int level;
@@ -48,6 +51,7 @@ public class PlayerStatistics {
 					if (ClientProxy.getPlayerMp().getHealth() > 10 || difSet >= 3 || ClientProxy.getPlayerMp().getHealth() > 1 && difSet >= 2) {
 						healhurtTimer = 0;
 						ClientProxy.getPlayerMp().attackEntityFrom(DamageSource.starve, 1);
+						MinecraftForge.EVENT_BUS.post(new ThirstAPI.OnPlayerHurt(player));
 					}
 				}
 			}
@@ -65,6 +69,7 @@ public class PlayerStatistics {
 						PoisonController.startPoison();
 					}
 				}
+				MinecraftForge.EVENT_BUS.post(new ThirstAPI.OnPlayerDrinkWaterSource(player));
 				drinkTimer = 0;
 			}
 		}

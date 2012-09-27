@@ -3,6 +3,7 @@ package tarun1998.thirstmod;
 import java.io.*;
 import java.net.*;
 import tarun1998.thirstmod.blocks.JMRecipes;
+import tarun1998.thirstmod.blocks.RCRecipes;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
@@ -183,6 +184,16 @@ public class ThirstUtils {
 	public static void addJMRecipe(int id, int metadata, ItemStack item) {
 		JMRecipes.solidifying().addSolidifying(id, metadata, item);
 	}
+	
+	/**
+	 * Adds a recipe to the Rain Collector
+	 * @param id The id of the item to fill.
+	 * @param timeToFill Amount of time taken to fill the item. For reference Glass Bottle = 200, Bucket = 600;
+	 * @param return1 The filled item.
+	 */
+	public static void addRCRecipe(int id, int timeToFill, ItemStack return1) {
+		RCRecipes.fill().addRecipe(id, timeToFill, return1);
+	}
 
 	/**
 	 * Setups the current directory as Minecraft.getMinecraftDir does not work
@@ -210,7 +221,7 @@ public class ThirstUtils {
 		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
 			System.out.println("[ThirstMod] " + obj);
 		} else {
-			FMLCommonHandler.instance().getMinecraftServerInstance().logInfoMessage("[ThirstMod] "+ obj.toString());
+			FMLCommonHandler.instance().getMinecraftServerInstance().logInfo("[ThirstMod] "+ obj.toString());
 		}
 	}
 }

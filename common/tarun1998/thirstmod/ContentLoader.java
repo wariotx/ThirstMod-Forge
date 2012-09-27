@@ -1,6 +1,10 @@
 package tarun1998.thirstmod;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+
 import net.minecraft.src.*;
 import java.util.*;
 import cpw.mods.fml.common.Side;
@@ -22,11 +26,9 @@ public class ContentLoader {
 	public static String name;
 	public static String shortName;
 	public static boolean alwaysDrinkable;
-	public static boolean hasEffect;
 	public static int maxStackSize;
 	public static float poisonChance;
 	public static boolean isShiny;
-	public static int chance;
 	public static int foodHeal;
 	public static float satHeal;
 	public static int texPos;
@@ -34,8 +36,7 @@ public class ContentLoader {
 	public static int potionId;
 	public static int potionDuration;
 	public static int potionAmplifier;
-	public static float potionEffectProbability;
-
+	
 	public ContentLoader(Side side) {
 		loadMainFiles(side);
 	}
@@ -44,7 +45,7 @@ public class ContentLoader {
 		boolean deletedBad = false;
 		File contentDir = new File(ThirstUtils.getDir(), "/mods/ThirstMod/Content/");
 		contentDir.mkdirs();
-
+		
 		if (deletedBad == false) {
 			ThirstUtils.deleteFiles(ThirstUtils.getDir() + "/mods/ThirstMod/Content/", ".DS_Store");
 			ThirstUtils.deleteFiles(ThirstUtils.getDir() + "/mods/ThirstMod/Content/", ".ini");
@@ -56,9 +57,7 @@ public class ContentLoader {
 			LinkedList<String> drinkList = new LinkedList<String>();
 			if (contentDir.listFiles().length > 0) {
 				for (int i = 0; i < contentDir.listFiles().length; i++) {
-					if (contentDir.listFiles()[i].getName() != "Textures") {
-						contentList.add(contentDir.listFiles()[i]);
-					}
+					contentList.add(contentDir.listFiles()[i]);
 				}
 			}
 
@@ -71,19 +70,21 @@ public class ContentLoader {
 					File fileInDir = files.listFiles()[j];
 					if (fileInDir.getName().endsWith(".txt")) {
 						drinkList.add(fileInDir.getName());
+						setDefaults();
 						try {
 							init(new BufferedReader(new FileReader(fileInDir)), files.getName());
 
-							Item drink = (((Drink) new Drink(id, replenish, saturation, alwaysDrinkable).setItemName(shortName).setMaxStackSize(maxStackSize)).setEffect(isShiny)).setPoisoningChance(chance).setPotionEffect(potionId, potionDuration, potionDuration, potionEffectProbability).setTexFile(textureFile);
+							Item drink = (((Drink) new Drink(id, replenish, saturation, alwaysDrinkable).setItemName(shortName).setMaxStackSize(maxStackSize)).setEffect(isShiny)).setPoisoningChance(poisonChance).setPotionEffect(potionId, potionDuration, potionDuration, 1).setTexFile(textureFile);
 
 							drink.setIconIndex(texPos);
 							LanguageRegistry.addName(drink, name);
 							ThirstUtils.addJMRecipe(jmTop, metadata, new ItemStack(drink));
 
+							String output = fileInDir.getName().replace(".txt", "");
+							
 							if (side.equals(Side.CLIENT)) {
 								MinecraftForgeClient.preloadTexture(textureFile);
 							}
-							String output = fileInDir.getName().replace(".txt", "");
 							addedfiles.add(output);
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -167,7 +168,27 @@ public class ContentLoader {
 			potionId = Integer.parseInt(colon[1]);
 			potionDuration = Integer.parseInt(colon[2]);
 			potionAmplifier = Integer.parseInt(colon[3]);
-			potionEffectProbability = 1;
 		}
+	}
+	
+	public void setDefaults() {
+		id = 0;
+		metadata = 0;
+		texture = 0;
+		replenish = 0;
+		jmTop = 0;
+		saturation = 0;
+		name = "";
+		shortName = "";
+		alwaysDrinkable = false;
+		maxStackSize = 0;
+		poisonChance = 0.0f; 
+		isShiny = false;
+		foodHeal = 0;
+		satHeal = 0.0f;
+		texPos = 0;
+		potionId = 0;
+		potionDuration = 0;
+		potionAmplifier = 0;
 	}
 }

@@ -8,21 +8,24 @@ import tarun1998.thirstmod.*;
 public class RCRecipes {
 	private static final RCRecipes solidifyingBase = new RCRecipes();
 	private Map solidifyingList;
+	private Map fillTime;
 
 	public static final RCRecipes fill() {
 		return solidifyingBase;
 	}
 
-	private RCRecipes() {
+	public RCRecipes() {
 		solidifyingList = new HashMap();
-		addRecipe(Item.glassBottle.shiftedIndex, new ItemStack(DrinkLoader.freshWater));
+		fillTime = new HashMap();
+		addRecipe(Item.glassBottle.shiftedIndex, 200, new ItemStack(DrinkLoader.freshWater));
 		if (ConfigHelper.wantFBucket == true) {
-			addRecipe(Item.bucketEmpty.shiftedIndex, new ItemStack(DrinkLoader.fBucket));
+			addRecipe(Item.bucketEmpty.shiftedIndex, 600, new ItemStack(DrinkLoader.fBucket));
 		}
 	}
 
-	public void addRecipe(int i, ItemStack itemstack) {
+	public void addRecipe(int i, int time, ItemStack itemstack) {
 		solidifyingList.put(Integer.valueOf(i), itemstack);
+		fillTime.put(Integer.valueOf(i), Integer.valueOf(time));
 	}
 
 	public ItemStack getSolidifyingResult(int i) {
@@ -31,5 +34,9 @@ public class RCRecipes {
 
 	public Map getSolidifyingList() {
 		return solidifyingList;
+	}
+	
+	public int getFillTimeFor(int itemid) {
+		return (Integer) fillTime.get(itemid);
 	}
 }

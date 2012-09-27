@@ -48,15 +48,12 @@ def main():
     # Copies the other stuff I have uploaded to Github to the build folder.
     eclipse_formatter_dir = os.path.join(other_dir, 'eclipse_formatter.xml')
     readme_dir = os.path.join(other_dir, 'README.md')
-    buildscript_sh_dir = mcp_dir + '/build.sh'
     buildscript_py_dir = mcp_dir + '/build.py'
     new_formatter_dir = os.path.join(build_dir, 'eclipse_formatter.xml')
     new_readme_dir = os.path.join(build_dir, 'README.md')
-    new_buildscript_sh_dir = build_dir + '/build.sh'
     new_buildscript_py_dir = build_dir + '/build.py'
     shutil.copyfile(eclipse_formatter_dir, new_formatter_dir)
     shutil.copyfile(readme_dir, new_readme_dir)
-    shutil.copyfile(buildscript_sh_dir, new_buildscript_sh_dir)
     shutil.copyfile(buildscript_py_dir, new_buildscript_py_dir)
     
     print '-> Preparing latest release zip'

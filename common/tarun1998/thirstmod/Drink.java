@@ -35,7 +35,7 @@ public class Drink extends Item {
 		if (alwaysDrinkable == true) {
 			this.alwaysDrinkable = true;
 		}
-		setTabToDisplayOn(CreativeTabs.tabFood);
+		setCreativeTab(CreativeTabs.tabFood);
 		this.thirstReplenish = replenish;
 		this.saturationReplenish = saturation;
 	}
@@ -77,7 +77,7 @@ public class Drink extends Item {
 	public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 		if (canDrink() == true || alwaysDrinkable == true || entityplayer.capabilities.isCreativeMode == true) {
 			entityplayer.setItemInUse(itemstack, getMaxItemUseDuration(itemstack));
-		}
+		} 
 		return itemstack;
 	}
 
