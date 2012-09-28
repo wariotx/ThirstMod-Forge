@@ -18,6 +18,7 @@ public class RCRecipes {
 		solidifyingList = new HashMap();
 		fillTime = new HashMap();
 		addRecipe(Item.glassBottle.shiftedIndex, 200, new ItemStack(DrinkLoader.freshWater));
+		addRecipe(DrinkLoader.woodGlass.shiftedIndex, 150, new ItemStack(DrinkLoader.woodWater));
 		if (ConfigHelper.wantFBucket == true) {
 			addRecipe(Item.bucketEmpty.shiftedIndex, 600, new ItemStack(DrinkLoader.fBucket));
 		}
@@ -37,6 +38,9 @@ public class RCRecipes {
 	}
 	
 	public int getFillTimeFor(int itemid) {
-		return (Integer) fillTime.get(itemid);
+		if(fillTime.get(itemid) != null) {
+			return (Integer) fillTime.get(itemid);
+		}
+		else return 200;
 	}
 }

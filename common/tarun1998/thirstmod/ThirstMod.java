@@ -111,7 +111,9 @@ public class ThirstMod implements IGuiHandler {
 	 */
 	@ForgeSubscribe
 	public void onAttack(AttackEntityEvent attack) {
-		ThirstUtils.getStats().addExhaustion(0.3f);
+		if(!attack.entity.worldObj.isRemote) {
+			ThirstUtils.getStats().addExhaustion(0.6f);
+		}
 	}
 
 	/**
@@ -120,8 +122,10 @@ public class ThirstMod implements IGuiHandler {
 	 */
 	@ForgeSubscribe
 	public void onHurt(LivingHurtEvent hurt) {
-		if (hurt.entityLiving instanceof EntityPlayer) {
-			ThirstUtils.getStats().addExhaustion(0.3f);
+		if(!hurt.entity.worldObj.isRemote) {
+			if (hurt.entityLiving instanceof EntityPlayer) {
+				ThirstUtils.getStats().addExhaustion(0.6f);
+			}
 		}
 	}
 

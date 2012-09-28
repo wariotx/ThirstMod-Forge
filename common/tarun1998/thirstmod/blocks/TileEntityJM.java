@@ -1,11 +1,13 @@
 package tarun1998.thirstmod.blocks;
 
+import tarun1998.thirstmod.DrinkLoader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.src.*;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.ISidedInventory;
 
 public class TileEntityJM extends TileEntity implements IInventory, ISidedInventory {
+	//0 = item to brew, 1 = type, 2 = return, 3 = fuel.
 	private ItemStack stacks[];
 	public int brewrbrewTime;
 	public int currentItemCoolTime;
@@ -201,6 +203,8 @@ public class TileEntityJM extends TileEntity implements IInventory, ISidedInvent
 		int i = itemstack.getItem().shiftedIndex;
 		if (i == Item.glassBottle.shiftedIndex) {
 			return 200;
+		} else if (i == DrinkLoader.woodGlass.shiftedIndex) {
+			return 100;
 		} else {
 			return fail;
 		}

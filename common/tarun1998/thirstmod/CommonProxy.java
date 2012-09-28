@@ -12,7 +12,7 @@ public class CommonProxy {
 	public boolean loadedMod = false;
 
 	public void onLoad() {
-		TickRegistry.registerTickHandler(new TickHanderServer(), Side.SERVER);
+		TickRegistry.registerTickHandler(new TickHandler(), Side.SERVER);
 		new ContentLoader(FMLServerHandler.instance().getSide());
 	}
 

@@ -181,4 +181,8 @@ public class Drink extends Item {
 	public String getTextureFile() {
 		return texture;
 	}
+	
+	public Item getReturn() {
+		return returnItem;
+	}
 }
