@@ -1,13 +1,11 @@
 package tarun1998.thirstmod;
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 
 import net.minecraft.src.*;
 import java.util.*;
 import cpw.mods.fml.common.Side;
+import tarun1998.thirstmod.utils.*;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.MinecraftForgeClient;

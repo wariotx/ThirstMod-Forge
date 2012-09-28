@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Random;
 
 import tarun1998.thirstmod.PoisonController;
-import tarun1998.thirstmod.ThirstUtils;
+import tarun1998.thirstmod.utils.*;
 import net.minecraft.src.*;
 
 public class ItemPotionMod extends ItemPotion
@@ -25,7 +25,7 @@ public class ItemPotionMod extends ItemPotion
         this.setMaxStackSize(1);
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
-        this.setCreativeTab(CreativeTabs.tabBrewing);
+        this.setTabToDisplayOn(CreativeTabs.tabBrewing);
     }
 
     /**

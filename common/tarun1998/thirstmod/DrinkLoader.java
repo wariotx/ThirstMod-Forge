@@ -7,7 +7,7 @@ import net.minecraft.src.*;
 public class DrinkLoader {
 	public static Item freshWater;
 	public static Item milk;
-	public static Item woodGlass = new ItemThirst(ConfigHelper.woodGlassId).setItemName("woodGlass").setIconCoord(5, 1).setCreativeTab(CreativeTabs.tabFood);
+	public static Item woodGlass = new ItemThirst(ConfigHelper.woodGlassId).setItemName("woodGlass").setIconCoord(5, 1).setTabToDisplayOn(CreativeTabs.tabFood);
 	public static Item woodWater = ((Drink) ((Drink) ((Drink) new Drink(ConfigHelper.woodWaterId, 3, 1.2f, false).setItemName("woodWater")).setTexFile("/tarun1998/thirstmod/textures/icons.png").setMaxStackSize(ConfigHelper.maxStackSize)).setReturn(woodGlass)).setPoisoningChance(0.3f).setIconCoord(6, 1);
 	public static Item woodFWater = ((Drink) ((Drink) new Drink(ConfigHelper.woodFWaterId, 5, 1.6f, false).setItemName("woodFWater")).setTexFile("/tarun1998/thirstmod/textures/icons.png").setMaxStackSize(ConfigHelper.maxStackSize)).setReturn(woodGlass).setIconCoord(7, 1);
 	public static Item fBucket;

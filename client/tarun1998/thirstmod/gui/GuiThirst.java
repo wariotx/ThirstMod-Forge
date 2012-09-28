@@ -10,7 +10,7 @@ import tarun1998.thirstmod.ConfigHelper;
 import tarun1998.thirstmod.PlayerStatistics;
 import tarun1998.thirstmod.PoisonController;
 import tarun1998.thirstmod.ThirstMod;
-import tarun1998.thirstmod.ThirstUtils;
+import tarun1998.thirstmod.utils.*;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import cpw.mods.fml.client.FMLClientHandler;
@@ -544,7 +544,7 @@ public class GuiThirst extends GuiIngame {
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0.0F, (float) (var7 - 48), 0.0F);
 		this.mc.mcProfiler.startSection("chat");
-		this.persistantChatGUI.drawChat(this.updateCounter);
+		this.persistantChatGUI.func_73762_a(this.updateCounter);
 		this.mc.mcProfiler.endSection();
 		GL11.glPopMatrix();
 

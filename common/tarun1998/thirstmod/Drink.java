@@ -3,14 +3,12 @@
  */
 package tarun1998.thirstmod;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.*;
+import tarun1998.thirstmod.utils.*;
 
 public class Drink extends Item {
 	private int thirstReplenish;
@@ -35,7 +33,7 @@ public class Drink extends Item {
 		if (alwaysDrinkable == true) {
 			this.alwaysDrinkable = true;
 		}
-		setCreativeTab(CreativeTabs.tabFood);
+		setTabToDisplayOn(CreativeTabs.tabFood);
 		this.thirstReplenish = replenish;
 		this.saturationReplenish = saturation;
 	}

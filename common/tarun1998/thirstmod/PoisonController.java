@@ -1,10 +1,9 @@
 package tarun1998.thirstmod;
 
 import java.util.*;
-
-import tarun1998.thirstmod.api.ThirstAPI;
-import net.minecraft.src.BiomeGenBase;
+import tarun1998.thirstmod.api.*;
 import net.minecraftforge.common.MinecraftForge;
+import tarun1998.thirstmod.utils.*;
 
 public class PoisonController {
 	private static int poisonTimer;
@@ -50,16 +49,14 @@ public class PoisonController {
 	 */
 	private void poisonPlayer() {
 		if (ConfigHelper.poisonOn == true) {
-			if (poisonPlayer == true) {
-				MinecraftForge.EVENT_BUS.post(new ThirstAPI.OnPlayerPoisoned(360 - poisonTimer));
-				poisonTimer++;
-				ThirstUtils.getStats().addExhaustion(0.052777777777778f);
-				isPoisoned = true;
-				if (poisonTimer > 360) {
-					poisonTimer = 0;
-					isPoisoned = false;
-					poisonPlayer = false;
-				}
+			MinecraftForge.EVENT_BUS.post(new ThirstAPI.OnPlayerPoisoned(360 - poisonTimer));
+			poisonTimer++;
+			ThirstUtils.getStats().addExhaustion(0.052777777777778f);
+			isPoisoned = true;
+			if (poisonTimer > 360) {
+				poisonTimer = 0;
+				isPoisoned = false;
+				poisonPlayer = false;
 			}
 		}
 	}

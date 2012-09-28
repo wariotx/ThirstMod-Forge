@@ -2,13 +2,12 @@ package tarun1998.thirstmod;
 
 import java.util.*;
 
-import tarun1998.thirstmod.api.ThirstAPI;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Side;
+import tarun1998.thirstmod.api.*;
+import cpw.mods.fml.common.*;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.src.*;
 import net.minecraftforge.common.MinecraftForge;
+import tarun1998.thirstmod.utils.*;
 
 public class PlayerStatistics {
 	public int level;
@@ -16,6 +15,7 @@ public class PlayerStatistics {
 	public float exhaustion;
 	public int healhurtTimer;
 	public int drinkTimer;
+	public int rainTimer;
 	private Random random = new Random();
 	private PoisonController poisonCon = new PoisonController();
 
@@ -80,6 +80,7 @@ public class PlayerStatistics {
 			level = 0;
 		}
 		exhaustPlayer(player);
+		drinkFromRain(player);
 	}
 
 	/**
@@ -115,6 +116,41 @@ public class PlayerStatistics {
 		} else {
 			addExhaustion(0.160f);
 		}
+	}
+	
+	/**
+	 * Does whether the player is attempting to drink from rain.
+	 * @param player
+	 */
+	public void drinkFromRain(EntityPlayer player) {
+		int x = (int)player.posX;
+		int y = (int)player.posY;
+		int z = (int)player.posZ;
+		
+		if(player.isSneaking() == true && isPlayerTopEmpty(x, y, z, player.worldObj) == true) {
+			rainTimer++;
+			if(rainTimer > 40) {
+				this.addStats(1, 0.2f);
+				rainTimer = 0;
+			}
+		}
+	}
+	
+	/**
+	 * Checks whether there is any block above the player position.
+	 * @param x position of the player.
+	 * @param y position of the player.
+	 * @param z position of the player.
+	 * @param world World.class instance.
+	 * @return false if there is a block above the player.
+	 */
+	public boolean isPlayerTopEmpty(int x, int y, int z, World world) {
+		for(int i = y; i < 256; i++) {
+			if(world.getBlockId(x, i, z) != 0) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**

@@ -1,22 +1,17 @@
-package tarun1998.thirstmod;
+package tarun1998.thirstmod.utils;
 
 import java.io.*;
 import java.net.*;
-import tarun1998.thirstmod.blocks.JMRecipes;
-import tarun1998.thirstmod.blocks.RCRecipes;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+
+import tarun1998.thirstmod.*;
+import tarun1998.thirstmod.blocks.*;
+import cpw.mods.fml.common.*;
 import net.minecraft.src.*;
 
 public class ThirstUtils {
 	public static final String NAME = "Thirst mod";
 	public static final String ID = "ThirstMod";
 	public static final String VERSION = "1.1.2";
-
-	private static String currentDir;
 
 	private static PlayerStatistics stats = new PlayerStatistics();
 	public static PlayerStatisticsMP statsMp = new PlayerStatisticsMP();
@@ -195,18 +190,6 @@ public class ThirstUtils {
 		RCRecipes.fill().addRecipe(id, timeToFill, return1);
 	}
 
-	/**
-	 * Setups the current directory as Minecraft.getMinecraftDir does not work
-	 * on the server side.
-	 * @param event
-	 */
-	public static void setupCurrentDir(FMLPreInitializationEvent event) {
-		File one = event.getSuggestedConfigurationFile();
-		File two = one.getParentFile(); //Config Folder
-		File three = two.getParentFile(); //Base Folder
-		currentDir = three.getAbsolutePath();
-	}
-
 	public static String getDir() {
 		File s = ObfuscationReflectionHelper.getPrivateValue(Loader.class, Loader.instance(), "minecraftDir");
 		return s.getAbsolutePath();
@@ -221,7 +204,7 @@ public class ThirstUtils {
 		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
 			System.out.println("[ThirstMod] " + obj);
 		} else {
-			FMLCommonHandler.instance().getMinecraftServerInstance().logInfo("[ThirstMod] "+ obj.toString());
+			FMLCommonHandler.instance().getMinecraftServerInstance().logInfoMessage("[ThirstMod] "+ obj.toString());
 		}
 	}
 }

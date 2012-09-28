@@ -1,7 +1,7 @@
 package tarun1998.thirstmod.reflection;
 
-import tarun1998.thirstmod.ThirstUtils;
 import net.minecraft.src.*;
+import tarun1998.thirstmod.utils.*;
 
 public class ItemSoupMod extends ItemFood
 {

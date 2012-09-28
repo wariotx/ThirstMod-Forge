@@ -5,6 +5,7 @@ package tarun1998.thirstmod;
 
 import java.io.File;
 import net.minecraftforge.common.Configuration;
+import tarun1998.thirstmod.utils.*;
 
 public class ConfigHelper {
 	private static Configuration config = new Configuration(new File(ThirstUtils.getDir(), "/mods/ThirstMod/" + "Config.txt"));

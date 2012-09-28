@@ -1,30 +1,14 @@
 package tarun1998.thirstmod.packets;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
+import java.io.*;
 
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.EntityPlayerMP;
-import net.minecraft.src.NBTTagCompound;
-import net.minecraft.src.NetHandler;
-import net.minecraft.src.NetLoginHandler;
-import net.minecraft.src.NetworkManager;
-import net.minecraft.src.Packet1Login;
-import net.minecraft.src.Packet250CustomPayload;
-
+import net.minecraft.src.*;
 import com.google.common.io.ByteArrayDataInput;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Side;
-import cpw.mods.fml.common.network.IConnectionHandler;
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.network.Player;
-
-import tarun1998.thirstmod.CommonProxy;
-import tarun1998.thirstmod.PacketHandler;
-import tarun1998.thirstmod.PlayerStatistics;
-import tarun1998.thirstmod.ThirstUtils;
+import cpw.mods.fml.common.*;
+import cpw.mods.fml.common.network.*;
+import tarun1998.thirstmod.*;
+import tarun1998.thirstmod.utils.*;
 
 public class PacketHandleSave extends PacketHandler implements IConnectionHandler {
 	

@@ -5,8 +5,7 @@ import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.server.FMLServerHandler;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.*;
-import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.event.world.WorldEvent;
+import tarun1998.thirstmod.utils.*;
 
 public class CommonProxy {
 	public boolean loadedMod = false;

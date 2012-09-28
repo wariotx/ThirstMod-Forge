@@ -1,8 +1,7 @@
 package tarun1998.thirstmod.reflection;
 
 import java.util.HashMap;
-
-import tarun1998.thirstmod.ThirstUtils;
+import tarun1998.thirstmod.utils.*;
 import net.minecraft.src.*;
 
 public class ItemMilkMod extends ItemBucketMilk
@@ -11,7 +10,7 @@ public class ItemMilkMod extends ItemBucketMilk
     {
         super(par1);
         this.setMaxStackSize(1);
-        this.setCreativeTab(CreativeTabs.tabMisc);
+        this.setTabToDisplayOn(CreativeTabs.tabMisc);
     }
 
     public ItemStack onFoodEaten(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
@@ -23,7 +22,7 @@ public class ItemMilkMod extends ItemBucketMilk
 
         if (!par2World.isRemote)
         {
-            par3EntityPlayer.curePotionEffects(par1ItemStack);
+            par3EntityPlayer.clearActivePotions();
         }
         
         if(!par2World.isRemote) {
