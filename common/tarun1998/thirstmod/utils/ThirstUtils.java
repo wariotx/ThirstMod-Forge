@@ -5,6 +5,7 @@ import java.net.*;
 
 import tarun1998.thirstmod.*;
 import tarun1998.thirstmod.blocks.*;
+import tarun1998.thirstmod.packets.PacketPlayerPos;
 import cpw.mods.fml.common.*;
 import net.minecraft.src.*;
 
@@ -12,7 +13,7 @@ public class ThirstUtils {
 	public static final String NAME = "Thirst mod";
 	public static final String ID = "ThirstMod";
 	public static final String VERSION = "1.1.2";
-
+	
 	private static PlayerStatistics stats = new PlayerStatistics();
 	public static PlayerStatisticsMP statsMp = new PlayerStatisticsMP();
 
@@ -53,7 +54,15 @@ public class ThirstUtils {
 	 * @return the current biome of the player.
 	 */
 	public static String getCurrentBiome(EntityPlayer entityplayer) {
-		return entityplayer.worldObj.getWorldChunkManager().getBiomeGenAt((int) entityplayer.posX, (int) entityplayer.posZ).biomeName;
+		if(FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+			if(PacketHandler.isRemote == true) {
+				return PacketPlayerPos.currentBiome;
+			} else {
+				return entityplayer.worldObj.getWorldChunkManager().getBiomeGenAt((int) entityplayer.posX, (int) entityplayer.posZ).biomeName;
+			}
+		} else {
+			return entityplayer.worldObj.getWorldChunkManager().getBiomeGenAt((int) entityplayer.posX, (int) entityplayer.posZ).biomeName;
+		}
 	}
 
 	/**
@@ -103,7 +112,7 @@ public class ThirstUtils {
 	}
 
 	public static void setModUnloaded() {
-		ThirstMod.INSTANCE.loadedMod = false;
+		ThirstMod.proxy.loadedMod = false;
 	}
 
 	/**

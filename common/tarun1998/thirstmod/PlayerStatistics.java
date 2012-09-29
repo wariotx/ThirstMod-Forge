@@ -88,7 +88,12 @@ public class PlayerStatistics {
 	 * @param player EntityPlayer Instance.
 	 */
 	public void exhaustPlayer(EntityPlayer player) {
-		int multiplier = ThirstUtils.getCurrentBiome(player) == "Desert" ? 2 : 1;
+		int multiplier;
+		if(FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+			 multiplier = ThirstUtils.getCurrentBiome(ClientProxy.getPlayerMp()) == "Desert" ? 2 : 1;
+		} else {
+			 multiplier = ThirstUtils.getCurrentBiome(player) == "Desert" ? 2 : 1;
+		}
 		int movement = ThirstUtils.getMovementStat(player);
 		float tweak = (float) ConfigHelper.thirstRate / 10;
 		if (player.isInsideOfMaterial(Material.water)) {
@@ -113,9 +118,7 @@ public class PlayerStatistics {
 			} else {
 				addExhaustion(0.004F * multiplier * tweak);
 			}
-		} else {
-			addExhaustion(0.160f);
-		}
+		} 
 	}
 	
 	/**
@@ -127,7 +130,8 @@ public class PlayerStatistics {
 		int y = (int)player.posY;
 		int z = (int)player.posZ;
 		
-		if(player.isSneaking() == true && isPlayerTopEmpty(x, y, z, player.worldObj) == true) {
+		if(player.isSneaking() == true && isPlayerTopEmpty(x, y, z, player.worldObj) == true && player.worldObj.getWorldInfo().isRaining() == true
+				&& player.isInWater() == false && player.isInsideOfMaterial(Material.water) == false) {
 			rainTimer++;
 			if(rainTimer > 40) {
 				this.addStats(1, 0.2f);

@@ -37,8 +37,6 @@ public class ThirstMod implements IGuiHandler {
 	@SidedProxy(clientSide = "tarun1998.thirstmod.ClientProxy", serverSide = "tarun1998.thirstmod.CommonProxy")
 	public static CommonProxy proxy;
 
-	private boolean changedGui = false;
-	public boolean loadedMod = false;
 	public static boolean modOff = false;
 
 	public static boolean shouldTellPlayer0 = false;
@@ -47,6 +45,7 @@ public class ThirstMod implements IGuiHandler {
 	//Networks
 	public PacketHandleSave savePacket = new PacketHandleSave();
 	public PacketPlaySound soundPacket = new PacketPlaySound();
+	public PacketPlayerPos posPacket = new  PacketPlayerPos();
 
 	/**
 	 * Called when the mod has been loaded.

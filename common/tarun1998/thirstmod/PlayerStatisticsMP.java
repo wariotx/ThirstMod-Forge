@@ -4,6 +4,7 @@ import java.util.*;
 
 import tarun1998.thirstmod.api.ThirstAPI;
 import tarun1998.thirstmod.packets.PacketPlaySound;
+import tarun1998.thirstmod.packets.PacketPlayerPos;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Side;
 import cpw.mods.fml.relauncher.ReflectionHelper;
@@ -77,6 +78,7 @@ public class PlayerStatisticsMP extends PlayerStatistics {
 				player.setSprinting(false);
 			}
 			exhaustPlayer(player);
+			PacketPlayerPos.sendPlayerPos(playerMp);
 		}
 	} 
 

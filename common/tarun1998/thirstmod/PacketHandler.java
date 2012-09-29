@@ -26,6 +26,7 @@ public class PacketHandler implements IPacketHandler {
 		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
 			if(id == 1) ThirstMod.INSTANCE.savePacket.readClient(dat, id);
 			if(id == 2) ThirstMod.INSTANCE.soundPacket.readClient(dat, (EntityPlayer) player, id);
+			if(id == 3) ThirstMod.INSTANCE.posPacket.readClient(dat, id);
 		}
 	}
 }
