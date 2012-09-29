@@ -89,7 +89,7 @@ public class PlayerStatistics {
 	 */
 	public void exhaustPlayer(EntityPlayer player) {
 		int multiplier;
-		if(FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+		if(PacketHandler.isRemote == false) {
 			 multiplier = ThirstUtils.getCurrentBiome(ClientProxy.getPlayerMp()) == "Desert" ? 2 : 1;
 		} else {
 			 multiplier = ThirstUtils.getCurrentBiome(player) == "Desert" ? 2 : 1;
