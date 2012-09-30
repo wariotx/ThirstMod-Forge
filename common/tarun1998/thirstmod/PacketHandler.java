@@ -15,6 +15,8 @@ import cpw.mods.fml.common.network.*;
 public class PacketHandler implements IPacketHandler {
 	public static Map playerInstance = new HashMap();
 	public static boolean isRemote = false;
+	// 0 = none, 1 = integrated, 2 = dedicated
+	public static int typeOfServer;
 
 	@Override
 	public void onPacketData(NetworkManager manager, Packet250CustomPayload packet, Player player) {

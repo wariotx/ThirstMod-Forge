@@ -45,8 +45,6 @@ public class ContentLoader {
 		contentDir.mkdirs();
 		
 		if (deletedBad == false) {
-			ThirstUtils.deleteFiles(ThirstUtils.getDir() + "/mods/ThirstMod/Content/", ".DS_Store");
-			ThirstUtils.deleteFiles(ThirstUtils.getDir() + "/mods/ThirstMod/Content/", ".ini");
 			deletedBad = true;
 		}
 
@@ -55,14 +53,14 @@ public class ContentLoader {
 			LinkedList<String> drinkList = new LinkedList<String>();
 			if (contentDir.listFiles().length > 0) {
 				for (int i = 0; i < contentDir.listFiles().length; i++) {
-					contentList.add(contentDir.listFiles()[i]);
+					if(contentDir.listFiles()[i].isFile() == false) {
+						contentList.add(contentDir.listFiles()[i]);
+					}
 				}
 			}
 
 			for (int i = 0; i < contentList.size(); i++) {
 				File files = contentList.get(i);
-				ThirstUtils.deleteFiles(files.getAbsolutePath(), ".DS_Store");
-				ThirstUtils.deleteFiles(files.getAbsolutePath(), ".ini");
 
 				for (int j = 0; j < files.listFiles().length; j++) {
 					File fileInDir = files.listFiles()[j];
