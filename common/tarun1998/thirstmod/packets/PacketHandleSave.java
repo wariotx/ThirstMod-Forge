@@ -130,6 +130,7 @@ public class PacketHandleSave extends PacketHandler implements IConnectionHandle
 		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) ThirstUtils.setDefaults();
 		ThirstUtils.setModUnloaded();
 		isRemote = false;
+		typeOfServer = 0;
 	}
 
 	@Override
@@ -140,10 +141,13 @@ public class PacketHandleSave extends PacketHandler implements IConnectionHandle
 	@Override
 	public void connectionOpened(NetHandler netClientHandler, String server, int port, NetworkManager manager) {
 		isRemote = true;
+		typeOfServer = 2;
 	}
 
 	@Override
 	public void connectionOpened(NetHandler netClientHandler, MinecraftServer server, NetworkManager manager) {
+		typeOfServer = 1;
+		isRemote = true; 
 	}
 
 	@Override
