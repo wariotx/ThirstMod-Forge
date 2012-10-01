@@ -1,0 +1,13 @@
+ID:670
+Name:Protein Mix
+ShortName:proMix
+TexturePos:4
+TextureFile:icons.png
+Replenish:4
+Saturation:1.3
+DBRecipe:344:0
+AlwaysDrinkable:false
+MaxStackSize:4
+PoisonChance:0.1
+Shiny:false
+FoodHeal:4:1.2

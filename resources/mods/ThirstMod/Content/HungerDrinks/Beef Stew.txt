@@ -1,0 +1,13 @@
+ID:683 
+Name:Beef Stew
+ShortName:beefStew
+TexturePos:0
+TextureFile:icons.png
+Replenish:5
+Saturation:1.2
+DBRecipe:364:0
+AlwaysDrinkable:false
+MaxStackSize:6
+PoisonChance:0
+Shiny:false
+FoodHeal:6:1.2
