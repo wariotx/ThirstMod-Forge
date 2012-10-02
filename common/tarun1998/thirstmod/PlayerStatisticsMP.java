@@ -95,6 +95,7 @@ public class PlayerStatisticsMP extends PlayerStatistics {
 		if(player.isSneaking() == true && isPlayerTopEmpty(x, y, z, player.worldObj) == true && player.worldObj.getWorldInfo().isRaining() == true
 				&& player.isInWater() == false && player.isInsideOfMaterial(Material.water) == false) {
 			rainTimer++;
+			/*2 seconds!*/
 			if(rainTimer > 40) {
 				this.addStats(1, 0.2f);
 				PacketPlaySound.sendPlaySound(player);
@@ -133,9 +134,7 @@ public class PlayerStatisticsMP extends PlayerStatistics {
 			} else {
 				addExhaustion(0.004F * multiplier * tweak);
 			}
-		} else {
-			addExhaustion(0.160f);
-		}
+		} 
 	}
 
 	/**

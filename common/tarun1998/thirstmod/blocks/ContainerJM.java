@@ -69,7 +69,6 @@ public class ContainerJM extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(int par1) {
-		System.out.println("Hi12");
 		ItemStack var2 = null;
 		Slot var3 = (Slot) this.inventorySlots.get(par1);
 
@@ -120,8 +119,6 @@ public class ContainerJM extends Container {
 
 			var3.onPickupFromSlot(var4);
 		}
-
-		System.out.println(par1);
 		return var2;
 	}
 
