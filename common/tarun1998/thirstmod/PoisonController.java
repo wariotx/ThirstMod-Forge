@@ -52,7 +52,7 @@ public class PoisonController {
 			if(shouldPoison() == true) {
 				MinecraftForge.EVENT_BUS.post(new ThirstAPI.OnPlayerPoisoned(360 - poisonTimer));
 				poisonTimer++;
-				ThirstUtils.getStats().addExhaustion(0.052777777777778f);
+				ThirstUtils.getUtilsFor(ThirstUtils.getPlayerName()).addExhaustion(0.052777777777778f);
 				isPoisoned = true;
 				if (poisonTimer > 360) {
 					poisonTimer = 0;

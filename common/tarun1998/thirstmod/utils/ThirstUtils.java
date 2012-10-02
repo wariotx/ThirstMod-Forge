@@ -6,7 +6,9 @@ import java.net.*;
 import tarun1998.thirstmod.*;
 import tarun1998.thirstmod.blocks.*;
 import tarun1998.thirstmod.packets.PacketPlayerPos;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.*;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.*;
 
 public class ThirstUtils {
@@ -14,7 +16,7 @@ public class ThirstUtils {
 	public static final String ID = "ThirstMod";
 	public static final String VERSION = "1.1.2";
 	
-	private static PlayerStatistics stats = new PlayerStatistics();
+	private PlayerStatistics stats = new PlayerStatistics();
 	public static PlayerStatisticsMP statsMp = new PlayerStatisticsMP();
 
 	/**
@@ -29,10 +31,10 @@ public class ThirstUtils {
 	 * Gets the PlayerStatistics.class instance.
 	 * @return the PlayerStatistics.class instance.
 	 */
-	public static PlayerStatistics getStats() {
+	public PlayerStatistics getStats() {
 		return stats;
 	}
-
+	
 	/**
 	 * Gets the players current speed in blocks per tick.
 	 * @param entityplayer instance.
@@ -66,42 +68,9 @@ public class ThirstUtils {
 	}
 
 	/**
-	 * Writes all the data in PlayerStatistics to the NBT.
-	 * @param nbt Player NBT.
-	 */
-	public static void writeNbt(NBTTagCompound nbt) {
-		nbt.setInteger("tmLevel", getStats().level);
-		nbt.setFloat("tmExhaustion", getStats().exhaustion);
-		nbt.setFloat("tmSaturation", getStats().saturation);
-		nbt.setInteger("tmTimer", getStats().healhurtTimer);
-		nbt.setInteger("tmTimer2", getStats().drinkTimer);
-		nbt.setBoolean("tmPoisoned", PoisonController.isPoisoned());
-		nbt.setInteger("tmPoisonTime", PoisonController.poisonTimeRemain());
-	}
-
-	/**
-	 * Reads the data from the nbt and applies it to the data in
-	 * PlayerStatistics.class.
-	 * @param nbt Player NBT
-	 */
-	public static void readNbt(NBTTagCompound nbt) {
-		if (nbt.hasKey("tmLevel")) {
-			getStats().level = nbt.getInteger("tmLevel");
-			getStats().exhaustion = nbt.getFloat("tmExhaustion");
-			getStats().saturation = nbt.getFloat("tmSaturation");
-			getStats().healhurtTimer = nbt.getInteger("tmTimer");
-			getStats().drinkTimer = nbt.getInteger("tmTimer2");
-			PoisonController.setPoisonedTo(nbt.getBoolean("tmPoisoned"));
-			PoisonController.setPoisonTime(nbt.getInteger("tmPoisonTime"));
-		} else {
-			setDefaults();
-		}
-	}
-
-	/**
 	 * Sets all the data in PlayerStatistics to their original values.
 	 */
-	public static void setDefaults() {
+	public void setDefaults() {
 		getStats().level = 20;
 		getStats().exhaustion = 0f;
 		getStats().saturation = 5f;
@@ -113,13 +82,14 @@ public class ThirstUtils {
 
 	public static void setModUnloaded() {
 		ThirstMod.proxy.loadedMod = false;
+		PacketHandler.isRemote = false;
 	}
 
 	/**
 	 * Gets the Thirst Level from PlayerStatistics.class
 	 * @return the level.
 	 */
-	public static int getLevel() {
+	public int getLevel() {
 		return getStats().level;
 	}
 
@@ -127,7 +97,7 @@ public class ThirstUtils {
 	 * Gets the Saturation Level from PlayerStatistics.class
 	 * @return the saturation value.
 	 */
-	public static float getSaturation() {
+	public float getSaturation() {
 		return getStats().saturation;
 	}
 
@@ -135,7 +105,7 @@ public class ThirstUtils {
 	 * Gets the Exhaustion Level from PlayerStatistics.class
 	 * @return the exhaustion level.
 	 */
-	public static float getExhaustion() {
+	public float getExhaustion() {
 		return getStats().exhaustion;
 	}
 
@@ -145,6 +115,31 @@ public class ThirstUtils {
 	 */
 	public void addExhaustion(float f) {
 		getStats().addExhaustion(f);
+	}
+	
+	public static ThirstUtils getUtilsFor(String playerUser) {
+		return (ThirstUtils) PacketHandler.playerInstance.get(playerUser);
+	}
+	
+	public static String getPlayerName() {
+		return ClientProxy.getPlayer().username;
+	}
+	
+	public static void addNewPlayer(String username, ThirstUtils utils) {
+		PacketHandler.playerInstance.put(username, utils);
+	}
+	
+	public static boolean isClientHost() {
+		if(FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+			String name = ClientProxy.getPlayer().username;
+			if(PacketHandler.isRemote && PacketHandler.typeOfServer == 1) {
+				MinecraftServer server = FMLClientHandler.instance().getServer();
+				if(server.getServerOwner() == name) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**

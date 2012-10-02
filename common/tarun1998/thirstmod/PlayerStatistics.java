@@ -118,6 +118,7 @@ public class PlayerStatistics {
 				addExhaustion(0.04F * multiplier * tweak);
 			} else {
 				addExhaustion(0.004F * multiplier * tweak);
+				
 			}
 		} 
 	}

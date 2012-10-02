@@ -281,7 +281,7 @@ public class GuiThirst extends GuiIngame {
 					}
 				}
 				
-				PlayerStatistics thirststats = ThirstUtils.getStats();
+				PlayerStatistics thirststats = ThirstUtils.getUtilsFor(ThirstUtils.getPlayerName()).getStats();
 				int thirstLvl = thirststats.level;
 				for (int i13 = 0; i13 < 10; i13++) {
 					if(ConfigHelper.oldTextures == true) {

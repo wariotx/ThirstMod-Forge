@@ -18,9 +18,11 @@ import net.minecraftforge.event.*;
 import net.minecraftforge.event.world.WorldEvent;
 
 public class ClientProxy extends CommonProxy {
-	public boolean loadedMod = false;
-	private boolean changedGui = false;
+	public boolean loadedMod;
+	private boolean changedGui;
 	private int intDat;
+	private boolean ranGame;
+	private String sessionPlayer; // Can only be used once the player has been in a game.
 
 	@Override
 	public void onLoad() {
@@ -53,56 +55,70 @@ public class ClientProxy extends CommonProxy {
 						changedGui = true;
 					}
 
-					new ThirstUtils();
-					onLoadNBT();
+					sessionPlayer = getPlayer().username;
+					ThirstUtils.addNewPlayer(getPlayer().username, new ThirstUtils());
 					loadedMod = true;
 				}
+				ranGame = true;
 			}
-			ThirstUtils.getStats().onTick(getPlayer());
+			ThirstUtils.getUtilsFor(getPlayer().username).getStats().onTick(getPlayer());
 
 			intDat++;
 			if (PacketHandler.isRemote == true & intDat > 20) {
-				PacketHandleSave.sendSaveData(getPlayer().username, ThirstUtils.getStats());
+				PacketHandleSave.sendSaveData(getPlayer().username, ThirstUtils.getUtilsFor(getPlayer().username).getStats());
 			}
 		}
 	}
 
 	public void onTickInGUI(GuiScreen gui) {
 		if (gui instanceof GuiMainMenu) {
-			ThirstUtils.setDefaults();
+			if(ranGame == true) {
+				ThirstUtils.getUtilsFor(sessionPlayer).setDefaults();
+			}
 			loadedMod = false;
 		}
 		if (gui instanceof GuiGameOver) {
-			ThirstUtils.setDefaults();
+			ThirstUtils.getUtilsFor(sessionPlayer).setDefaults();
 		}
 	}
 
-	public void onLoadNBT() {
-		try {
-			MinecraftServer minecraftServer = FMLClientHandler.instance().getServer();
-			String allNames[] = minecraftServer.getAllUsernames().clone();
-			for (int i = 0; i < allNames.length; i++) {
-				EntityPlayerMP player = minecraftServer.getConfigurationManager().getPlayerForUsername(allNames[i]);
-				ThirstUtils.readNbt(player.getEntityData());
-			}
-		} catch (Exception e) {
-			/* This shouldn't be called at all! It is impossible */
+	/**
+	 * Writes all the data in PlayerStatistics to the NBT.
+	 * @param nbt Player NBT.
+	 */
+	public static void writeNbt(EntityPlayer player, NBTTagCompound nbt) {
+		ThirstUtils utils = (ThirstUtils) PacketHandler.playerInstance.get(player.username);
+		PlayerStatistics stats = utils.getStats();
+		nbt.setInteger("tmLevel", stats.level);
+		nbt.setFloat("tmExhaustion", stats.exhaustion);
+		nbt.setFloat("tmSaturation", stats.saturation);
+		nbt.setInteger("tmTimer", stats.healhurtTimer);
+		nbt.setInteger("tmTimer2", stats.drinkTimer);
+		nbt.setBoolean("tmPoisoned", PoisonController.isPoisoned());
+		nbt.setInteger("tmPoisonTime", PoisonController.poisonTimeRemain());
+	}
+	
+	/**
+	 * Reads the data from the nbt and applies it to the data in
+	 * PlayerStatistics.class.
+	 * @param nbt Player NBT
+	 */
+	public static void readNbt(EntityPlayer player, NBTTagCompound nbt) {
+		ThirstUtils utils = (ThirstUtils) PacketHandler.playerInstance.get(player.username);
+		PlayerStatistics stats = utils.getStats();
+		if (nbt.hasKey("tmLevel")) {
+			stats.level = nbt.getInteger("tmLevel");
+			stats.exhaustion = nbt.getFloat("tmExhaustion");
+			stats.saturation = nbt.getFloat("tmSaturation");
+			stats.healhurtTimer = nbt.getInteger("tmTimer");
+			stats.drinkTimer = nbt.getInteger("tmTimer2");
+			PoisonController.setPoisonedTo(nbt.getBoolean("tmPoisoned"));
+			PoisonController.setPoisonTime(nbt.getInteger("tmPoisonTime"));
+		} else {
+			utils.setDefaults();
 		}
 	}
 
-	@ForgeSubscribe
-	public void onSave(WorldEvent.Save save) {
-		try {
-			MinecraftServer minecraft = FMLClientHandler.instance().getServer();
-			String allNames[] = minecraft.getAllUsernames().clone();
-			for (int i = 0; i < allNames.length; i++) {
-				EntityPlayerMP player = minecraft.getConfigurationManager().getPlayerForUsername(allNames[i]);
-				ThirstUtils.writeNbt(player.getEntityData());
-			}
-		} catch (Exception e) {
-			/* This shouldn't be called at all! It is impossible */
-		}
-	}
 
 	/**
 	 * Gets an EntityPlayer.class instance.

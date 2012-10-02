@@ -76,7 +76,7 @@ public class ItemPotionMod extends ItemPotion
         }
         
         if(!par2World.isRemote) {
-    		ThirstUtils.getStats().addStats(5, 1.2f);
+    		ThirstUtils.getUtilsFor(par3EntityPlayer.username).getStats().addStats(5, 1.2f);
     		if(par1ItemStack.getItemDamage() == 0) {
     			Random rand = new Random();
     			if(rand.nextFloat() < 0.3f) {

@@ -5,6 +5,8 @@ import java.io.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.src.*;
 import com.google.common.io.ByteArrayDataInput;
+
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.network.*;
 import tarun1998.thirstmod.*;
@@ -19,12 +21,18 @@ public class PacketHandleSave extends PacketHandler implements IConnectionHandle
 		float saturation = dat.readFloat();
 		float exhaustion = dat.readFloat();
 		String playerName = dat.readLine();
-
-		ThirstUtils.getStats().level = level;
-		ThirstUtils.getStats().healhurtTimer = healTimer;
-		ThirstUtils.getStats().drinkTimer = drinkTimer;
-		ThirstUtils.getStats().saturation = saturation;
-		ThirstUtils.getStats().exhaustion = exhaustion;
+		
+		if(!playerInstance.containsKey(playerName)) {
+			ThirstUtils.addNewPlayer(playerName, new ThirstUtils());
+		}
+		
+		if(ClientProxy.getPlayer().username.equals(playerName)) {
+			ThirstUtils.getUtilsFor(playerName).getStats().level = level;
+			ThirstUtils.getUtilsFor(playerName).getStats().healhurtTimer = healTimer;
+			ThirstUtils.getUtilsFor(playerName).getStats().drinkTimer = drinkTimer;
+			ThirstUtils.getUtilsFor(playerName).getStats().saturation = saturation;
+			ThirstUtils.getUtilsFor(playerName).getStats().exhaustion = exhaustion;
+		}
 	}
 	
 	public void readServer(ByteArrayDataInput dat, int id) {
@@ -37,11 +45,13 @@ public class PacketHandleSave extends PacketHandler implements IConnectionHandle
 		
 		writeData(level, healTimer, drinkTimer, saturation, exhaustion, playerName);
 		
-		CommonProxy.getStatsMP().level = level;
-		CommonProxy.getStatsMP().healhurtTimer = healTimer;
-		CommonProxy.getStatsMP().drinkTimer = drinkTimer;
-		CommonProxy.getStatsMP().saturation = saturation;
-		CommonProxy.getStatsMP().exhaustion = exhaustion;
+		if(typeOfServer == 2) {
+			CommonProxy.getStatsMP().level = level;
+			CommonProxy.getStatsMP().healhurtTimer = healTimer;
+			CommonProxy.getStatsMP().drinkTimer = drinkTimer;
+			CommonProxy.getStatsMP().saturation = saturation;
+			CommonProxy.getStatsMP().exhaustion = exhaustion;
+		}
 	}
 	
 	/**
@@ -68,18 +78,18 @@ public class PacketHandleSave extends PacketHandler implements IConnectionHandle
 	 * @param s player username
 	 */
 	public void readData(String s, ThirstUtils utils) {
-		EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(s);
+		EntityPlayerMP player = FMLClientHandler.instance().getServer().getConfigurationManager().getPlayerForUsername(s);
 		NBTTagCompound nbt = player.getEntityData();
 		if (nbt.hasKey("tmLevel")) {
-			utils.getStats().level = nbt.getInteger("tmLevel");
-			utils.getStats().exhaustion = nbt.getFloat("tmExhaustion");
-			utils.getStats().saturation = nbt.getFloat("tmSaturation");
-			utils.getStats().healhurtTimer = nbt.getInteger("tmTimer");
-			utils.getStats().drinkTimer = nbt.getInteger("tmTimer2");
+			ThirstUtils.getUtilsFor(s).getStats().level = nbt.getInteger("tmLevel");
+			ThirstUtils.getUtilsFor(s).getStats().exhaustion = nbt.getFloat("tmExhaustion");
+			ThirstUtils.getUtilsFor(s).getStats().saturation = nbt.getFloat("tmSaturation");
+			ThirstUtils.getUtilsFor(s).getStats().healhurtTimer = nbt.getInteger("tmTimer");
+			ThirstUtils.getUtilsFor(s).getStats().drinkTimer = nbt.getInteger("tmTimer2");
 		} else {
 			utils.setDefaults();
 		}
-		sendSaveData(s, utils.getStats());
+		sendSaveData(s, ThirstUtils.getUtilsFor(s).getStats());
 	}
 
 	/**
@@ -108,8 +118,8 @@ public class PacketHandleSave extends PacketHandler implements IConnectionHandle
 		pkt.data = bos.toByteArray();
 		pkt.length = bos.size();
 		pkt.isChunkDataPacket = false;
-		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) PacketDispatcher.sendPacketToServer(pkt);
-		if (FMLCommonHandler.instance().getSide() == Side.SERVER) {
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) PacketDispatcher.sendPacketToServer(pkt);
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(s);
 			PacketDispatcher.sendPacketToPlayer(pkt, (Player) player);
 		}
@@ -117,20 +127,16 @@ public class PacketHandleSave extends PacketHandler implements IConnectionHandle
 	
 	@Override
 	public void playerLoggedIn(Player other, NetHandler netHandler, NetworkManager manager) {
-		EntityPlayer player = netHandler.getPlayer();
-		if (FMLCommonHandler.instance().getSide() == Side.SERVER) {
+		EntityPlayer player = (EntityPlayer)other;
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			playerInstance.put(player.username, new ThirstUtils());
 			ThirstUtils utils = (ThirstUtils) playerInstance.get(player.username);
-			readData(player.username, (ThirstUtils) playerInstance.get(player.username));
+			readData(player.username, utils);
 		}
 	}
 	
 	@Override
 	public void connectionClosed(NetworkManager manager) {
-		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) ThirstUtils.setDefaults();
-		ThirstUtils.setModUnloaded();
-		isRemote = false;
-		typeOfServer = 0;
 	}
 
 	@Override

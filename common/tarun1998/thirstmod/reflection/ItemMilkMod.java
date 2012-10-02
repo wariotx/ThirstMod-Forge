@@ -26,7 +26,7 @@ public class ItemMilkMod extends ItemBucketMilk
         }
         
         if(!par2World.isRemote) {
-    		ThirstUtils.getStats().addStats(10, 4f);
+    		ThirstUtils.getUtilsFor(par3EntityPlayer.username).getStats().addStats(10, 4f);
     	}
 
         return par1ItemStack.stackSize <= 0 ? new ItemStack(Item.bucketEmpty) : par1ItemStack;

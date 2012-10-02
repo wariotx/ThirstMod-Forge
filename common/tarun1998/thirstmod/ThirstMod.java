@@ -32,7 +32,7 @@ public class ThirstMod implements IGuiHandler {
 	public static int jmFront = 1;
 	public static int rcTop = 0;
 
-	@Instance
+	@Instance(ThirstUtils.ID)
 	public static ThirstMod INSTANCE;
 
 	@SidedProxy(clientSide = "tarun1998.thirstmod.ClientProxy", serverSide = "tarun1998.thirstmod.CommonProxy")
@@ -106,7 +106,7 @@ public class ThirstMod implements IGuiHandler {
 	@ForgeSubscribe
 	public void onAttack(AttackEntityEvent attack) {
 		if(!attack.entity.worldObj.isRemote) {
-			ThirstUtils.getStats().addExhaustion(0.6f);
+			ThirstUtils.getUtilsFor(attack.entityPlayer.username).addExhaustion(0.6f);
 		}
 	}
 
@@ -118,7 +118,8 @@ public class ThirstMod implements IGuiHandler {
 	public void onHurt(LivingHurtEvent hurt) {
 		if(!hurt.entity.worldObj.isRemote) {
 			if (hurt.entityLiving instanceof EntityPlayer) {
-				ThirstUtils.getStats().addExhaustion(0.6f);
+				EntityPlayer player = (EntityPlayer)hurt.entityLiving;
+				ThirstUtils.getUtilsFor(player.username).addExhaustion(0.6f);
 			}
 		}
 	}

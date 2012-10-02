@@ -40,7 +40,7 @@ public class Drink extends Item {
 
 	public ItemStack onFoodEaten(ItemStack itemstack, World world, EntityPlayer entityplayer) {
 		if(!world.isRemote) {
-			ThirstUtils.getStats().addStats(thirstReplenish, saturationReplenish);
+			ThirstUtils.getUtilsFor(entityplayer.username).getStats().addStats(thirstReplenish, saturationReplenish);
 			if (poisonChance > 0 && ConfigHelper.poisonOn == true) {
 				Random rand = new Random();
 				if(rand.nextFloat() < poisonChance) {
@@ -154,7 +154,7 @@ public class Drink extends Item {
 	 * @return
 	 */
 	public boolean canDrink() {
-		if (ThirstUtils.getStats().level < 20) {
+		if (ThirstUtils.getUtilsFor(ThirstUtils.getPlayerName()).getStats().level < 20) {
 			return true;
 		} 
 		return false;

@@ -22,10 +22,10 @@ public class PacketHandler implements IPacketHandler {
 	public void onPacketData(NetworkManager manager, Packet250CustomPayload packet, Player player) {
 		ByteArrayDataInput dat = ByteStreams.newDataInput(packet.data);
 		int id = dat.readInt();
-		if (FMLCommonHandler.instance().getSide() == Side.SERVER) {
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			if(id == 1) ThirstMod.INSTANCE.savePacket.readServer(dat, id);
 		}
-		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+		if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 			if(id == 1) ThirstMod.INSTANCE.savePacket.readClient(dat, id);
 			if(id == 2) ThirstMod.INSTANCE.soundPacket.readClient(dat, (EntityPlayer) player, id);
 			if(id == 3) ThirstMod.INSTANCE.posPacket.readClient(dat, id);
