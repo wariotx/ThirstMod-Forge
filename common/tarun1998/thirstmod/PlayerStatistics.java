@@ -7,6 +7,7 @@ import cpw.mods.fml.common.*;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.src.*;
 import net.minecraftforge.common.MinecraftForge;
+import tarun1998.thirstmod.packets.PacketPlaySound;
 import tarun1998.thirstmod.utils.*;
 
 public class PlayerStatistics {
@@ -69,7 +70,7 @@ public class PlayerStatistics {
 						PoisonController.startPoison();
 					}
 				}
-				MinecraftForge.EVENT_BUS.post(new ThirstAPI.OnPlayerDrinkWaterSource(player));
+				MinecraftForge.EVENT_BUS.post(new ThirstAPI.OnPlayerDrinkWater(player));
 				drinkTimer = 0;
 			}
 		}
@@ -135,6 +136,9 @@ public class PlayerStatistics {
 			rainTimer++;
 			if(rainTimer > 40) {
 				this.addStats(1, 0.2f);
+				if(PacketHandler.isRemote == false) {
+					ClientProxy.getPlayerMp().worldObj.playSoundAtEntity(player, "random.drink", 0.5F, player.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+				} 
 				rainTimer = 0;
 			}
 		}

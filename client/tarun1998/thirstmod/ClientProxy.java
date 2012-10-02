@@ -86,6 +86,7 @@ public class ClientProxy extends CommonProxy {
 				ThirstUtils.readNbt(player.getEntityData());
 			}
 		} catch (Exception e) {
+			/* This shouldn't be called at all! It is impossible */
 		}
 	}
 
@@ -99,6 +100,7 @@ public class ClientProxy extends CommonProxy {
 				ThirstUtils.writeNbt(player.getEntityData());
 			}
 		} catch (Exception e) {
+			/* This shouldn't be called at all! It is impossible */
 		}
 	}
 
@@ -111,7 +113,7 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	/**
-	 * Gets an EntityPlayerMP.class instance.
+	 * Gets an EntityPlayerMP.class instance. Only works on client and not connected to another server.
 	 * @return EntityPlayerMP.class instance.
 	 */
 	public static EntityPlayerMP getPlayerMp() {

@@ -4,6 +4,7 @@ import java.util.Random;
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
+import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.*;
 import cpw.mods.fml.common.registry.*;
@@ -82,6 +83,10 @@ public class ThirstMod implements IGuiHandler {
 		replaceItems();
 
 		proxy.onLoad();
+	}
+	
+	@PostInit
+	public void modsLoaded(FMLPostInitializationEvent event) {
 	}
 
 	/**

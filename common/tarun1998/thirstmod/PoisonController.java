@@ -49,14 +49,16 @@ public class PoisonController {
 	 */
 	private void poisonPlayer() {
 		if (ConfigHelper.poisonOn == true) {
-			MinecraftForge.EVENT_BUS.post(new ThirstAPI.OnPlayerPoisoned(360 - poisonTimer));
-			poisonTimer++;
-			ThirstUtils.getStats().addExhaustion(0.052777777777778f);
-			isPoisoned = true;
-			if (poisonTimer > 360) {
-				poisonTimer = 0;
-				isPoisoned = false;
-				poisonPlayer = false;
+			if(shouldPoison() == true) {
+				MinecraftForge.EVENT_BUS.post(new ThirstAPI.OnPlayerPoisoned(360 - poisonTimer));
+				poisonTimer++;
+				ThirstUtils.getStats().addExhaustion(0.052777777777778f);
+				isPoisoned = true;
+				if (poisonTimer > 360) {
+					poisonTimer = 0;
+					isPoisoned = false;
+					poisonPlayer = false;
+				}
 			}
 		}
 	}

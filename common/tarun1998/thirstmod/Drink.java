@@ -153,13 +153,18 @@ public class Drink extends Item {
 	 * Can the person drink.
 	 * @return
 	 */
-	public static boolean canDrink() {
+	public boolean canDrink() {
 		if (ThirstUtils.getStats().level < 20) {
 			return true;
 		} 
 		return false;
 	}
 
+	/**
+	 * Sets the item that is returned.
+	 * @param item Item that is returned after the drink is drunk.
+	 * @return this.
+	 */
 	public Item setReturn(Item item) {
 		returnItem = item;
 		return this;
@@ -180,6 +185,10 @@ public class Drink extends Item {
 		return texture;
 	}
 	
+	/**
+	 * Gets the return item for this drink.
+	 * @return the item that will be given after this drink is drunk.
+	 */
 	public Item getReturn() {
 		return returnItem;
 	}

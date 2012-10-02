@@ -69,6 +69,7 @@ public class ContainerJM extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(int par1) {
+		System.out.println("Hi12");
 		ItemStack var2 = null;
 		Slot var3 = (Slot) this.inventorySlots.get(par1);
 
@@ -91,6 +92,11 @@ public class ContainerJM extends Container {
 					if (!this.mergeItemStack(var4, 1, 2, false)) {
 						return null;
 					}
+				} else if (var4.getItem().shiftedIndex == this.furnace.getItemMake(var4)) {
+					if (!this.mergeItemStack(var4, 3, 2, false)) {
+						return null;
+					}
+					
 				} else if (par1 >= 4 && par1 < 30) {
 					if (!this.mergeItemStack(var4, 30, 39, false)) {
 						return null;

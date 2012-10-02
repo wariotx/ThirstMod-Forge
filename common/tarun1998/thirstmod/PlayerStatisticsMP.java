@@ -70,7 +70,7 @@ public class PlayerStatisticsMP extends PlayerStatistics {
 							PoisonController.startPoison();
 						}
 					}
-					MinecraftForge.EVENT_BUS.post(new ThirstAPI.OnPlayerDrinkWaterSource(player));
+					MinecraftForge.EVENT_BUS.post(new ThirstAPI.OnPlayerDrinkWater(player));
 					drinkTimer = 0;
 				}
 			}
@@ -78,9 +78,30 @@ public class PlayerStatisticsMP extends PlayerStatistics {
 				player.setSprinting(false);
 			}
 			exhaustPlayer(player);
+			drinkFromRain(player);
 			PacketPlayerPos.sendPlayerPos(playerMp);
 		}
 	} 
+	
+	/**
+	 * Does whether the player is attempting to drink from rain.
+	 * @param player
+	 */
+	public void drinkFromRain(EntityPlayer player) {
+		int x = (int)player.posX;
+		int y = (int)player.posY;
+		int z = (int)player.posZ;
+		
+		if(player.isSneaking() == true && isPlayerTopEmpty(x, y, z, player.worldObj) == true && player.worldObj.getWorldInfo().isRaining() == true
+				&& player.isInWater() == false && player.isInsideOfMaterial(Material.water) == false) {
+			rainTimer++;
+			if(rainTimer > 40) {
+				this.addStats(1, 0.2f);
+				PacketPlaySound.sendPlaySound(player);
+				rainTimer = 0;
+			}
+		}
+	}
 
 	/**
 	 * Exhausts the player.
