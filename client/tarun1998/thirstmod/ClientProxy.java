@@ -73,6 +73,9 @@ public class ClientProxy extends CommonProxy {
 				for(int i = 0; i < usernames.length; i++) {
 					MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 					EntityPlayerMP player = server.getConfigurationManager().getPlayerForUsername(usernames[i]);
+					if(!PacketHandler.playerInstance.containsKey(player.username)) {
+						ThirstUtils.addNewPlayer(player.username, new ThirstUtils());
+					}
 					this.getStatsMP(usernames[i]).onTick(player, player);
 				}
 			}
