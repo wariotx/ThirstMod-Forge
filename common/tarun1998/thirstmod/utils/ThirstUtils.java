@@ -14,10 +14,10 @@ import net.minecraft.src.*;
 public class ThirstUtils {
 	public static final String NAME = "Thirst mod";
 	public static final String ID = "ThirstMod";
-	public static final String VERSION = "1.1.2";
+	public static final String VERSION = "1.2.0";
 	
 	private PlayerStatistics stats = new PlayerStatistics();
-	public static PlayerStatisticsMP statsMp = new PlayerStatisticsMP();
+	public PlayerStatisticsMP statsMp = new PlayerStatisticsMP();
 
 	/**
 	 * Gets the mod version.
@@ -33,6 +33,19 @@ public class ThirstUtils {
 	 */
 	public PlayerStatistics getStats() {
 		return stats;
+	}
+	
+	
+	public static ThirstUtils getUtilsFor(String playerUser) {
+		return (ThirstUtils) PacketHandler.playerInstance.get(playerUser);
+	}
+	
+	public static String getPlayerName() {
+		return ClientProxy.getPlayer().username;
+	}
+	
+	public static void addNewPlayer(String username, ThirstUtils utils) {
+		PacketHandler.playerInstance.put(username, utils);
 	}
 	
 	/**
@@ -76,8 +89,8 @@ public class ThirstUtils {
 		getStats().saturation = 5f;
 		getStats().healhurtTimer = 0;
 		getStats().drinkTimer = 0;
-		PoisonController.setPoisonedTo(false);
-		PoisonController.setPoisonTime(0);
+		getStats().getPoison().setPoisonedTo(false);
+		getStats().getPoison().setPoisonTime(0);
 	}
 
 	public static void setModUnloaded() {
@@ -117,24 +130,12 @@ public class ThirstUtils {
 		getStats().addExhaustion(f);
 	}
 	
-	public static ThirstUtils getUtilsFor(String playerUser) {
-		return (ThirstUtils) PacketHandler.playerInstance.get(playerUser);
-	}
-	
-	public static String getPlayerName() {
-		return ClientProxy.getPlayer().username;
-	}
-	
-	public static void addNewPlayer(String username, ThirstUtils utils) {
-		PacketHandler.playerInstance.put(username, utils);
-	}
-	
 	public static boolean isClientHost() {
 		if(FMLCommonHandler.instance().getSide() == Side.CLIENT) {
 			String name = ClientProxy.getPlayer().username;
 			if(PacketHandler.isRemote && PacketHandler.typeOfServer == 1) {
 				MinecraftServer server = FMLClientHandler.instance().getServer();
-				if(server.getServerOwner() == name) {
+				if(server.getServerOwner().equals(name)) {
 					return true;
 				}
 			}

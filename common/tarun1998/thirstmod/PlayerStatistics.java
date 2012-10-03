@@ -67,7 +67,7 @@ public class PlayerStatistics {
 				}
 				if (poisonCon.getBiomesList().containsKey(ThirstUtils.getCurrentBiome(player)) && ConfigHelper.poisonOn == true) {
 					if (random.nextFloat() < poisonCon.getBiomePoison(ThirstUtils.getCurrentBiome(player))) {
-						PoisonController.startPoison();
+						getPoison().startPoison();
 					}
 				}
 				MinecraftForge.EVENT_BUS.post(new ThirstAPI.OnPlayerDrinkWater(player));
@@ -160,6 +160,10 @@ public class PlayerStatistics {
 			}
 		}
 		return true;
+	}
+	
+	public PoisonController getPoison() {
+		return poisonCon;
 	}
 
 	/**

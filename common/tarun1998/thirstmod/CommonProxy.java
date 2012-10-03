@@ -20,12 +20,12 @@ public class CommonProxy {
 		for (int i = 0; i < names.length; i++) {
 			EntityPlayerMP player = FMLServerHandler.instance().getServer().getConfigurationManager().getPlayerForUsername(names[i]);
 			if (player.capabilities.isCreativeMode == false) {
-				getStatsMP().onTick(player, player);
+				getStatsMP(names[i]).onTick(player, player);
 			}
 		}
 	}
 	
-	public static PlayerStatisticsMP getStatsMP() {
-		return ThirstUtils.statsMp;
+	public static PlayerStatisticsMP getStatsMP(String username) {
+		return ThirstUtils.getUtilsFor(username).statsMp;
 	}
 }

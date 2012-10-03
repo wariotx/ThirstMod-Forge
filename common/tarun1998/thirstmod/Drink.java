@@ -44,7 +44,7 @@ public class Drink extends Item {
 			if (poisonChance > 0 && ConfigHelper.poisonOn == true) {
 				Random rand = new Random();
 				if(rand.nextFloat() < poisonChance) {
-					PoisonController.startPoison();
+					ThirstUtils.getUtilsFor(entityplayer.username).getStats().getPoison().startPoison();
 				}
 			}
 		

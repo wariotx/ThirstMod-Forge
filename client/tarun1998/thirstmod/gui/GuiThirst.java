@@ -307,7 +307,7 @@ public class GuiThirst extends GuiIngame {
 
 						drawTexturedModalRect(width, height, textureXStart, textureYStart1, textureEndX, textureEndY);
 
-						if (PoisonController.isPoisoned() == false) {
+						if (thirststats.getPoison().isPoisoned() == false) {
 							if (i13 * 2 + 1 < thirstLvl) {
 								drawTexturedModalRect(width, height, textureXStart + 9, textureYStart, textureEndX, textureEndY);
 							}
@@ -315,7 +315,7 @@ public class GuiThirst extends GuiIngame {
 							if (i13 * 2 + 1 == thirstLvl) {
 								drawTexturedModalRect(width, height, textureXStart + 18, textureYStart, textureEndX, textureEndY);
 							}
-						} else if (PoisonController.isPoisoned() == true) {
+						} else if (thirststats.getPoison().isPoisoned() == true) {
 							if (i13 * 2 + 1 < thirstLvl) {
 								drawTexturedModalRect(width, height, textureXStart + 27, textureYStart, textureEndX, textureEndY);
 							}
@@ -347,7 +347,7 @@ public class GuiThirst extends GuiIngame {
 
 						drawTexturedModalRect(width, height, textureXStart, textureYStart1, textureEndX, textureEndY);
 
-						if (PoisonController.isPoisoned() == false) {
+						if (thirststats.getPoison().isPoisoned() == false) {
 							if (i13 * 2 + 1 < thirstLvl) {
 								drawTexturedModalRect(width, height, textureXStart + 8, textureYStart, textureEndX, textureEndY);
 							}
@@ -355,7 +355,7 @@ public class GuiThirst extends GuiIngame {
 							if (i13 * 2 + 1 == thirstLvl) {
 								drawTexturedModalRect(width, height, textureXStart + 16, textureYStart, textureEndX, textureEndY);
 							}
-						} else if (PoisonController.isPoisoned() == true) {
+						} else if (thirststats.getPoison().isPoisoned() == true) {
 							if (i13 * 2 + 1 < thirstLvl) {
 								drawTexturedModalRect(width, height, textureXStart + 24, textureYStart, textureEndX, textureEndY);
 							}

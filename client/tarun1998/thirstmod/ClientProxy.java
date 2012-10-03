@@ -67,6 +67,15 @@ public class ClientProxy extends CommonProxy {
 			if (PacketHandler.isRemote == true & intDat > 20) {
 				PacketHandleSave.sendSaveData(getPlayer().username, ThirstUtils.getUtilsFor(getPlayer().username).getStats());
 			}
+			
+			if(ThirstUtils.isClientHost() == true) {
+				String usernames[] = FMLCommonHandler.instance().getMinecraftServerInstance().getAllUsernames().clone();
+				for(int i = 0; i < usernames.length; i++) {
+					MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+					EntityPlayerMP player = server.getConfigurationManager().getPlayerForUsername(usernames[i]);
+					this.getStatsMP(usernames[i]).onTick(player, player);
+				}
+			}
 		}
 	}
 
@@ -94,8 +103,8 @@ public class ClientProxy extends CommonProxy {
 		nbt.setFloat("tmSaturation", stats.saturation);
 		nbt.setInteger("tmTimer", stats.healhurtTimer);
 		nbt.setInteger("tmTimer2", stats.drinkTimer);
-		nbt.setBoolean("tmPoisoned", PoisonController.isPoisoned());
-		nbt.setInteger("tmPoisonTime", PoisonController.poisonTimeRemain());
+		nbt.setBoolean("tmPoisoned", utils.getStats().getPoison().isPoisoned());
+		nbt.setInteger("tmPoisonTime", utils.getStats().getPoison().poisonTimeRemain());
 	}
 	
 	/**
@@ -112,8 +121,8 @@ public class ClientProxy extends CommonProxy {
 			stats.saturation = nbt.getFloat("tmSaturation");
 			stats.healhurtTimer = nbt.getInteger("tmTimer");
 			stats.drinkTimer = nbt.getInteger("tmTimer2");
-			PoisonController.setPoisonedTo(nbt.getBoolean("tmPoisoned"));
-			PoisonController.setPoisonTime(nbt.getInteger("tmPoisonTime"));
+			stats.getPoison().setPoisonedTo(nbt.getBoolean("tmPoisoned"));
+			stats.getPoison().setPoisonTime(nbt.getInteger("tmPoisonTime"));
 		} else {
 			utils.setDefaults();
 		}

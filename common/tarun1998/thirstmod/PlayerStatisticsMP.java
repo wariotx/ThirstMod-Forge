@@ -36,7 +36,7 @@ public class PlayerStatisticsMP extends PlayerStatistics {
 	 * @param player EntityPlayer instance.
 	 */
 	public void onTick(EntityPlayer player, EntityPlayerMP playerMp) {
-		if(FMLCommonHandler.instance().getSide() == Side.SERVER) {
+		if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			int difSet = player.worldObj.difficultySetting;
 			if (ConfigHelper.peacefulOn == true) {
 				difSet = 1;
@@ -61,13 +61,15 @@ public class PlayerStatisticsMP extends PlayerStatistics {
 			}
 			poisonCon.onTick();
 			if (player.isSneaking() && player.isInWater() && level < 20) {
+				System.out.println("Player about to drink from water");
 				drinkTimer++;
-				if (drinkTimer > 16) {
+				if (drinkTimer > 13 && ThirstUtils.isClientHost() == false) {
 					addStats(1, 0.3F);
 					PacketPlaySound.sendPlaySound(player);
+					System.out.println("Drinking From Water");
 					if (poisonCon.getBiomesList().containsKey(ThirstUtils.getCurrentBiome(player)) && ConfigHelper.poisonOn == true) {
 						if (random.nextFloat() < poisonCon.getBiomePoison(ThirstUtils.getCurrentBiome(playerMp))) {
-							PoisonController.startPoison();
+							ThirstUtils.getUtilsFor(player.username).getStats().getPoison().startPoison();;
 						}
 					}
 					MinecraftForge.EVENT_BUS.post(new ThirstAPI.OnPlayerDrinkWater(player));
@@ -96,7 +98,7 @@ public class PlayerStatisticsMP extends PlayerStatistics {
 				&& player.isInWater() == false && player.isInsideOfMaterial(Material.water) == false) {
 			rainTimer++;
 			/*2 seconds!*/
-			if(rainTimer > 40) {
+			if(rainTimer > 35) {
 				this.addStats(1, 0.2f);
 				PacketPlaySound.sendPlaySound(player);
 				rainTimer = 0;

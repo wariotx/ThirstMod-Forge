@@ -6,9 +6,9 @@ import net.minecraftforge.common.MinecraftForge;
 import tarun1998.thirstmod.utils.*;
 
 public class PoisonController {
-	private static int poisonTimer;
-	private static boolean poisonPlayer = false;
-	private static boolean isPoisoned = false;
+	private int poisonTimer;
+	private boolean poisonPlayer = false;
+	private boolean isPoisoned = false;
 	private static Map biomesList = new HashMap();
 	private boolean loadedClass = false;
 
@@ -28,7 +28,7 @@ public class PoisonController {
 	/**
 	 * Starts the poison.
 	 */
-	public static void startPoison() {
+	public void startPoison() {
 		poisonPlayer = true;
 	}
 
@@ -36,7 +36,7 @@ public class PoisonController {
 	 * Checks if the game should poison.
 	 * @return if can poison.
 	 */
-	public static boolean shouldPoison() {
+	public boolean shouldPoison() {
 		if (poisonPlayer == true && MinecraftForge.EVENT_BUS.post(new ThirstAPI.ShouldPoison()) == false) {
 			return true;
 		} else {
@@ -67,7 +67,7 @@ public class PoisonController {
 	 * Checks if the player is currently poisoned.
 	 * @return if the player is poisoned.
 	 */
-	public static boolean isPoisoned() {
+	public boolean isPoisoned() {
 		if (isPoisoned == true) {
 			return true;
 		} else {
@@ -79,7 +79,7 @@ public class PoisonController {
 	 * Checks how much time is remaining until the poison stops.
 	 * @return remaining time until poison stops.
 	 */
-	public static int poisonTimeRemain() {
+	public int poisonTimeRemain() {
 		if (poisonTimer > 0) {
 			return poisonTimer;
 		} else {
@@ -127,11 +127,11 @@ public class PoisonController {
 		return biomesList;
 	}
 	
-	public static void setPoisonedTo(boolean what) {
+	public void setPoisonedTo(boolean what) {
 		poisonPlayer = what;
 	}
 	
-	public static void setPoisonTime(int what) {
+	public void setPoisonTime(int what) {
 		poisonTimer = what;
 	}
 }

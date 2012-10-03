@@ -80,7 +80,7 @@ public class ItemPotionMod extends ItemPotion
     		if(par1ItemStack.getItemDamage() == 0) {
     			Random rand = new Random();
     			if(rand.nextFloat() < 0.3f) {
-    				PoisonController.startPoison();
+    				ThirstUtils.getUtilsFor(par3EntityPlayer.username).getStats().getPoison().startPoison();;
     			}
     		}
     	}

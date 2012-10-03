@@ -45,13 +45,12 @@ public class PacketHandleSave extends PacketHandler implements IConnectionHandle
 		
 		writeData(level, healTimer, drinkTimer, saturation, exhaustion, playerName);
 		
-		if(typeOfServer == 2) {
-			CommonProxy.getStatsMP().level = level;
-			CommonProxy.getStatsMP().healhurtTimer = healTimer;
-			CommonProxy.getStatsMP().drinkTimer = drinkTimer;
-			CommonProxy.getStatsMP().saturation = saturation;
-			CommonProxy.getStatsMP().exhaustion = exhaustion;
-		}
+		PlayerStatisticsMP stats = ThirstUtils.getUtilsFor(playerName).statsMp;
+		stats.level = level;
+		stats.healhurtTimer = healTimer;
+		stats.drinkTimer = drinkTimer;
+		stats.saturation = saturation;
+		stats.exhaustion = exhaustion;
 	}
 	
 	/**
