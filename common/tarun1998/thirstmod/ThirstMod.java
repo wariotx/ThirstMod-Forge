@@ -26,6 +26,7 @@ import net.minecraftforge.event.world.*;
 public class ThirstMod implements IGuiHandler {
 	public static final Block waterCollector = new BlockRC(ConfigHelper.rcId).setBlockName("waterCollector").setResistance(5F).setHardness(4F).setCreativeTab(CreativeTabs.tabDeco);
 	public static final Block juiceMaker = new BlockJM(ConfigHelper.jmId).setBlockName("juiceMaker").setResistance(5F).setHardness(4F).setCreativeTab(CreativeTabs.tabDeco);
+	//public static final Block filterBlock = new BlockFilter(1090).setBlockName("filterBlock").setResistance(5f).setHardness(4f).setCreativeTab(CreativeTabs.tabDeco);
 	public static final Item dFilter = (new ItemThirst(ConfigHelper.dFilterId).setItemName("dFilter").setMaxStackSize(1)).setIconIndex(33).setTabToDisplayOn(CreativeTabs.tabMisc);
 	public static final Item Filter = (new ItemThirst(ConfigHelper.filterId).setItemName("filter").setMaxStackSize(1)).setContainerItem(dFilter).setIconIndex(32).setTabToDisplayOn(CreativeTabs.tabMisc);
 
@@ -56,9 +57,11 @@ public class ThirstMod implements IGuiHandler {
 	public void onLoad(FMLInitializationEvent event) {
 		GameRegistry.registerBlock(waterCollector);
 		GameRegistry.registerBlock(juiceMaker);
+		//GameRegistry.registerBlock(filterBlock);
 
 		GameRegistry.registerTileEntity(TileEntityRC.class, "Rain Collector");
 		GameRegistry.registerTileEntity(TileEntityJM.class, "Juice Maker");
+		//GameRegistry.registerTileEntity(TileEntityFilter.class, "Filter Block");
 
 		GameRegistry.addRecipe(new ItemStack(waterCollector, 1), new Object[]
 		{ "***", "*#*", "***", Character.valueOf('*'), Block.cobblestone, Character.valueOf('#'), Item.bucketEmpty, });
@@ -152,6 +155,8 @@ public class ThirstMod implements IGuiHandler {
 			return new ContainerJM(player.inventory, (TileEntityJM) tile);
 		case 91:
 			return new ContainerRC(player.inventory, (TileEntityRC) tile);
+		case 92: 
+			return new ContainerFilter(player.inventory, (TileEntityFilter) tile);
 		}
 		return null;
 	}
@@ -167,6 +172,8 @@ public class ThirstMod implements IGuiHandler {
 			return new GuiJM(player.inventory, (TileEntityJM) tile);
 		case 91:
 			return new GuiRC(player.inventory, (TileEntityRC) tile);
+		case 92: 
+			return new GuiFilter(player.inventory, (TileEntityFilter) tile);
 		}
 		return null;
 	}

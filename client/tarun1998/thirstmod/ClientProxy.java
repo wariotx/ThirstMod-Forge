@@ -49,6 +49,7 @@ public class ClientProxy extends CommonProxy {
 
 		if (minecraft.thePlayer != null) {
 			if (getPlayer().capabilities.isCreativeMode == false) {
+				ThirstUtils.addNewPlayer(getPlayer().username, new ThirstUtils());
 				if (loadedMod == false) {
 					if (changedGui == false) {
 						minecraft.ingameGUI = new GuiThirst();
@@ -56,7 +57,6 @@ public class ClientProxy extends CommonProxy {
 					}
 
 					sessionPlayer = getPlayer().username;
-					ThirstUtils.addNewPlayer(getPlayer().username, new ThirstUtils());
 					loadedMod = true;
 				}
 				ranGame = true;
@@ -116,7 +116,7 @@ public class ClientProxy extends CommonProxy {
 	 * @param nbt Player NBT
 	 */
 	public static void readNbt(EntityPlayer player, NBTTagCompound nbt) {
-		ThirstUtils utils = (ThirstUtils) PacketHandler.playerInstance.get(player.username);
+		ThirstUtils utils = ThirstUtils.getUtilsFor(player.username);
 		PlayerStatistics stats = utils.getStats();
 		if (nbt.hasKey("tmLevel")) {
 			stats.level = nbt.getInteger("tmLevel");

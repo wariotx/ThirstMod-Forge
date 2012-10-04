@@ -76,8 +76,8 @@ public class PacketHandleSave extends PacketHandler implements IConnectionHandle
 	 * Reads data from an individual player nbt storage.
 	 * @param s player username
 	 */
-	public void readData(String s, ThirstUtils utils) {
-		EntityPlayerMP player = FMLClientHandler.instance().getServer().getConfigurationManager().getPlayerForUsername(s);
+	public void readData(String s) {
+		EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(s);
 		NBTTagCompound nbt = player.getEntityData();
 		if (nbt.hasKey("tmLevel")) {
 			ThirstUtils.getUtilsFor(s).getStats().level = nbt.getInteger("tmLevel");
@@ -86,7 +86,7 @@ public class PacketHandleSave extends PacketHandler implements IConnectionHandle
 			ThirstUtils.getUtilsFor(s).getStats().healhurtTimer = nbt.getInteger("tmTimer");
 			ThirstUtils.getUtilsFor(s).getStats().drinkTimer = nbt.getInteger("tmTimer2");
 		} else {
-			utils.setDefaults();
+			ThirstUtils.getUtilsFor(s).setDefaults();
 		}
 		sendSaveData(s, ThirstUtils.getUtilsFor(s).getStats());
 	}
@@ -129,8 +129,7 @@ public class PacketHandleSave extends PacketHandler implements IConnectionHandle
 		EntityPlayer player = (EntityPlayer)other;
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			playerInstance.put(player.username, new ThirstUtils());
-			ThirstUtils utils = (ThirstUtils) playerInstance.get(player.username);
-			readData(player.username, utils);
+			readData(player.username);
 		}
 	}
 	

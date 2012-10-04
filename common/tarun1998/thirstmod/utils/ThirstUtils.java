@@ -45,7 +45,9 @@ public class ThirstUtils {
 	}
 	
 	public static void addNewPlayer(String username, ThirstUtils utils) {
-		PacketHandler.playerInstance.put(username, utils);
+		if(!PacketHandler.playerInstance.containsKey(username)) {
+			PacketHandler.playerInstance.put(username, utils);
+		}
 	}
 	
 	/**
