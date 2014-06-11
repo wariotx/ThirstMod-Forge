@@ -1,35 +1,52 @@
 package tarun1998.thirstmod;
 
-import java.util.Random;
-
-import cpw.mods.fml.common.*;
-import cpw.mods.fml.common.Mod.Init;
+import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.Mod.PostInit;
-import cpw.mods.fml.common.event.*;
-import cpw.mods.fml.common.network.*;
-import cpw.mods.fml.common.registry.*;
-import net.minecraft.src.*;
-import tarun1998.thirstmod.api.*;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
+import cpw.mods.fml.common.SidedProxy;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemPotion;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import tarun1998.thirstmod.blocks.*;
-import tarun1998.thirstmod.gui.*;
-import tarun1998.thirstmod.packets.*;
-import tarun1998.thirstmod.utils.*;
-import tarun1998.thirstmod.reflection.*;
-import net.minecraftforge.common.*;
-import net.minecraftforge.event.*;
-import net.minecraftforge.event.entity.living.*;
-import net.minecraftforge.event.entity.player.*;
-import net.minecraftforge.event.world.*;
+import tarun1998.thirstmod.gui.GuiFilter;
+import tarun1998.thirstmod.gui.GuiJM;
+import tarun1998.thirstmod.gui.GuiRC;
+import tarun1998.thirstmod.packets.PacketHandleSave;
+import tarun1998.thirstmod.packets.PacketPlaySound;
+import tarun1998.thirstmod.packets.PacketPlayerPos;
+import tarun1998.thirstmod.reflection.ItemMilkMod;
+import tarun1998.thirstmod.reflection.ItemPotionMod;
+import tarun1998.thirstmod.reflection.ItemSoupMod;
+import tarun1998.thirstmod.utils.ThirstUtils;
 
 @Mod(modid = ThirstUtils.ID, name = ThirstUtils.NAME, version = ThirstUtils.VERSION)
-@NetworkMod(serverSideRequired = false, clientSideRequired = true, packetHandler = PacketHandler.class, channels = {"ThirstMod"})
+//@NetworkMod(serverSideRequired = false, clientSideRequired = true, packetHandler = PacketHandler.class, channels = {"ThirstMod"})
 public class ThirstMod implements IGuiHandler {
-    public static final Block waterCollector = new BlockRC(ConfigHelper.rcId).setBlockName("waterCollector").setResistance(5F).setHardness(4F).setCreativeTab(CreativeTabs.tabDeco);
-    public static final Block juiceMaker = new BlockJM(ConfigHelper.jmId).setBlockName("juiceMaker").setResistance(5F).setHardness(4F).setCreativeTab(CreativeTabs.tabDeco);
+    public static final Block waterCollector = new BlockRC(ConfigHelper.rcId)
+            .setResistance(5F).setHardness(4F).setCreativeTab(CreativeTabs.tabDeco);
+
+    public static final Block juiceMaker = new BlockJM(ConfigHelper.jmId)
+            .setResistance(5F).setHardness(4F).setCreativeTab(CreativeTabs.tabDeco);
     //public static final Block filterBlock = new BlockFilter(1090).setBlockName("filterBlock").setResistance(5f).setHardness(4f).setCreativeTab(CreativeTabs.tabDeco);
-    public static final Item dFilter = (new ItemThirst(ConfigHelper.dFilterId).setItemName("dFilter").setMaxStackSize(1)).setIconIndex(33).setTabToDisplayOn(CreativeTabs.tabMisc);
-    public static final Item Filter = (new ItemThirst(ConfigHelper.filterId).setItemName("filter").setMaxStackSize(1)).setContainerItem(dFilter).setIconIndex(32).setTabToDisplayOn(CreativeTabs.tabMisc);
+    public static final Item dFilter = (new ItemThirst(ConfigHelper.dFilterId)
+            .setMaxStackSize(1)).setIconIndex(33).setTabToDisplayOn(CreativeTabs.tabMisc);
+    public static final Item Filter = (new ItemThirst(ConfigHelper.filterId)
+            .setMaxStackSize(1)).setContainerItem(dFilter).setIconIndex(32).setTabToDisplayOn(CreativeTabs.tabMisc);
 
     public static int jmFront = 1;
     public static int rcTop = 0;
@@ -55,10 +72,12 @@ public class ThirstMod implements IGuiHandler {
      *
      * @param event
      */
-    @Init
+    @Mod.EventHandler
     public void onLoad(FMLInitializationEvent event) {
-        GameRegistry.registerBlock(waterCollector);
-        GameRegistry.registerBlock(juiceMaker);
+        GameRegistry.registerBlock(waterCollector, "waterCollector");
+        GameRegistry.registerBlock(juiceMaker, "juiceMaker");
+        GameRegistry.registerItem(dFilter, "dFilter");
+        GameRegistry.registerItem(Filter, "filter");
         //GameRegistry.registerBlock(filterBlock);
 
         GameRegistry.registerTileEntity(TileEntityRC.class, "Rain Collector");
@@ -66,13 +85,13 @@ public class ThirstMod implements IGuiHandler {
         //GameRegistry.registerTileEntity(TileEntityFilter.class, "Filter Block");
 
         GameRegistry.addRecipe(new ItemStack(waterCollector, 1), new Object[]
-                {"***", "*#*", "***", Character.valueOf('*'), Block.cobblestone, Character.valueOf('#'), Item.bucketEmpty,});
+                {"***", "*#*", "***", Character.valueOf('*'), Blocks.cobblestone, Character.valueOf('#'), Items.bucketEmpty,});
 
         GameRegistry.addRecipe(new ItemStack(juiceMaker, 1), new Object[]
-                {"***", "*#*", "***", Character.valueOf('*'), Block.cobblestone, Character.valueOf('#'), Item.glassBottle,});
+                {"***", "*#*", "***", Character.valueOf('*'), Blocks.cobblestone, Character.valueOf('#'), Items.glassBottle,});
 
         GameRegistry.addRecipe(new ItemStack(Filter), new Object[]
-                {"***", "*!*", "***", Character.valueOf('*'), Block.planks, Character.valueOf('!'), Item.silk});
+                {"***", "*!*", "***", Character.valueOf('*'), Blocks.planks, Character.valueOf('!'), Item.silk});
 
         GameRegistry.addShapelessRecipe(new ItemStack(Filter), new Object[]
                 {Item.silk, dFilter});
@@ -82,15 +101,15 @@ public class ThirstMod implements IGuiHandler {
 
         MinecraftForge.EVENT_BUS.register(INSTANCE);
         MinecraftForge.EVENT_BUS.register(proxy);
-        NetworkRegistry.instance().registerGuiHandler(this, this);
-        NetworkRegistry.instance().registerConnectionHandler(savePacket);
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, this);
+        //TODO Use cpw.mods.fml.common.network.FMLNetworkEvent
+//        NetworkRegistry.INSTANCE.registerConnectionHandler(savePacket);
 
         replaceItems();
 
         proxy.onLoad();
     }
 
-    @PostInit
     public void modsLoaded(FMLPostInitializationEvent event) {
     }
 
@@ -127,7 +146,8 @@ public class ThirstMod implements IGuiHandler {
         if (!hurt.entity.worldObj.isRemote) {
             if (hurt.entityLiving instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) hurt.entityLiving;
-                ThirstUtils.getUtilsFor(player.username).addExhaustion(0.6f);
+                player.addExhaustion(0.6f);
+                ThirstUtils.getUtilsFor(player.getDisplayName()).addExhaustion(0.6f);
             }
         }
     }
@@ -156,7 +176,7 @@ public class ThirstMod implements IGuiHandler {
      */
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        TileEntity tile = world.getBlockTileEntity(x, y, z);
+        TileEntity tile = world.getTileEntity(x, y, z);
         switch (ID) {
             case 90:
                 return new ContainerJM(player.inventory, (TileEntityJM) tile);
@@ -173,7 +193,7 @@ public class ThirstMod implements IGuiHandler {
      */
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        TileEntity tile = world.getBlockTileEntity(x, y, z);
+        TileEntity tile = world.getTileEntity(x, y, z);
         switch (ID) {
             case 90:
                 return new GuiJM(player.inventory, (TileEntityJM) tile);
@@ -195,16 +215,16 @@ public class ThirstMod implements IGuiHandler {
 		}
 		*/
 
-        Item.itemsList[Item.potion.shiftedIndex] = null;
-        Item.itemsList[Item.bucketMilk.shiftedIndex] = null;
-        Item.itemsList[Item.bowlSoup.shiftedIndex] = null;
+        Item.itemsList[Items.potionitem.shiftedIndex] = null;
+        Item.itemsList[Items.milk_bucket.shiftedIndex] = null;
+        Item.itemsList[Items.bowl.shiftedIndex] = null;
 
-        ItemPotion potion = (ItemPotionMod) (new ItemPotionMod(117)).setIconCoord(13, 8).setItemName("potion");
-        Item bucketMilk = (new ItemMilkMod(79)).setIconCoord(13, 4).setItemName("milk").setContainerItem(Item.bucketEmpty);
+        ItemPotion potion = (ItemPotionMod) (new ItemPotionMod()).setIconCoord(13, 8).setItemName("potion");
+        Item bucketMilk = (new ItemMilkMod(79)).setIconCoord(13, 4).setItemName("milk").setContainerItem(Items.bucket);
         Item soup = (new ItemSoupMod(26, 8)).setIconCoord(8, 4).setItemName("mushroomStew");
 
-        ObfuscationReflectionHelper.setPrivateValue(Item.class, Item.potion, potion, 118);
-        ObfuscationReflectionHelper.setPrivateValue(Item.class, Item.bucketMilk, bucketMilk, 80);
-        ObfuscationReflectionHelper.setPrivateValue(Item.class, Item.bowlSoup, soup, 27);
+        ObfuscationReflectionHelper.setPrivateValue(Item.class, Items.potionitem, potion, 118);
+        ObfuscationReflectionHelper.setPrivateValue(Item.class, Items.milk_bucket, bucketMilk, 80);
+        ObfuscationReflectionHelper.setPrivateValue(Item.class, Items.bowl, soup, 27);
     }
 }
